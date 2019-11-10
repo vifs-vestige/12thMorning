@@ -5,4 +5,8 @@
     <RootNamespace>_12thMorning</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.0.0-rc1.final" />
+  </ItemGroup>
+
 </Project>

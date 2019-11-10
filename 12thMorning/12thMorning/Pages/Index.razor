@@ -1,5 +1,7 @@
 ﻿@page "/"
 @inject IJSRuntime JSRuntime;
+@using _12thMorning.Data
+@inject BlogService Blog
 
 <h1>Helloasdfd, world! did it</h1>
 another test
@@ -7,11 +9,11 @@ another test
 
 Welcome to your new app.
 <button @onclick="text">print test</button>
+<strong>@Blog.getDb()</strong>
 
 @code{
 
-    public async void text()
-    {
+    public async void text() {
         await JSRuntime.InvokeAsync<string>("console.log", "test");
     }
 }
