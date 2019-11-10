@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using _12thMorning.Data;
+using Microsoft.AspNetCore.HttpOverrides;
+using System.Net;
 
 namespace _12thMorning
 {
@@ -29,6 +31,10 @@ namespace _12thMorning
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.KnownProxies.Add(IPAddress.Parse("10.0.0.100"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
