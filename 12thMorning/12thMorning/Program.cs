@@ -18,7 +18,7 @@ namespace _12thMorning
             //CreateWebHostBuilder(args).Build().Run();
             var host = new WebHostBuilder()
                 .UseKestrel()
-                //.usecontentroot(directory.getcurrentdirectory())
+                .UseContentRoot(Directory.GetCurrentDirectory())
                 //.usewebroot("wwwroot")
                 .UseStartup<Startup>()
                 .Build();
