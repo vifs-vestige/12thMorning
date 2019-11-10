@@ -8,7 +8,7 @@ namespace _12thMorning.Data
     {
         private static readonly string[] Summaries = new[]
         {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+            "F2re3ezing1", "Bra3c2ing1", "Chil32ly1", "Co32ol1", "Mi2l3d1", "W2ar3m1", "B23almy1", "H3o2td", "Swe3lt2ring", "Sco32rching"
         };
 
         public Task<WeatherForecast[]> GetForecastAsync(DateTime startDate)
@@ -20,6 +20,12 @@ namespace _12thMorning.Data
                 TemperatureC = rng.Next(-20, 55),
                 Summary = Summaries[rng.Next(Summaries.Length)]
             }).ToArray());
+        }
+
+        public string Test()
+        {
+            var rng = new Random();
+            return rng.Next(0, 10).ToString() + 'a';
         }
     }
 }
