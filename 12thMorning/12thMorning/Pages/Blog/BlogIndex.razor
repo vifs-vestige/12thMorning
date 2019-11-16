@@ -1,0 +1,29 @@
+﻿@page "/blog"
+
+@using _12thMorning.Data;
+@inject BlogService BlogDataService
+
+<h3>Blog</h3>
+
+@foreach (var blog in blogs) {
+    @blog.Post
+    <br />
+}
+
+<button class="btn btn-primary" @onclick="NextPage">Next page</button>
+
+
+@code {
+    private List<Blog> blogs;
+    private int page = 0;
+    private int size = 10;
+
+    protected override async Task OnInitializedAsync() {
+        blogs = await BlogDataService.GetBlogList(page, size);
+    }
+
+    protected async void NextPage() {
+        page++;
+        await OnInitializedAsync();
+    }
+}

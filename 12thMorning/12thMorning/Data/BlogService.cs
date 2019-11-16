@@ -5,13 +5,10 @@ using System.Threading.Tasks;
 
 namespace _12thMorning.Data {
     public class BlogService {
+        private BlogDataAccess BlogData = new BlogDataAccess();
 
-        public int getDb() {
-            var item = 777;
-            using (var db = new _12thMorningContext()) {
-                item = db.Test.First().Number;
-            }
-            return item;
+        public Task<List<Blog>> GetBlogList(int page, int size) {
+            return Task.FromResult(BlogData.GetAll(page, size));
         }
     }
 }

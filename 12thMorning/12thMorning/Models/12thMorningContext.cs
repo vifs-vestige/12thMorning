@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace _12thMorning.Data {
     public class _12thMorningContext : DbContext {
-        public DbSet<Test> Test { get; set; }
+        public DbSet<Blog> Blog { get; set; }
 
         public _12thMorningContext(DbContextOptions<_12thMorningContext> a) : base(a) {
         }
@@ -22,8 +22,11 @@ namespace _12thMorning.Data {
 
     }
 
-    public class Test {
+    public class Blog {
         public int Id { get; set; }
-        public int Number{ get; set; }
+        public string Post{ get; set; }
+        public DateTime DateAdded { get; set; }
+        public string Title { get; set; }
+        public string MainTag { get; set; }
     }
 }
