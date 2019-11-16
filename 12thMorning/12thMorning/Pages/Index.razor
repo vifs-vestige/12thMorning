@@ -8,9 +8,15 @@ another test
 Welcome to your new app.
 <button @onclick="text">print test</button>
 
+@stuff()
+
 @code{
 
     public async void text() {
         await JSRuntime.InvokeAsync<string>("console.log", "test");
+    }
+
+    protected string stuff() {
+        return Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
     }
 }

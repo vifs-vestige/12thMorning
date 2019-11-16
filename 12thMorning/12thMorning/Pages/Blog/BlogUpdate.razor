@@ -1,13 +1,12 @@
 ﻿@page "/blogUpdate"
 
 <h3>BlogUpdate</h3>
-<environment names="Production">
-    Production
-</environment>
-<environment names="Development">
-    Development
-</environment>
+
+@stuff()
 
 @code {
 
+    protected string stuff() {
+        return Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+    }
 }
