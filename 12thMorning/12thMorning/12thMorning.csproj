@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BlazorPrettyCode" Version="1.0.1" />
+    <PackageReference Include="BlazorStrap" Version="1.0.106" />
+    <PackageReference Include="BlazorStyled" Version="1.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="0.7.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0">
       <PrivateAssets>all</PrivateAssets>
@@ -14,6 +18,12 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.0.0-rc1.final" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="bbsharp">
+      <HintPath>..\..\..\..\Users\vifs8\Downloads\bbsharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

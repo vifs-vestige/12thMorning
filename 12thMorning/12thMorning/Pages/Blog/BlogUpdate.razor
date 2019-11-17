@@ -1,12 +1,63 @@
 ﻿@page "/blogUpdate"
+@page "/blogUpdate/{id}"
 
-<h3>BlogUpdate</h3>
+@using _12thMorning.Data
+@inject BlogService BlogDataService
+@inject IJSRuntime JSRuntime;
 
-@stuff()
+<h3>BlogUpdate: @Blog.Title</h3>
+
+<EditForm Model="@Blog" OnValidSubmit="@submit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <InputText id="title" @bind-Value="Blog.Title" />
+    <br />
+    <InputTextArea id="post" @bind-Value="Blog.Post" style="width: 90%" />
+    <br />
+    <InputSelect id="mainTage" @bind-Value="Blog.MainTag">
+        <option value=""></option>
+        <option value="Mixed">Mixed</option>
+        <option value="Dev">Dev</option>
+        <option value="Personal">Personal</option>
+    </InputSelect>
+    <br />
+    <InputDate id="date" @bind-Value="Blog.DateAdded"></InputDate>
+    <br/>
+    <button type="submit" class="btn-danger">Submit</button>
+
+</EditForm>
+<br />
+<button type="button" class="btn-primary" @onclick="Preview">Preview</button>
+
+<div>
+    @Post
+</div>
 
 @code {
+    [Parameter]
+    public string Id { get; set; }
+    private bool isVisible { get; set; } = true;
 
-    protected string stuff() {
-        return Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+    private int blogId;
+    private Blog Blog;
+    private MarkupString Post;
+
+    protected override void OnInitialized() {
+        if (int.TryParse(Id, out blogId)) {
+            Blog = BlogDataService.GetBlog(blogId);
+        }
+        else {
+            Blog = new Blog();
+        }
+    }
+
+    private async void Preview() {
+        Post = (MarkupString)BlogDataService.ParsePost(Blog.Post);
+        await JSRuntime.InvokeAsync<string>("PR.prettyPrint");
+    }
+
+    private void submit() {
+        BlogDataService.UpdateBlog(Blog);
     }
 }

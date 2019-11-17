@@ -1,49 +1,32 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">12thMorning</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-</div>
+﻿@*<div class="top-row pl-4 navbar navbar-dark">
+        <a class="navbar-brand" href="">12thMorning</a>
+        <button class="navbar-toggler" @onclick="ToggleNavMenu">
+            Toogle
+        </button>
+    </div>*@
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="blog">
-                <span class="oi oi-plus" aria-hidden="true"></span> Blog
-            </NavLink>
-        </li>
-        @if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development") {
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href="blogupdate">
-                    <span class="oi oi-plus" aria-hidden="true"></span> Blog Update
-                </NavLink>
-            </li>
+<BSNavbar IsExpand="true" IsDark="true" Color="Color.Dark">
+    <BSNavbarBrand Href="/">12th Morning</BSNavbarBrand>
+
+    <BSNav IsList="true" IsPills="true" Class="m-2" >
+        <BSNavItem Class="mx-2">
+            <BSNavLink Href="/blog">
+                Blog
+            </BSNavLink>
+        </BSNavItem>
+        @if (Startup.IsDev) {
+            <BSNavItem Class="mx-2">
+                <BSNavLink Href="/blogUpdate">
+                    Blog Update
+                </BSNavLink>
+            </BSNavItem>
         }
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </li>
-    </ul>
-</div>
+    </BSNav>
+</BSNavbar>
+
 
 @code {
-    bool collapseNavMenu = true;
-
-    string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
+    public bool CheckActive() {
+        return true;
     }
 }

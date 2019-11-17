@@ -1,25 +1,22 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using _12thMorning.Data;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using _12thMorning.Data;
-using Microsoft.AspNetCore.HttpOverrides;
-using System.Net;
-using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.Extensions.FileProviders;
-using System.IO;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+using System;
+using BlazorStrap;
+using BlazorStyled;
+using System.Net.Http;
+using System.Linq;
+using Microsoft.AspNetCore.Components;
 
 namespace _12thMorning {
     public class Startup {
+        private static bool isDev = false;
+        public static bool IsDev { get { return isDev; } }
         public Startup(IConfiguration configuration) {
             Configuration = configuration;
         }
@@ -31,12 +28,24 @@ namespace _12thMorning {
         public void ConfigureServices(IServiceCollection services) {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<BlogService>();
+            services.AddBootstrapCSS();
+            services.AddBlazorStyled();
             services.Configure<ForwardedHeadersOptions>(options => {
                 options.ForwardedHeaders =
                     ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
+
+            if (!services.Any(x => x.ServiceType == typeof(HttpClient))) {
+                // Setup HttpClient for server side in a client side compatible fashion
+                services.AddScoped<HttpClient>(s => {
+                    // Creating the URI helper needs to wait until the JS Runtime is initialized, so defer it.
+                    NavigationManager navman = s.GetRequiredService<NavigationManager>();
+                    return new HttpClient {
+                        BaseAddress = new Uri(navman.BaseUri)
+                    };
+                });
+            }
 
             services.AddDbContextPool<_12thMorningContext>( 
                 options => options.UseMySql("Server=localhost;Database=12thmorning;Uid=12thmorning;", 
@@ -44,6 +53,8 @@ namespace _12thMorning {
                     mySqlOptions.ServerVersion(new Version(10, 1, 41), Pomelo.EntityFrameworkCore.MySql.Infrastructure.ServerType.MariaDb); // replace with your Server Version and Type
                 }
             ));
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +64,7 @@ namespace _12thMorning {
             });
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
+                Startup.isDev = true;
             }
             else {
                 app.UseExceptionHandler("/Error");
@@ -70,8 +82,6 @@ namespace _12thMorning {
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
-
-            app.UseAuthentication();
         }
     }
 }

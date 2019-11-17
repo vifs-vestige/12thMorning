@@ -1,0 +1,35 @@
+﻿@page "/blog/{id}"
+
+@using _12thMorning.Data
+
+@inject NavigationManager NavManager
+@inject BlogService BlogDataService
+@inject IJSRuntime JSRuntime
+
+<h3>BlogPost</h3>
+<div>
+    @((MarkupString)BlogDataService.ParsePost(blog.Post))
+</div>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    private Blog blog;
+
+    protected override void OnInitialized() {
+        try {
+            blog = BlogDataService.GetBlog(int.Parse(Id));
+        }
+        catch {
+            NavManager.NavigateTo("blog");
+        }
+    }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if (firstRender) {
+            await JSRuntime.InvokeAsync<string>("PR.prettyPrint");
+        }
+    }
+
+}

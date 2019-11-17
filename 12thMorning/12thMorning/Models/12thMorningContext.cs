@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,9 +25,13 @@ namespace _12thMorning.Data {
 
     public class Blog {
         public int Id { get; set; }
+        public int PostNumber { get; set; }
+        [Required]
         public string Post{ get; set; }
         public DateTime DateAdded { get; set; }
+        [Required]
         public string Title { get; set; }
+        [Required]
         public string MainTag { get; set; }
     }
 }

@@ -10,7 +10,9 @@
     <title>12thMorning</title>
     <base href="~/" />
     <link rel="stylesheet" href="~/css/bootstrap/bootstrap.min.css" />
-    <link href="~/css/site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    @(await Html.RenderComponentAsync<BlazorStyled.ServerSideStyled>(RenderMode.ServerPrerendered))
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js?skin=sons-of-obsidian"></script>
 </head>
 <body>
     <app>
@@ -18,5 +20,12 @@
     </app>
 
     <script src="_framework/blazor.server.js"></script>
+
+    <!-- BlazorStyled is used by BlazorStrap documentation site -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    <!-- The below two files are needed by BlazorStrap -->
+    <script src="_content/BlazorStrap/blazorStrap.js"></script>
+    <script src="_content/BlazorStrap/popper.min.js"></script>
 </body>
 </html>

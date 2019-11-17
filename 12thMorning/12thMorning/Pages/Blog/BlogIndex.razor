@@ -1,29 +1,72 @@
 ﻿@page "/blog"
 
-@using _12thMorning.Data;
+@using _12thMorning.Data
 @inject BlogService BlogDataService
+@inject IJSRuntime JSRuntime;
 
 <h3>Blog</h3>
 
 @foreach (var blog in blogs) {
-    @blog.Post
+    <h1><a href="blog/@blog.PostNumber">@blog.Title</a></h1>
+    <div>
+        @((MarkupString)BlogDataService.GetPreviewPost(blog.Post))
+    </div>
     <br />
 }
 
-<button class="btn btn-primary" @onclick="NextPage">Next page</button>
+<BSPagination>
+    <BSPaginationItem>
+        <BSPaginationLink @onclick="PerviousPage" PaginationLinkType="PaginationLinkType.PreviousText" />
+    </BSPaginationItem>
+    @foreach (var x in pages) {
+        <BSPaginationItem>
+            <BSPaginationLink @onclick="@(() => GoToPage(x))" PaginationLinkType="PaginationLinkType.Custom">@x</BSPaginationLink>
+        </BSPaginationItem>
+    }
+    <BSPaginationItem>
+        <BSPaginationLink @onclick="NextPage" PaginationLinkType="PaginationLinkType.NextText" />
+    </BSPaginationItem>
+</BSPagination>
 
 
 @code {
+
     private List<Blog> blogs;
     private int page = 0;
-    private int size = 10;
+    private int size = 2;
+    private List<int> pages = new List<int>();
+    private int count;
 
     protected override async Task OnInitializedAsync() {
+        count = BlogDataService.GetPages(size);
+        for (int x = 1; x <= count; x++) {
+            pages.Add(x);
+        }
+        blogs = await BlogDataService.GetBlogList(page, size);
+    }
+
+    protected async void GoToPage(int index) {
+        page = index - 1;
         blogs = await BlogDataService.GetBlogList(page, size);
     }
 
     protected async void NextPage() {
-        page++;
-        await OnInitializedAsync();
+        if (page != count - 1) {
+            page++;
+        }
+        blogs = await BlogDataService.GetBlogList(page, size);
+    }
+
+    protected async void PerviousPage() {
+        if (page != 0) {
+            page--;
+        }
+        blogs = await BlogDataService.GetBlogList(page, size);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if (firstRender) {
+            await JSRuntime.InvokeAsync<string>("PR.prettyPrint");
+        }
     }
 }
