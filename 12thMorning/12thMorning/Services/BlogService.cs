@@ -45,7 +45,7 @@ namespace _12thMorning.Data {
         }
 
         public static string RenderCode(BBCodeNode Node, bool ThrowOnError, object LookupTable) {
-            return "<pre class=\"prettyprint\">" + Node.Children.ToHtml(ThrowOnError, LookupTable) + "</pre>";
+            return "<pre class=\"prettyprint linenums:1\">" + Node.Children.ToHtml(ThrowOnError, LookupTable) + "</pre>";
         }
 
 
