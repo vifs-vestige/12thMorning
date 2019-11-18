@@ -6,6 +6,20 @@
 
 <h3>The Blogs</h3>
 
+<BSPagination>
+    <BSPaginationItem>
+        <BSPaginationLink href='blog/#' @onclick="PerviousPage" PaginationLinkType="PaginationLinkType.PreviousText" />
+    </BSPaginationItem>
+    @foreach (var x in pages) {
+        <BSPaginationItem>
+            <BSPaginationLink href='blog/#' @onclick="@(() => GoToPage(x))" PaginationLinkType="PaginationLinkType.Custom">@x</BSPaginationLink>
+        </BSPaginationItem>
+    }
+    <BSPaginationItem>
+        <BSPaginationLink href='blog/#' @onclick="NextPage" PaginationLinkType="PaginationLinkType.NextText" />
+    </BSPaginationItem>
+</BSPagination>
+
 @foreach (var blog in blogs) {
     <h1><a href="blog/@blog.PostNumber">@blog.Title</a></h1>
     <small><small>@blog.DateAdded.ToString("dd MMMM yyyy")</small></small>
@@ -15,17 +29,17 @@
     <br />
 }
 
-<BSPagination>
+<BSPagination Class="mb-3">
     <BSPaginationItem>
-        <BSPaginationLink @onclick="PerviousPage" PaginationLinkType="PaginationLinkType.PreviousText" />
+        <BSPaginationLink href='blog/#' @onclick="PerviousPage" PaginationLinkType="PaginationLinkType.PreviousText" />
     </BSPaginationItem>
     @foreach (var x in pages) {
         <BSPaginationItem>
-            <BSPaginationLink @onclick="@(() => GoToPage(x))" PaginationLinkType="PaginationLinkType.Custom">@x</BSPaginationLink>
+            <BSPaginationLink href='blog/#' @onclick="@(() => GoToPage(x))" PaginationLinkType="PaginationLinkType.Custom">@x</BSPaginationLink>
         </BSPaginationItem>
     }
     <BSPaginationItem>
-        <BSPaginationLink @onclick="NextPage" PaginationLinkType="PaginationLinkType.NextText" />
+        <BSPaginationLink href='blog/#' @onclick="NextPage" PaginationLinkType="PaginationLinkType.NextText" />
     </BSPaginationItem>
 </BSPagination>
 
