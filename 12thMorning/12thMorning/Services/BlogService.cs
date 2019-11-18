@@ -29,18 +29,23 @@ namespace _12thMorning.Data {
         }
 
         public string ParsePost(string post) {
-            var doc = BBCodeDocument.Load(post, false);
+            try {
+                var doc = BBCodeDocument.Load(post, false);
 
-            var LookupTable = HtmlRenderer.DefaultLookupTable.ToList();
-            LookupTable.Remove(LookupTable.First(x => x.Key == "code"));
-            LookupTable.Add(new KeyValuePair<string, HtmlRendererCallback>("code", RenderCode));
+                var LookupTable = HtmlRenderer.DefaultLookupTable.ToList();
+                LookupTable.Remove(LookupTable.First(x => x.Key == "code"));
+                LookupTable.Remove(LookupTable.First(x => x.Key == "i"));
+                LookupTable.Add(new KeyValuePair<string, HtmlRendererCallback>("code", RenderCode));
 
-            return doc.Children.ToHtml(false, LookupTable.ToArray());
+                return doc.Children.ToHtml(false, LookupTable.ToArray());
+            } catch {
+                return post.Replace("\n", "<br />");
+            }
         }
 
         public string GetPreviewPost(string post) {
             post = ParsePost(post);
-            var temp = post.Split("<br /><br />");
+            var temp = post.Split("<br />", StringSplitOptions.RemoveEmptyEntries);
             return temp[0] + "<br /><br />" + temp[1];
         }
 

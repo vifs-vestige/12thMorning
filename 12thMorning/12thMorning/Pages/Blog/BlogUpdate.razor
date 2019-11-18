@@ -3,9 +3,12 @@
 
 @using _12thMorning.Data
 @inject BlogService BlogDataService
-@inject IJSRuntime JSRuntime;
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavManager
 
 <h3>BlogUpdate: @Blog.Title</h3>
+
+<button @onclick="Next">next</button>
 
 <EditForm Model="@Blog" OnValidSubmit="@submit">
     <DataAnnotationsValidator />
@@ -13,7 +16,7 @@
 
     <InputText id="title" @bind-Value="Blog.Title" />
     <br />
-    <InputTextArea id="post" @bind-Value="Blog.Post" style="width: 90%" />
+    <InputTextArea id="post" @bind-Value="Blog.Post" style="width: 90%; height: 400px;" />
     <br />
     <InputSelect id="mainTage" @bind-Value="Blog.MainTag">
         <option value=""></option>
@@ -23,7 +26,7 @@
     </InputSelect>
     <br />
     <InputDate id="date" @bind-Value="Blog.DateAdded"></InputDate>
-    <br/>
+    <br />
     <button type="submit" class="btn-danger">Submit</button>
 
 </EditForm>
@@ -42,6 +45,12 @@
     private int blogId;
     private Blog Blog;
     private MarkupString Post;
+
+    protected void Next() {
+        blogId++;
+        Blog = BlogDataService.GetBlog(blogId);
+
+    }
 
     protected override void OnInitialized() {
         if (int.TryParse(Id, out blogId)) {

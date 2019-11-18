@@ -9,7 +9,7 @@ namespace _12thMorning.Data {
 
         public List<Blog> GetAll(int page, int size) {
             try {
-                return db.Blog.AsQueryable().Skip(page*size).Take(size).ToList();
+                return db.Blog.OrderByDescending(x => x.PostNumber).Where(x => x.MainTag != "temp").AsQueryable().Skip(page*size).Take(size).ToList();
             } catch {
                 throw;
             }
@@ -17,7 +17,7 @@ namespace _12thMorning.Data {
 
         public Blog Get(int id) {
             try {
-                return db.Blog.First(x => x.PostNumber == id);
+                return db.Blog.Where(x => x.MainTag != "temp").First(x => x.PostNumber == id);
             } catch {
                 return null;
             }
@@ -36,7 +36,7 @@ namespace _12thMorning.Data {
         }
 
         public int GetCount() {
-            return db.Blog.Count();
+            return db.Blog.Where(x => x.MainTag != "temp").Count();
         }
 
     }
