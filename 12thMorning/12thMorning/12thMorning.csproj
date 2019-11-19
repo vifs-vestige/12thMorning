@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Images\**" />
+    <Content Remove="Images\**" />
+    <EmbeddedResource Remove="Images\**" />
+    <None Remove="Images\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BlazorPrettyCode" Version="1.0.1" />
     <PackageReference Include="BlazorStrap" Version="1.0.106" />
     <PackageReference Include="BlazorStyled" Version="1.0.0" />
@@ -24,20 +31,6 @@
     <Reference Include="bbsharp">
       <HintPath>bbsharp.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\Images\Blog\Boom.gif" />
-    <None Include="wwwroot\Images\Blog\bowling.jpg" />
-    <None Include="wwwroot\Images\Blog\CrewDead.png" />
-    <None Include="wwwroot\Images\Blog\crewPathfinding.gif" />
-    <None Include="wwwroot\Images\Blog\Damage.gif" />
-    <None Include="wwwroot\Images\Blog\FogOfWar.PNG" />
-    <None Include="wwwroot\Images\Blog\front0.jpg" />
-    <None Include="wwwroot\Images\Blog\side0.jpg" />
-    <None Include="wwwroot\Images\Blog\Targeting.PNG" />
-    <None Include="wwwroot\Images\Blog\TempArt.png" />
-    <None Include="wwwroot\Images\Blog\WeaponsFinished.png" />
   </ItemGroup>
 
 </Project>
