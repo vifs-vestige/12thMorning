@@ -29,6 +29,7 @@ namespace _12thMorning
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseStaticWebAssets()
                 .UseStartup<Startup>();
     }
 }
