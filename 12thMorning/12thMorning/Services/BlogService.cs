@@ -35,7 +35,10 @@ namespace _12thMorning.Data {
                 var LookupTable = HtmlRenderer.DefaultLookupTable.ToList();
                 LookupTable.Remove(LookupTable.First(x => x.Key == "code"));
                 LookupTable.Remove(LookupTable.First(x => x.Key == "i"));
+                LookupTable.Remove(LookupTable.First(x => x.Key == "img"));
                 LookupTable.Add(new KeyValuePair<string, HtmlRendererCallback>("code", RenderCode));
+                LookupTable.Add(new KeyValuePair<string, HtmlRendererCallback>("s", RenderStrikethough));
+                LookupTable.Add(new KeyValuePair<string, HtmlRendererCallback>("img", RenderImg));
 
                 return doc.Children.ToHtml(false, LookupTable.ToArray());
             } catch {
@@ -51,6 +54,13 @@ namespace _12thMorning.Data {
 
         public static string RenderCode(BBCodeNode Node, bool ThrowOnError, object LookupTable) {
             return "<pre class=\"prettyprint linenums:1\">" + Node.Children.ToHtml(ThrowOnError, LookupTable) + "</pre>";
+        }
+        public static string RenderStrikethough(BBCodeNode Node, bool ThrowOnError, object LookupTable) {
+            return "<del>" + Node.Children.ToHtml(ThrowOnError, LookupTable) + "</del>";
+        }
+
+        public static string RenderImg(BBCodeNode Node, bool ThrowOnError, object LookupTable) {
+            return "<img src='" + Node.Children.ToHtml(ThrowOnError, LookupTable) + "'/>";
         }
 
 

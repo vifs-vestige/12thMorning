@@ -17,7 +17,7 @@ namespace _12thMorning.Data {
 
         public Blog Get(int id) {
             try {
-                return db.Blog.Where(x => x.MainTag != "temp").First(x => x.PostNumber == id);
+                return db.Blog.First(x => x.PostNumber == id);
             } catch {
                 return null;
             }

@@ -26,4 +26,18 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\Images\Blog\Boom.gif" />
+    <None Include="wwwroot\Images\Blog\bowling.jpg" />
+    <None Include="wwwroot\Images\Blog\CrewDead.png" />
+    <None Include="wwwroot\Images\Blog\crewPathfinding.gif" />
+    <None Include="wwwroot\Images\Blog\Damage.gif" />
+    <None Include="wwwroot\Images\Blog\FogOfWar.PNG" />
+    <None Include="wwwroot\Images\Blog\front0.jpg" />
+    <None Include="wwwroot\Images\Blog\side0.jpg" />
+    <None Include="wwwroot\Images\Blog\Targeting.PNG" />
+    <None Include="wwwroot\Images\Blog\TempArt.png" />
+    <None Include="wwwroot\Images\Blog\WeaponsFinished.png" />
+  </ItemGroup>
+
 </Project>
