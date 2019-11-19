@@ -7,8 +7,8 @@
         <BSPaginationLink href='blog/#' @onclick="PerviousPage" PaginationLinkType="PaginationLinkType.PreviousText" />
     </BSPaginationItem>
     @foreach (var x in pages) {
-        <BSPaginationItem>
-            <BSPaginationLink href='blog/#' @onclick="@(() => GoToPage(x))" PaginationLinkType="PaginationLinkType.Custom">@x</BSPaginationLink>
+        <BSPaginationItem IsActive="(x - 1) == page">
+            <BSPaginationLink href='blog/#' @onclick="@(() => GoToPage(x))"  PaginationLinkType="PaginationLinkType.Custom">@x</BSPaginationLink>
         </BSPaginationItem>
     }
     <BSPaginationItem>
@@ -17,7 +17,7 @@
 </BSPagination>
 
 @foreach (var blog in blogs) {
-    <h1><a href="blog/@blog.PostNumber">@blog.Title</a></h1>
+    <h1><a href="blogpost/@blog.PostNumber">@blog.Title</a></h1>
     <small><small>@blog.DateAdded.ToString("dd MMMM yyyy")</small></small>
     <div>
         @((MarkupString)BlogDataService.GetPreviewPost(blog.Post))
@@ -27,15 +27,15 @@
 
 <BSPagination Class="mb-3">
     <BSPaginationItem>
-        <BSPaginationLink href='blogpost/#' @onclick="PerviousPage" PaginationLinkType="PaginationLinkType.PreviousText" />
+        <BSPaginationLink href='blog/#' @onclick="PerviousPage" PaginationLinkType="PaginationLinkType.PreviousText" />
     </BSPaginationItem>
     @foreach (var x in pages) {
-        <BSPaginationItem>
-            <BSPaginationLink href='blogpost/#' @onclick="@(() => GoToPage(x))" PaginationLinkType="PaginationLinkType.Custom">@x</BSPaginationLink>
+        <BSPaginationItem IsActive="(x - 1) == page">
+            <BSPaginationLink href='blog/#' @onclick="@(() => GoToPage(x))" PaginationLinkType="PaginationLinkType.Custom">@x</BSPaginationLink>
         </BSPaginationItem>
     }
     <BSPaginationItem>
-        <BSPaginationLink href='blogpost/#' @onclick="NextPage" PaginationLinkType="PaginationLinkType.NextText" />
+        <BSPaginationLink href='blog/#' @onclick="NextPage" PaginationLinkType="PaginationLinkType.NextText" />
     </BSPaginationItem>
 </BSPagination>
 @ChildContent
