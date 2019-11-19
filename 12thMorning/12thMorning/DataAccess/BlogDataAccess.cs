@@ -7,9 +7,16 @@ namespace _12thMorning.Data {
     public class BlogDataAccess {
         private _12thMorningContext db = new _12thMorningContext();
 
-        public List<Blog> GetAll(int page, int size) {
+        public List<Blog> GetAll(int page, int size, string type = "") {
             try {
-                return db.Blog.OrderByDescending(x => x.PostNumber).Where(x => x.MainTag != "temp").AsQueryable().Skip(page*size).Take(size).ToList();
+                IQueryable<Blog> blog;
+                if (type == "dev")
+                    blog = db.Blog.Where(x => x.MainTag == "Dev" || x.MainTag == "Mixed");
+                else if (type == "personal")
+                    blog = db.Blog.Where(x => x.MainTag == "Personal" || x.MainTag == "Mixed");
+                else
+                    blog = db.Blog.AsQueryable<Blog>();
+                return blog.OrderByDescending(x => x.PostNumber).Skip(page*size).Take(size).ToList();
             } catch {
                 throw;
             }
@@ -35,8 +42,15 @@ namespace _12thMorning.Data {
             }
         }
 
-        public int GetCount() {
-            return db.Blog.Where(x => x.MainTag != "temp").Count();
+        public int GetCount(string type = "") {
+            IQueryable<Blog> blog;
+            if (type == "dev")
+                blog = db.Blog.Where(x => x.MainTag == "Dev");
+            else if (type == "personal")
+                blog = db.Blog.Where(x => x.MainTag == "Personal");
+            else
+                blog = db.Blog.AsQueryable<Blog>();
+            return blog.Count();
         }
 
     }

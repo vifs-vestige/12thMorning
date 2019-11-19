@@ -4,29 +4,39 @@
             Toogle
         </button>
     </div>*@
+@inject NavigationManager NavManager
 
-<BSNavbar IsExpand="true" IsDark="true" Color="Color.Dark">
-    <BSNavbarBrand Href="/">12th Morning</BSNavbarBrand>
+    <BSNavbar IsExpand="true" IsDark="true" Color="Color.Dark">
+        <BSNavbarBrand Href="/">12th Morning</BSNavbarBrand>
+                <BSNav IsPills="true" Class="m-2" IsNavbar="true">
+                    <BSNavItem IsDropdown="true" Class="mx-2" @bind-IsOpen="@IsOpen">
+                        <BSDropdownToggle @onclick="onclick" Color="Color.Info">Blog</BSDropdownToggle>
+                        <BSDropdownMenu @bind-IsOpen="@IsOpen">
+                            <BSDropdownItem @onclick="onclick" Href="/route">all</BSDropdownItem>
+                            <BSDropdownItem IsDivider="true" />
+                            <BSDropdownItem @onclick="onclick" Href="/route/dev">dev</BSDropdownItem>
+                            <BSDropdownItem IsDivider="true" />
+                            <BSDropdownItem @onclick="onclick" Href="/route/personal">personal</BSDropdownItem>
+                        </BSDropdownMenu>
+                    </BSNavItem>
 
-    <BSNav IsList="true" IsPills="true" Class="m-2" >
-        <BSNavItem Class="mx-2">
-            <BSNavLink Href="/blog">
-                Blog
-            </BSNavLink>
-        </BSNavItem>
-        @if (Startup.IsDev) {
-            <BSNavItem Class="mx-2">
-                <BSNavLink Href="/blogUpdate">
-                    Blog Update
-                </BSNavLink>
-            </BSNavItem>
-        }
-    </BSNav>
-</BSNavbar>
+                    @if (Startup.IsDev) {
+                        <BSNavItem Class="mx-2">
+                            <BSNavLink Href="/blogUpdate">
+                                Blog Update
+                            </BSNavLink>
+                        </BSNavItem>
+                    }
+                </BSNav>
+    </BSNavbar>
 
 
 @code {
-    public bool CheckActive() {
-        return true;
+    protected bool IsOpen { get; set; } = false;
+    protected void onclick(MouseEventArgs e) {
+        IsOpen = !IsOpen;
+        StateHasChanged();
     }
+
+
 }

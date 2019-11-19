@@ -12,16 +12,16 @@ namespace _12thMorning.Data {
     public class BlogService {
         private BlogDataAccess BlogData = new BlogDataAccess();
 
-        public Task<List<Blog>> GetBlogList(int page, int size) {
-            return Task.FromResult(BlogData.GetAll(page, size));
+        public Task<List<Blog>> GetBlogList(int page, int size, string type = "") {
+            return Task.FromResult(BlogData.GetAll(page, size, type));
         }
 
         public Blog GetBlog(int id) {
             return BlogData.Get(id);
         }
 
-        public int GetPages(int size) {
-            return (int)Math.Ceiling((double)BlogData.GetCount() / size);
+        public int GetPages(int size, string type = "") {
+            return (int)Math.Ceiling((double)BlogData.GetCount(type) / size);
         }
 
         public void UpdateBlog(Blog blog) {

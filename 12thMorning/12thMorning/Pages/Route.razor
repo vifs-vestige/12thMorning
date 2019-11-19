@@ -1,0 +1,12 @@
+﻿@page "/route/{item}"
+@page "/route"
+@inject NavigationManager NavManager
+
+@code {
+    [Parameter]
+    public string item { get; set; }
+
+    protected override void OnInitialized() {
+            NavManager.NavigateTo("/blog/" + item);
+    }
+}
