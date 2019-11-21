@@ -1,42 +1,47 @@
-﻿@*<div class="top-row pl-4 navbar navbar-dark">
-        <a class="navbar-brand" href="">12thMorning</a>
-        <button class="navbar-toggler" @onclick="ToggleNavMenu">
-            Toogle
-        </button>
-    </div>*@
-@inject NavigationManager NavManager
+﻿@inject NavigationManager NavManager
 
-    <BSNavbar IsExpand="true" IsDark="true" Color="Color.Dark">
+<BSNavbar IsExpand="true" IsDark="true" Color="Color.Dark">
         <BSNavbarBrand Href="/">12th Morning</BSNavbarBrand>
-                <BSNav IsPills="true" Class="m-2" IsNavbar="true">
-                    <BSNavItem IsDropdown="true" Class="mx-2" @bind-IsOpen="@IsOpen">
-                        <BSDropdownToggle @onclick="onclick" Color="Color.Info">Blog</BSDropdownToggle>
-                        <BSDropdownMenu @bind-IsOpen="@IsOpen">
-                            <BSDropdownItem @onclick="onclick" Href="/route">all</BSDropdownItem>
-                            <BSDropdownItem IsDivider="true" />
-                            <BSDropdownItem @onclick="onclick" Href="/route/dev">dev</BSDropdownItem>
-                            <BSDropdownItem IsDivider="true" />
-                            <BSDropdownItem @onclick="onclick" Href="/route/personal">personal</BSDropdownItem>
-                        </BSDropdownMenu>
-                    </BSNavItem>
+        <BSNav IsPills="true" Class="m-2" IsNavbar="true">
+            <BSDropdown Class="mx-2">
+                <BSButtonGroup>
+                        <BSNavLink Class="btn btn-outline-info" href="/blog">
+                            Blog Update
+                        </BSNavLink>
+                    <BSDropdownToggle IsSplit="true" @onclick="onclick" Color="Color.Info"></BSDropdownToggle>
+                    <BSDropdownMenu @bind-IsOpen="@IsOpen">
+                        <BSDropdownItem @onclick="onclick" Href="/route">all</BSDropdownItem>
+                        <BSDropdownItem IsDivider="true" />
+                        <BSDropdownItem @onclick="onclick" Href="/blog/dev">dev</BSDropdownItem>
+                        <BSDropdownItem IsDivider="true" />
+                        <BSDropdownItem @onclick="onclick" Href="/blog/personal">personal</BSDropdownItem>
+                    </BSDropdownMenu>
+                </BSButtonGroup>
+            </BSDropdown>
+            <BSNavItem Class="mx-2">
+                <BSNavLink Class="btn btn-outline-info" href="/streamschedule">
+                    Stream Schedule
+                </BSNavLink>
+            </BSNavItem>
 
-                    @if (Startup.IsDev) {
-                        <BSNavItem Class="mx-2">
-                            <BSNavLink Href="/blogUpdate">
-                                Blog Update
-                            </BSNavLink>
-                        </BSNavItem>
-                    }
-                </BSNav>
+            @if (Startup.IsDev) {
+                <BSNavItem Class="mx-2">
+                    <BSNavLink Class="btn btn-outline-info" href="/blogupdate">
+                        Blog Update
+                    </BSNavLink>
+                </BSNavItem>
+            }
+        </BSNav>
     </BSNavbar>
 
 
+
+
 @code {
+    private string url;
     protected bool IsOpen { get; set; } = false;
     protected void onclick(MouseEventArgs e) {
         IsOpen = !IsOpen;
         StateHasChanged();
     }
-
-
 }

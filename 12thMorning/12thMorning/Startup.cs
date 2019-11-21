@@ -1,5 +1,8 @@
 using _12thMorning.Data;
+using BlazorStrap;
+using BlazorStyled;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
@@ -7,11 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using BlazorStrap;
-using BlazorStyled;
-using System.Net.Http;
 using System.Linq;
-using Microsoft.AspNetCore.Components;
+using System.Net.Http;
 
 namespace _12thMorning {
     public class Startup {

@@ -2,23 +2,27 @@
 @page "/blog/{type}"
 
 @using _12thMorning.Data
+
+@implements IDisposable
+
 @inject BlogService BlogDataService
-@inject IJSRuntime JSRuntime;
+@inject IJSRuntime JSRuntime
+@inject Microsoft.AspNetCore.Components.NavigationManager NavManager
 
 <base href="~/" />
 <h3>The Blogs</h3>
 
-@*<BSPagination>
+<BSPagination>
     <BSPaginationItem>
-        <BSPaginationLink href='blog/#' @onclick="PerviousPage" PaginationLinkType="PaginationLinkType.PreviousText" />
+        <BSPaginationLink @onclick="PerviousPage" PaginationLinkType="PaginationLinkType.PreviousText" />
     </BSPaginationItem>
     @foreach (var x in pages) {
         <BSPaginationItem>
-            <BSPaginationLink href='blog/#' @onclick="@(() => GoToPage(x))" PaginationLinkType="PaginationLinkType.Custom">@x</BSPaginationLink>
+            <BSPaginationLink @onclick="@(() => GoToPage(x))" PaginationLinkType="PaginationLinkType.Custom">@x</BSPaginationLink>
         </BSPaginationItem>
     }
     <BSPaginationItem>
-        <BSPaginationLink href='blog/#' @onclick="NextPage" PaginationLinkType="PaginationLinkType.NextText" />
+        <BSPaginationLink @onclick="NextPage" PaginationLinkType="PaginationLinkType.NextText" />
     </BSPaginationItem>
 </BSPagination>
 
@@ -33,74 +37,74 @@
 
 <BSPagination Class="mb-3">
     <BSPaginationItem>
-        <BSPaginationLink href='blogpost/#' @onclick="PerviousPage" PaginationLinkType="PaginationLinkType.PreviousText" />
+        <BSPaginationLink @onclick="PerviousPage" PaginationLinkType="PaginationLinkType.PreviousText" />
     </BSPaginationItem>
     @foreach (var x in pages) {
         <BSPaginationItem>
-            <BSPaginationLink href='blogpost/#' @onclick="@(() => GoToPage(x))" PaginationLinkType="PaginationLinkType.Custom">@x</BSPaginationLink>
+            <BSPaginationLink @onclick="@(() => GoToPage(x))" PaginationLinkType="PaginationLinkType.Custom">@x</BSPaginationLink>
         </BSPaginationItem>
     }
     <BSPaginationItem>
-        <BSPaginationLink href='blogpost/#' @onclick="NextPage" PaginationLinkType="PaginationLinkType.NextText" />
+        <BSPaginationLink @onclick="NextPage" PaginationLinkType="PaginationLinkType.NextText" />
     </BSPaginationItem>
-</BSPagination>*@
-
-<div class="mx-5">
-<BlogSummary type="@type"/>
-    </div>
-
-@*@update(type)*@
-
+</BSPagination>
 
 
 @code {
     [Parameter]
     public string type { get; set; }
-    //private List<Blog> blogs;
-    //private int page = 0;
-    //private int size = 5;
-    //private List<int> pages = new List<int>();
-    //private int count;
+    private List<Blog> blogs;
+    private int page = 0;
+    private int size = 10;
+    private List<int> pages;
+    private int count;
 
-    protected bool update(string type) {
-        //if (reload)
-        //    this.StateHasChanged();
-        //reload = !reload;
-        return true;
+    private async void OnLocationChanges(object sender, LocationChangedEventArgs e) => await Update();
 
+    private async Task Update() {
+        count = BlogDataService.GetPages(size, type);
+        page = 0;
+        pages = new List<int>();
+        for (int x = 1; x <= count; x++) {
+            pages.Add(x);
+        }
+        blogs = await BlogDataService.GetBlogList(page, size, type);
+        StateHasChanged();
     }
 
-    //protected override async Task OnInitializedAsync() {
-    //    count = BlogDataService.GetPages(size, type);
-    //    for (int x = 1; x <= count; x++) {
-    //        pages.Add(x);
-    //    }
-    //    blogs = await BlogDataService.GetBlogList(page, size, type);
-    //}
+    protected override async Task OnInitializedAsync() {
+        await Update();
+        NavManager.LocationChanged += OnLocationChanges;
+    }
 
-    //protected async void GoToPage(int index) {
-    //    page = index - 1;
-    //    blogs = await BlogDataService.GetBlogList(page, size, type);
-    //}
+    public void Dispose() {
+        NavManager.LocationChanged -= OnLocationChanges;
+    }
 
-    //protected async void NextPage() {
-    //    if (page != count - 1) {
-    //        page++;
-    //    }
-    //    blogs = await BlogDataService.GetBlogList(page, size, type);
-    //}
+    private async Task MoveToTop() {
+        await JSRuntime.InvokeAsync<string>("window.scrollTo", 0,0);
+    }
 
-    //protected async void PerviousPage() {
-    //    if (page != 0) {
-    //        page--;
-    //    }
-    //    blogs = await BlogDataService.GetBlogList(page, size, type);
-    //}
+    protected async void GoToPage(int index) {
+        page = index - 1;
+        blogs = await BlogDataService.GetBlogList(page, size, type);
+        await MoveToTop();
+    }
 
-    //protected override async Task OnAfterRenderAsync(bool firstRender) {
-    //    if (firstRender) {
-    //        await JSRuntime.InvokeAsync<string>("PR.prettyPrint");
-    //    }
-    //}
+    protected async void NextPage() {
+        if (page != count - 1) {
+            page++;
+        }
+        blogs = await BlogDataService.GetBlogList(page, size, type);
+        await MoveToTop();
+    }
+
+    protected async void PerviousPage() {
+        if (page != 0) {
+            page--;
+        }
+        blogs = await BlogDataService.GetBlogList(page, size, type);
+        await MoveToTop();
+    }
 
 }

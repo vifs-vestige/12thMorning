@@ -1,1 +1,9 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+
+a.nav-item {
+    color: #17a2b8 !important;
+}
+
+a.nav-item.active, a.nav-item:hover {
+    color: white !important;
+}
