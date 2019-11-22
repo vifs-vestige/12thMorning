@@ -27,7 +27,7 @@
 </BSPagination>
 
 @foreach (var blog in blogs) {
-    <h1><a href="blog/@blog.PostNumber">@blog.Title</a></h1>
+    <h1><a href="blogpost/@blog.PostNumber">@blog.Title</a></h1>
     <small><small>@blog.DateAdded.ToString("dd MMMM yyyy")</small></small>
     <div>
         @((MarkupString)BlogDataService.GetPreviewPost(blog.Post))
