@@ -7,3 +7,21 @@ a.nav-item {
 a.nav-item.active, a.nav-item:hover {
     color: white !important;
 }
+
+.page-item > a {
+    color: #17a2b8 !important;
+}
+
+.page-item.active > a {
+    background-color: #17a2b8 !important;
+    color: white !important;
+}
+
+.page-item.disabled > a {
+    background-color: #dee2e6 !important;
+    color: white !important;
+}
+
+h1 > a {
+    color: #17a2b8 !important;
+}

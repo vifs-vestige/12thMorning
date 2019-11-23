@@ -1,0 +1,39 @@
+﻿<BSPagination>
+    <BSPaginationItem IsDisabled="@(Page == 0 ? true : false)">
+        <BSPaginationLink PaginationLinkType="PaginationLinkType.PreviousText" Href="@GetUrl((Page-1))" />
+    </BSPaginationItem>
+    @foreach (var index in pages) {
+        <BSPaginationItem IsActive=@(index == Page ? true : false)>
+            <BSPaginationLink PaginationLinkType="PaginationLinkType.Custom" Href="@GetUrl((index))">
+                @index
+            </BSPaginationLink>
+        </BSPaginationItem>
+    }
+    <BSPaginationItem IsDisabled="@(Page == Count-1 ? true : false)">
+        <BSPaginationLink PaginationLinkType="PaginationLinkType.NextText" Href="@GetUrl((Page+1))" />
+    </BSPaginationItem>
+</BSPagination>
+
+@code {
+    [Parameter]
+    public string Type { get; set; }
+    [Parameter]
+    public int Page { get; set; }
+    [Parameter]
+    public int Count { get; set; }
+    private List<int> pages;
+
+    protected override void OnInitialized() {
+        pages = new List<int>();
+        for (int x = 0; x < Count; x++) {
+            pages.Add(x);
+        }
+    }
+
+    private string GetUrl(int index) {
+        if (Type != null)
+            return "/blogs/" + Type + "/" + index;
+        else
+            return "/blogs/" + index;
+    }
+}

@@ -5,16 +5,16 @@
         <BSNav IsPills="true" Class="m-2" IsNavbar="true">
             <BSDropdown Class="mx-2">
                 <BSButtonGroup>
-                        <BSNavLink Class="btn btn-outline-info" href="/blog">
-                            Blog Update
+                        <BSNavLink Class="btn btn-outline-info blog-menu" href="/blogs">
+                            Blog
                         </BSNavLink>
                     <BSDropdownToggle IsSplit="true" @onclick="onclick" Color="Color.Info"></BSDropdownToggle>
                     <BSDropdownMenu @bind-IsOpen="@IsOpen">
-                        <BSDropdownItem @onclick="onclick" Href="/route">all</BSDropdownItem>
+                        <BSDropdownItem @onclick="onclick" Href="/blogs">all</BSDropdownItem>
                         <BSDropdownItem IsDivider="true" />
-                        <BSDropdownItem @onclick="onclick" Href="/blog/dev">dev</BSDropdownItem>
+                        <BSDropdownItem @onclick="onclick" Href="/blogs/dev">dev</BSDropdownItem>
                         <BSDropdownItem IsDivider="true" />
-                        <BSDropdownItem @onclick="onclick" Href="/blog/personal">personal</BSDropdownItem>
+                        <BSDropdownItem @onclick="onclick" Href="/blogs/personal">personal</BSDropdownItem>
                     </BSDropdownMenu>
                 </BSButtonGroup>
             </BSDropdown>
@@ -38,10 +38,10 @@
 
 
 @code {
-    private string url;
     protected bool IsOpen { get; set; } = false;
     protected void onclick(MouseEventArgs e) {
         IsOpen = !IsOpen;
         StateHasChanged();
     }
+
 }

@@ -1,5 +1,7 @@
-﻿@page "/blog"
-@page "/blog/{type}"
+﻿@page "/blogs"
+@page "/blogs/{type}/{page:int}"
+@page "/blogs/{type}"
+@page "/blogs/{page:int}"
 
 @using _12thMorning.Data
 
@@ -12,22 +14,10 @@
 <base href="~/" />
 <h3>The Blogs</h3>
 
-<BSPagination>
-    <BSPaginationItem>
-        <BSPaginationLink @onclick="PerviousPage" PaginationLinkType="PaginationLinkType.PreviousText" />
-    </BSPaginationItem>
-    @foreach (var x in pages) {
-        <BSPaginationItem>
-            <BSPaginationLink @onclick="@(() => GoToPage(x))" PaginationLinkType="PaginationLinkType.Custom">@x</BSPaginationLink>
-        </BSPaginationItem>
-    }
-    <BSPaginationItem>
-        <BSPaginationLink @onclick="NextPage" PaginationLinkType="PaginationLinkType.NextText" />
-    </BSPaginationItem>
-</BSPagination>
+<BlogPaging Page="@Page" Type="@Type" Count="@count"/>
 
 @foreach (var blog in blogs) {
-    <h1><a href="blogpost/@blog.PostNumber">@blog.Title</a></h1>
+    <h1><a href="blog/@blog.PostNumber">@blog.Title</a></h1>
     <small><small>@blog.DateAdded.ToString("dd MMMM yyyy")</small></small>
     <div>
         @((MarkupString)BlogDataService.GetPreviewPost(blog.Post))
@@ -35,26 +25,14 @@
     <br />
 }
 
-<BSPagination Class="mb-3">
-    <BSPaginationItem>
-        <BSPaginationLink @onclick="PerviousPage" PaginationLinkType="PaginationLinkType.PreviousText" />
-    </BSPaginationItem>
-    @foreach (var x in pages) {
-        <BSPaginationItem>
-            <BSPaginationLink @onclick="@(() => GoToPage(x))" PaginationLinkType="PaginationLinkType.Custom">@x</BSPaginationLink>
-        </BSPaginationItem>
-    }
-    <BSPaginationItem>
-        <BSPaginationLink @onclick="NextPage" PaginationLinkType="PaginationLinkType.NextText" />
-    </BSPaginationItem>
-</BSPagination>
-
+<BlogPaging Page="@Page" Type="@Type" Count="@count" />
 
 @code {
     [Parameter]
-    public string type { get; set; }
+    public string Type { get; set; }
+    [Parameter]
+    public int Page { get; set; }
     private List<Blog> blogs;
-    private int page = 0;
     private int size = 10;
     private List<int> pages;
     private int count;
@@ -62,13 +40,12 @@
     private async void OnLocationChanges(object sender, LocationChangedEventArgs e) => await Update();
 
     private async Task Update() {
-        count = BlogDataService.GetPages(size, type);
-        page = 0;
+        count = BlogDataService.GetPages(size, Type);
         pages = new List<int>();
         for (int x = 1; x <= count; x++) {
             pages.Add(x);
         }
-        blogs = await BlogDataService.GetBlogList(page, size, type);
+        blogs = await BlogDataService.GetBlogList(Page, size, Type);
         StateHasChanged();
     }
 
@@ -81,30 +58,10 @@
         NavManager.LocationChanged -= OnLocationChanges;
     }
 
-    private async Task MoveToTop() {
-        await JSRuntime.InvokeAsync<string>("window.scrollTo", 0,0);
-    }
-
-    protected async void GoToPage(int index) {
-        page = index - 1;
-        blogs = await BlogDataService.GetBlogList(page, size, type);
-        await MoveToTop();
-    }
-
-    protected async void NextPage() {
-        if (page != count - 1) {
-            page++;
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if (firstRender) {
+            await JSRuntime.InvokeAsync<string>("PR.prettyPrint");
         }
-        blogs = await BlogDataService.GetBlogList(page, size, type);
-        await MoveToTop();
-    }
-
-    protected async void PerviousPage() {
-        if (page != 0) {
-            page--;
-        }
-        blogs = await BlogDataService.GetBlogList(page, size, type);
-        await MoveToTop();
     }
 
 }

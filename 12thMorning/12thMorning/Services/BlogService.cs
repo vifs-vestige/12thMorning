@@ -46,6 +46,7 @@ namespace _12thMorning.Data {
             }
         }
 
+        //change so only calls sql to get first two paraphrahs, help performance
         public string GetPreviewPost(string post) {
             post = ParsePost(post);
             var temp = post.Split("<br />", StringSplitOptions.RemoveEmptyEntries);

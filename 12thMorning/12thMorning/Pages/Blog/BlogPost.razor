@@ -1,4 +1,4 @@
-﻿@page "/blogpost/{id}"
+﻿@page "/blog/{id:int}"
 
 @using _12thMorning.Data
 
@@ -15,18 +15,12 @@
 
 @code {
     [Parameter]
-    public string Id { get; set; }
+    public int Id { get; set; }
     private Blog blog;
 
     protected override void OnInitialized() {
-        try {
-            blog = BlogDataService.GetBlog(int.Parse(Id));
-        }
-        catch {
-            NavManager.NavigateTo("blog");
-        }
+        blog = BlogDataService.GetBlog(Id);
     }
-
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         if (firstRender) {
