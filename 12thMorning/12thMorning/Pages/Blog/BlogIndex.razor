@@ -32,19 +32,14 @@
     public string Type { get; set; }
     [Parameter]
     public int Page { get; set; }
+    private int count;
     private List<Blog> blogs;
     private int size = 10;
-    private List<int> pages;
-    private int count;
 
     private async void OnLocationChanges(object sender, LocationChangedEventArgs e) => await Update();
 
     private async Task Update() {
         count = BlogDataService.GetPages(size, Type);
-        pages = new List<int>();
-        for (int x = 1; x <= count; x++) {
-            pages.Add(x);
-        }
         blogs = await BlogDataService.GetBlogList(Page, size, Type);
         StateHasChanged();
     }

@@ -2,7 +2,7 @@
     <BSPaginationItem IsDisabled="@(Page == 0 ? true : false)">
         <BSPaginationLink PaginationLinkType="PaginationLinkType.PreviousText" Href="@GetUrl((Page-1))" />
     </BSPaginationItem>
-    @foreach (var index in pages) {
+    @foreach (var index in Enumerable.Range(0, Count)) {
         <BSPaginationItem IsActive=@(index == Page ? true : false)>
             <BSPaginationLink PaginationLinkType="PaginationLinkType.Custom" Href="@GetUrl((index))">
                 @index
@@ -22,13 +22,6 @@
     [Parameter]
     public int Count { get; set; }
     private List<int> pages;
-
-    protected override void OnInitialized() {
-        pages = new List<int>();
-        for (int x = 0; x < Count; x++) {
-            pages.Add(x);
-        }
-    }
 
     private string GetUrl(int index) {
         if (Type != null)
