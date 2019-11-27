@@ -21,7 +21,6 @@
     public int Page { get; set; }
     [Parameter]
     public int Count { get; set; }
-    private List<int> pages;
 
     private string GetUrl(int index) {
         if (Type != null)

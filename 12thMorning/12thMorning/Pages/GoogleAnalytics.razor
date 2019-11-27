@@ -1,0 +1,34 @@
+﻿@implements IDisposable
+
+@inject IJSRuntime JSRuntime
+@inject Microsoft.AspNetCore.Components.NavigationManager NavManager
+
+@code {
+    [Parameter]
+    public string TrackingId { get; set; } = null;
+
+    private async Task Update() {
+        var relativeUri = new Uri(NavManager.Uri).PathAndQuery;
+        await JSRuntime.InvokeAsync<string>("GoogleAnalyticsInterop.navigate",
+                TrackingId, relativeUri);
+    }
+
+    protected override async Task OnInitializedAsync() {
+        if (!Startup.IsDev) {
+            await base.OnInitializedAsync();
+            NavManager.LocationChanged += OnLocationChanges;
+        }
+    }
+
+    public void Dispose() {
+        NavManager.LocationChanged -= OnLocationChanges;
+    }
+
+    private async void OnLocationChanges(object sender, LocationChangedEventArgs e) => await Update();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if(firstRender && !Startup.IsDev) {
+            await JSRuntime.InvokeAsync<string>("GoogleAnalyticsInterop.configure", TrackingId);
+        }
+    }
+}

@@ -75,6 +75,7 @@ namespace _12thMorning {
             }
 
             //app.UseHttpsRedirection();
+            app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseFileServer();
 
