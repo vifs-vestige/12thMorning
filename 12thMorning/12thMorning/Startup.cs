@@ -1,4 +1,5 @@
 using _12thMorning.Data;
+using _12thMorning.Services;
 using BlazorStrap;
 using BlazorStyled;
 using Microsoft.AspNetCore.Builder;
@@ -29,6 +30,7 @@ namespace _12thMorning {
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<BlogService>();
+            services.AddSingleton<StateService>();
             services.AddBootstrapCSS();
             services.AddBlazorStyled();
             services.Configure<ForwardedHeadersOptions>(options => {

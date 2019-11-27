@@ -1,7 +1,9 @@
 ﻿@page "/blogUpdate"
 @page "/blogUpdate/{id}"
 
+@using _12thMorning.Services
 @using _12thMorning.Data
+
 @inject BlogService BlogDataService
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavManager
@@ -46,13 +48,13 @@
 
     protected void Next() {
         blogId++;
-        Blog = BlogDataService.GetBlog(blogId);
+        Blog = BlogDataService.GetBlogRaw(blogId);
 
     }
 
     protected override void OnInitialized() {
         if (int.TryParse(Id, out blogId)) {
-            Blog = BlogDataService.GetBlog(blogId);
+            Blog = BlogDataService.GetBlogRaw(blogId);
         }
         else {
             Blog = new Blog();
@@ -60,7 +62,7 @@
     }
 
     private async void Preview() {
-        Post = (MarkupString)BlogDataService.ParsePost(Blog.Post);
+        Post = BlogDataService.GetBlogPost(Blog.Post);
         await JSRuntime.InvokeAsync<string>("PR.prettyPrint");
     }
 

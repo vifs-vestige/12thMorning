@@ -1,5 +1,6 @@
-﻿@page "/blog/{id:int}"
+﻿@page "/blog/{Id:int}"
 
+@using _12thMorning.Services
 @using _12thMorning.Data
 
 @inject NavigationManager NavManager
@@ -10,7 +11,7 @@
 <h3 class="ml-5">@blog.Title</h3>
 <small class="ml-5">@blog.DateAdded.ToString("dd MMMM yyyy")</small>
 <div class="m-5">
-    @((MarkupString)BlogDataService.ParsePost(blog.Post))
+    @((MarkupString)blog.Post)
 </div>
 
 @code {
@@ -19,7 +20,7 @@
     private Blog blog;
 
     protected override void OnInitialized() {
-        blog = BlogDataService.GetBlog(Id);
+        blog = BlogDataService.GetBlogFull(Id);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {

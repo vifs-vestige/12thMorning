@@ -23,7 +23,7 @@ namespace _12thMorning.Data {
 
     }
 
-    public class Blog {
+    public class Blog : ICloneable {
         public int Id { get; set; }
         public int PostNumber { get; set; }
         [Required]
@@ -33,5 +33,9 @@ namespace _12thMorning.Data {
         public string Title { get; set; }
         [Required]
         public string MainTag { get; set; }
+
+        public object Clone() {
+            return this.MemberwiseClone();
+        }
     }
 }

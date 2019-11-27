@@ -15,8 +15,8 @@ namespace _12thMorning.Data {
                 else if (type == "personal")
                     blog = db.Blog.Where(x => x.MainTag == "Personal" || x.MainTag == "Mixed");
                 else
-                    blog = db.Blog.AsQueryable<Blog>();
-                return blog.OrderByDescending(x => x.PostNumber).Skip(page*size).Take(size).ToList();
+                    blog = db.Blog.AsQueryable();
+                return blog.OrderByDescending(x => x.PostNumber).Skip(page * size).Take(size).Select(x => (Blog)x.Clone()).ToList();
             } catch {
                 throw;
             }
@@ -24,14 +24,14 @@ namespace _12thMorning.Data {
 
         public Blog Get(int id) {
             try {
-                return db.Blog.First(x => x.PostNumber == id);
+                return (Blog)db.Blog.First(x => x.PostNumber == id).Clone();
             } catch {
                 return null;
             }
         }
 
         public void Update(Blog blog) {
-            if(Startup.IsDev) {
+            if (Startup.IsDev) {
                 if (blog.Id == 0) {
                     blog.DateAdded = DateTime.Now;
                     blog.PostNumber = db.Blog.Max(x => x.PostNumber) + 1;
