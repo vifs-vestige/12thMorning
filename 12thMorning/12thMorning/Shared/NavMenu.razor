@@ -1,9 +1,6 @@
-﻿@using _12thMorning.Services
+﻿@implements IDisposable
 
-@inject NavigationManager NavManager
-@inject StateService State
-
-<BSNavbar IsExpand="true" IsDark="true" Color="Color.Dark">
+<BSNavbar IsExpand="true" IsDark="true" Color="Color.Dark" Class="fixed-top">
     <BSNavbarBrand Href="/">12th Morning</BSNavbarBrand>
     <BSNav IsPills="true" Class="m-2" IsNavbar="true">
         <BSDropdown Class="mx-2">
@@ -11,13 +8,13 @@
                 <BSNavLink Class="btn btn-outline-info blog-menu" href="/blogs">
                     Blog @State.BlogType
                 </BSNavLink>
-                <BSDropdownToggle IsSplit="true" @onclick="onclick" Color="Color.Info"></BSDropdownToggle>
+                <BSDropdownToggle IsSplit="true" @onclick="OnClick" Color="Color.Info"></BSDropdownToggle>
                 <BSDropdownMenu @bind-IsOpen="@IsOpen">
-                    <BSDropdownItem @onclick="onclick" Href="/blogs">all</BSDropdownItem>
+                    <BSDropdownItem @onclick="OnClick" Href="/blogs">all</BSDropdownItem>
                     <BSDropdownItem IsDivider="true" />
-                    <BSDropdownItem @onclick="onclick" Href="/blogs/dev">dev</BSDropdownItem>
+                    <BSDropdownItem @onclick="OnClick" Href="/blogs/dev">dev</BSDropdownItem>
                     <BSDropdownItem IsDivider="true" />
-                    <BSDropdownItem @onclick="onclick" Href="/blogs/personal">personal</BSDropdownItem>
+                    <BSDropdownItem @onclick="OnClick" Href="/blogs/personal">personal</BSDropdownItem>
                 </BSDropdownMenu>
             </BSButtonGroup>
         </BSDropdown>
@@ -35,14 +32,33 @@
             </BSNavItem>
         }
     </BSNav>
+    <BSNav IsPills="true" Class="m-2 ml-auto" IsNavbar="true">
+        <BSNavItem Class="mx-2">
+            <BSButton IsOutline="true" Class="@State.MonthButtonClass" Color="Color.Info" @onclick="OnMonthClick">
+                Months
+            </BSButton>
+        </BSNavItem>
+    </BSNav>
 </BSNavbar>
 
 @code {
     protected bool IsOpen { get; set; } = false;
 
-    protected void onclick(MouseEventArgs e) {
+    protected void OnClick(MouseEventArgs e) {
         IsOpen = !IsOpen;
         StateHasChanged();
+    }
+
+    protected void OnMonthClick(MouseEventArgs e) {
+        State.OpenMonths();
+    }
+
+    protected override void OnInitialized() {
+        State.Change += StateHasChanged;
+    }
+
+    public void Dispose() {
+        State.Change -= StateHasChanged;
     }
 
 }

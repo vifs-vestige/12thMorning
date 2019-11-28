@@ -1,11 +1,6 @@
 ﻿@page "/blog/{Id:int}"
 
-@using _12thMorning.Services
-@using _12thMorning.Data
-
-@inject NavigationManager NavManager
 @inject BlogService BlogDataService
-@inject IJSRuntime JSRuntime
 
 <base href="~/" />
 <h3 class="ml-5">@blog.Title</h3>

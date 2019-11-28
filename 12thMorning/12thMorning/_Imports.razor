@@ -1,12 +1,16 @@
-﻿@using System.Net.Http
-@using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Components.Authorization
+﻿@using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Forms
-@using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.JSInterop
 @using _12thMorning
-@using _12thMorning.Shared
 @using _12thMorning.Pages
+@using _12thMorning.Pages.Tools
+@using _12thMorning.Data
+@using _12thMorning.Shared
+@using _12thMorning.Services
 @using BlazorStrap
 @using BlazorStyled
+
+@inject SessionStorage State
+@inject NavigationManager NavManager
+@inject IJSRuntime JSRuntime

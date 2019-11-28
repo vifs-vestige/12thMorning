@@ -2,24 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace _12thMorning.Data {
     public class BlogDataAccess {
         private _12thMorningContext db = new _12thMorningContext();
 
         public List<Blog> GetAll(int page, int size, string type = "") {
-            try {
-                IQueryable<Blog> blog;
-                if (type == "dev")
-                    blog = db.Blog.Where(x => x.MainTag == "Dev" || x.MainTag == "Mixed");
-                else if (type == "personal")
-                    blog = db.Blog.Where(x => x.MainTag == "Personal" || x.MainTag == "Mixed");
-                else
-                    blog = db.Blog.AsQueryable();
-                return blog.OrderByDescending(x => x.PostNumber).Skip(page * size).Take(size).Select(x => (Blog)x.Clone()).ToList();
-            } catch {
-                throw;
-            }
+            return GetQueryBlogs(type).OrderByDescending(x => x.PostNumber).Skip(page * size).Take(size).Select(x => (Blog)x.Clone()).ToList();
+        }
+
+        internal List<DateTime> GetMonths(string type) {
+            return GetQueryBlogs(type).Select(x => new DateTime(x.DateAdded.Year, x.DateAdded.Month, 1))
+                .Distinct().AsEnumerable().OrderBy(x => x).ToList();
         }
 
         public Blog Get(int id) {
@@ -51,6 +46,22 @@ namespace _12thMorning.Data {
             else
                 blog = db.Blog.AsQueryable<Blog>();
             return blog.Count();
+        }
+
+        private IQueryable<Blog> GetQueryBlogs(string type) {
+            try {
+                IQueryable<Blog> blog;
+                if (type == "dev")
+                    blog = db.Blog.Where(x => x.MainTag == "Dev" || x.MainTag == "Mixed");
+                else if (type == "personal")
+                    blog = db.Blog.Where(x => x.MainTag == "Personal" || x.MainTag == "Mixed");
+                else
+                    blog = db.Blog.AsQueryable();
+                return blog;
+            }
+            catch {
+                throw;
+            }
         }
 
     }

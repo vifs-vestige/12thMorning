@@ -1,23 +1,22 @@
 ﻿@page "/blogs"
-@page "/blogs/{type}/{page:int}"
 @page "/blogs/{type}"
+@page "/blogs/{type}/{page:int}"
+@page "/blogs/{type}/{page:int}/{month:datetime}"
 @page "/blogs/{page:int}"
-
-@using _12thMorning.Services
-@using _12thMorning.Data
+@page "/blogs/{page:int}/{month:datetime}"
 
 @implements IDisposable
 
 @inject BlogService BlogDataService
-@inject IJSRuntime JSRuntime
-@inject Microsoft.AspNetCore.Components.NavigationManager NavManager
-@inject StateService State
 
 <base href="~/" />
 <h3>The Blogs</h3>
 
+<BlogMonths Type="@Type" />
+
 <BlogPaging Page="@Page" Type="@Type" Count="@count" />
 
+<div class="@State.MovePostInClass">
 @foreach (var blog in blogs) {
     <h1><a href="blog/@blog.PostNumber">@blog.Title</a></h1>
     <small><small>@blog.DateAdded.ToString("dd MMMM yyyy")</small></small>
@@ -26,6 +25,7 @@
     </div>
     <br />
 }
+    </div>
 
 <BlogPaging Page="@Page" Type="@Type" Count="@count" />
 
@@ -34,6 +34,8 @@
     public string Type { get; set; }
     [Parameter]
     public int Page { get; set; }
+    [Parameter]
+    public DateTime Month { get; set; }
     private int count;
     private List<Blog> blogs;
     private int size = 10;
@@ -48,20 +50,18 @@
     }
 
     protected override async Task OnInitializedAsync() {
+        State.OnBlog();
         await Update();
+        State.Change += StateHasChanged;
         NavManager.LocationChanged += OnLocationChanges;
     }
 
     public void Dispose() {
         Type = "";
         State.BlogType = Type;
+        State.OffBlog();
         NavManager.LocationChanged -= OnLocationChanges;
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender) {
-        if (firstRender) {
-            await JSRuntime.InvokeAsync<string>("PR.prettyPrint");
-        }
+        State.Change -= StateHasChanged;
     }
 
 }

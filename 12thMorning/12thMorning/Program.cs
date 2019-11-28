@@ -15,6 +15,7 @@ namespace _12thMorning
     {
         public static void Main(string[] args)
         {
+            //CreateHostBuilder(args).Build().Run();
             CreateWebHostBuilder(args).Build().Run();
             //var host = new WebHostBuilder()
             //    .UseKestrel()
@@ -25,6 +26,20 @@ namespace _12thMorning
             //    .Build();
 
             //host.Run();
+        }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) {
+            return Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder => {
+
+                    webBuilder.UseStartup<Startup>();
+                    if (args.Contains("dev")) {
+                        webBuilder.UseSetting(WebHostDefaults.DetailedErrorsKey, "true");
+                    }
+                    //webBuilder.UseKestrel();
+                });
+
+
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

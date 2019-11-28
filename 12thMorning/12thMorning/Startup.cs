@@ -18,11 +18,13 @@ namespace _12thMorning {
     public class Startup {
         private static bool isDev = false;
         public static bool IsDev { get { return isDev; } }
-        public Startup(IConfiguration configuration) {
+        public Startup(IConfiguration configuration, IWebHostEnvironment env) {
             Configuration = configuration;
+            Env = env;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Env { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
@@ -30,9 +32,18 @@ namespace _12thMorning {
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<BlogService>();
-            services.AddSingleton<StateService>();
+            services.AddScoped<SessionStorage>();
             services.AddBootstrapCSS();
             services.AddBlazorStyled();
+
+            services.AddServerSideBlazor().AddCircuitOptions(o =>
+            {
+                if (Env.IsDevelopment()) //only add details when debugging
+                {
+                    o.DetailedErrors = true;
+                }
+            });
+
             services.Configure<ForwardedHeadersOptions>(options => {
                 options.ForwardedHeaders =
                     ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
@@ -69,7 +80,7 @@ namespace _12thMorning {
                 Startup.isDev = true;
             }
             else {
-                app.UseExceptionHandler("/Error");
+                app.UseExceptionHandler("/Tools/Error");
                 //    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 //    app.UseHsts();
             }
@@ -83,7 +94,7 @@ namespace _12thMorning {
 
             app.UseEndpoints(endpoints => {
                 endpoints.MapBlazorHub();
-                endpoints.MapFallbackToPage("/_Host");
+                endpoints.MapFallbackToPage("/Tools/_Host");
             });
         }
     }

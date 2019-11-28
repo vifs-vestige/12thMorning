@@ -1,0 +1,48 @@
+﻿@inject BlogService BlogDataService
+@implements IDisposable
+
+
+<BSNavbar IsExpand="true" IsDark="true" Color="Color.Light" class="@State.MonthToggleClass">
+    <BSNav IsList="true" IsVertical="true">
+        @foreach (var month in GetMonths()) {
+            <BSNavLink @onclick="onclick" Href="@GetUrl(month)">
+                @month.ToString("MMMM yyyy")
+            </BSNavLink>
+            <br />
+        }
+
+    </BSNav>
+</BSNavbar>
+
+@code {
+    [Parameter]
+    public string Type { get; set; }
+    private string hidden = "fixed-right hidden";
+
+    public List<DateTime> GetMonths() {
+        return BlogDataService.GetBlogMonths(Type);
+    }
+
+    private string GetUrl(DateTime month) {
+        string date = month.ToString("dd-MM-yyyy");
+        if (Type == "dev" || Type == "personall")
+            return "/blogs/" + Type + "/0/" + date;
+        else
+            return "/blogs/0/" + date;
+    }
+
+    protected void onclick(MouseEventArgs e) {
+
+        StateHasChanged();
+    }
+    
+    protected override void OnInitialized() {
+        State.Change += StateHasChanged;
+    }
+
+    public void Dispose() {
+        State.Change -= StateHasChanged;
+    }
+
+
+}

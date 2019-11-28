@@ -1,18 +1,23 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
-a.nav-item {
+.main{
+    top:150px;
+    position:relative;
+}
+
+a.nav-item, .page-item > a {
     color: #17a2b8 !important;
 }
 
-a.nav-item.active, a.nav-item:hover {
-    color: white !important;
-}
+    a.nav-item.active, a.nav-item:hover {
+        color: white !important;
+    }
 
 .page-item > a {
     color: #17a2b8 !important;
 }
 
-.page-item.active > a {
+.page-item.active > a, .nav-item button:hover, .nav-item button.toggled {
     background-color: #17a2b8 !important;
     color: white !important;
 }
@@ -22,6 +27,23 @@ a.nav-item.active, a.nav-item:hover {
     color: white !important;
 }
 
-h1 > a {
-    color: #17a2b8 !important;
+.fixed-right .nav-item {
+    padding: 0;
+    line-height: 1;
+}
+
+.navbar.fixed-right {
+    left: auto;
+    position: fixed;
+    top: 75px;
+    right: 0;
+    width: 200px;
+}
+
+.hidden {
+    display: none;
+}
+
+.move {
+    margin-right: 150px;
 }
