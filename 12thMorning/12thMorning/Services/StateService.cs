@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.JSInterop;
 
 namespace _12thMorning.Services {
     public class SessionStorage {
@@ -13,7 +9,6 @@ namespace _12thMorning.Services {
         public string MonthToggleClass = "hidden";
         public string MonthButtonClass = "hidden";
         public string MovePostInClass = "";
-        private IJSRuntime JSRuntime;
 
         public void OnBlog() {
             CurrentMonthToggle = false;
@@ -26,7 +21,11 @@ namespace _12thMorning.Services {
             CurrentMonthToggle = false;
             MonthToggleClass = "hidden";
             MonthButtonClass = "hidden";
-            Change.Invoke();
+            try {
+                Change.Invoke();
+            } catch(Exception e) {
+                var temp = e;
+            }
         }
 
         public void OpenMonths() {

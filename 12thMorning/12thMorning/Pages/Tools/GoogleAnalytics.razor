@@ -24,8 +24,11 @@
     private async void OnLocationChanges(object sender, LocationChangedEventArgs e) => await Update();
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
-        if(firstRender && !Startup.IsDev) {
+        if (firstRender && !Startup.IsDev) {
             await JSRuntime.InvokeAsync<string>("GoogleAnalyticsInterop.configure", TrackingId);
+
+            await JSRuntime.InvokeAsync<string>("GoogleAnalyticsInterop.navigate",
+                    TrackingId, new Uri(NavManager.Uri).PathAndQuery);
         }
     }
 }
