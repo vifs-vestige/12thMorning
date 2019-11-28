@@ -5,6 +5,6 @@ using System.Threading.Tasks;
 
 namespace _12thMorning.Services {
     public class StateService {
-        public static string BlogType;
+        public string BlogType;
     }
 }

@@ -11,6 +11,7 @@
 @inject BlogService BlogDataService
 @inject IJSRuntime JSRuntime
 @inject Microsoft.AspNetCore.Components.NavigationManager NavManager
+@inject StateService State
 
 <base href="~/" />
 <h3>The Blogs</h3>
@@ -40,7 +41,7 @@
     private async void OnLocationChanges(object sender, LocationChangedEventArgs e) => await Update();
 
     private async Task Update() {
-        StateService.BlogType = Type;
+        State.BlogType = Type;
         count = BlogDataService.GetPages(size, Type);
         blogs = await BlogDataService.GetBlogPreviewList(Page, size, Type);
         StateHasChanged();
@@ -53,7 +54,7 @@
 
     public void Dispose() {
         Type = "";
-        StateService.BlogType = Type;
+        State.BlogType = Type;
         NavManager.LocationChanged -= OnLocationChanges;
     }
 
