@@ -14,11 +14,12 @@
 
 <BlogMonths Type="@Type" />
 
-<BlogPaging Page="@Page" Type="@Type" Count="@count" />
+<BlogPaging Page="@Page" Type="@Type" Count="@count" Month="@Month"/>
 
 <div class="@State.MovePostInClass">
+    
 @foreach (var blog in blogs) {
-    <h1><a href="blog/@blog.PostNumber">@blog.Title</a></h1>
+    <h1><a href="blog/@blog.PostNumber/@Type">@blog.Title</a></h1>
     <small><small>@blog.DateAdded.ToString("dd MMMM yyyy")</small></small>
     <div>
         @((MarkupString)blog.Post)
@@ -26,8 +27,6 @@
     <br />
 }
     </div>
-
-<BlogPaging Page="@Page" Type="@Type" Count="@count" />
 
 @code {
     [Parameter]
@@ -39,13 +38,16 @@
     private int count;
     private List<Blog> blogs;
     private int size = 10;
+    private string TypeUrl = "";
 
     private async void OnLocationChanges(object sender, LocationChangedEventArgs e) => await Update();
 
     private async Task Update() {
+        if(Type != null)
+            TypeUrl = "/" + Type;
         State.BlogType = Type;
-        count = BlogDataService.GetPages(size, Type);
-        blogs = await BlogDataService.GetBlogPreviewList(Page, size, Type);
+        count = BlogDataService.GetPages(size, Type, Month);
+        blogs = await BlogDataService.GetBlogPreviewList(Page, size, Type, Month);
         StateHasChanged();
     }
 
@@ -62,6 +64,10 @@
         State.OffBlog();
         NavManager.LocationChanged -= OnLocationChanges;
         State.Change -= StateHasChanged;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+            await JSRuntime.InvokeAsync<string>("PR.prettyPrint");
     }
 
 }

@@ -1,4 +1,4 @@
-﻿<BSPagination>
+﻿<BSPagination Class="paging fixed-top mx-5">
     <BSPaginationItem IsDisabled="@(Page == 0 ? true : false)">
         <BSPaginationLink PaginationLinkType="PaginationLinkType.PreviousText" Href="@GetUrl((Page-1))" />
     </BSPaginationItem>
@@ -21,11 +21,18 @@
     public int Page { get; set; }
     [Parameter]
     public int Count { get; set; }
+    [Parameter]
+    public DateTime Month { get; set; }
 
     private string GetUrl(int index) {
+        var type = "";
         if (Type != null)
-            return "/blogs/" + Type + "/" + index;
-        else
-            return "/blogs/" + index;
+            type = "/" + Type;
+        var page = "/" + index;
+        var month = "";
+        if (Month.Ticks != 0)
+            month = "/"+ Month.ToString("MM-dd-yyyy");
+
+        return "/blogs/" + type + page + month;
     }
 }

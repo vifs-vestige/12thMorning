@@ -1,8 +1,8 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
-.main{
-    top:150px;
-    position:relative;
+.main {
+    top: 150px;
+    position: relative;
 }
 
 a.nav-item, .page-item > a {
@@ -40,10 +40,26 @@ a.nav-item, .page-item > a {
     width: 200px;
 }
 
+.paging {
+    top: 100px;
+    z-index: 10;
+}
+
+    .paging li a {
+        border: 3px solid #17a2b8;
+        border-radius: 5px !important;
+    }
+
 .hidden {
     display: none;
 }
 
 .move {
-    margin-right: 150px;
+    margin-right: 250px;
+}
+
+.temp {
+    background-color: white;
+    z-index: 5;
+    height: 150px;
 }

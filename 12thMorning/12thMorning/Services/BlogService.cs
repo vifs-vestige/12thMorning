@@ -16,8 +16,8 @@ namespace _12thMorning.Services {
         private BlogDataAccess BlogData = new BlogDataAccess();
 
         #region get blog(s)
-        public Task<List<Blog>> GetBlogPreviewList(int page, int size, string type = "") {
-            var blogs = BlogData.GetAll(page, size, type);
+        public Task<List<Blog>> GetBlogPreviewList(int page, int size, string type, DateTime month) {
+            var blogs = BlogData.GetAll(page, size, type, month);
             blogs.ForEach(x => x.Post = GetPreviewPost(x.Post));
             return Task.FromResult(blogs);
         }
@@ -38,12 +38,16 @@ namespace _12thMorning.Services {
         #endregion
 
         #region paging
-        public int GetPages(int size, string type = "") {
-            return (int)Math.Ceiling((double)BlogData.GetCount(type) / size);
+        public int GetPages(int size, string type, DateTime month) {
+            return (int)Math.Ceiling((double)BlogData.GetCount(type, month) / size);
         }
 
         public List<DateTime> GetBlogMonths(string type = "") {
             return BlogData.GetMonths(type);
+        }
+
+        public List<int?> GetBlogNextAndPrevious(int id, string type) {
+            return BlogData.GetNextAndPrevious(id, type);
         }
 
         #endregion
