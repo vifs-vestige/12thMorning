@@ -13,7 +13,6 @@
         <BSPaginationLink PaginationLinkType="PaginationLinkType.NextText" Href="@GetUrl("Next")" />
     </BSPaginationItem>
 </BSPagination>
-
 <base href="~/" />
 <h3 class="ml-5">@Blog.Title</h3>
 <small class="ml-5">@Blog.DateAdded.ToString("dd MMMM yyyy")</small>
@@ -21,16 +20,9 @@
     @((MarkupString)Blog.Post)
 </div>
 
-<BSPagination>
-    <BSPaginationItem IsDisabled="@(Previous == null ? true : false)">
-        <BSPaginationLink PaginationLinkType="PaginationLinkType.PreviousText" Href="@GetUrl("Previous")" />
-    </BSPaginationItem>
-    <BSPaginationItem IsDisabled="@(Next == null ? true : false)">
-        <BSPaginationLink PaginationLinkType="PaginationLinkType.NextText" Href="@GetUrl("Next")" />
-    </BSPaginationItem>
-</BSPagination>
-
 @code {
+    //todo: move href="~/" to parent
+    //todo: change color of comments
     [Parameter]
     public int Id { get; set; }
     [Parameter]
@@ -41,6 +33,7 @@
 
     protected override void OnInitialized() {
         SetUpNextAndPrevious();
+        //todo: move refresh stuff up to parent
         NavManager.LocationChanged += OnLocationChanges;
     }
 
@@ -52,6 +45,7 @@
         StateHasChanged();
     }
 
+    //todo: change direction to bool isNext
     private string GetUrl(string direction) {
         var index = "";
         if (direction == "Next" && Next != null)
@@ -65,7 +59,8 @@
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
-        await JSRuntime.InvokeAsync<string>("PR.prettyPrint");
+        await JSRuntime.InvokeAsync<string>
+        ("PR.prettyPrint");
     }
 
     public void Dispose() {

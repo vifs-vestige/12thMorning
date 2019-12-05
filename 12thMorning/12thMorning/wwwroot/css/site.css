@@ -40,15 +40,22 @@ a.nav-item, .page-item > a {
     width: 200px;
 }
 
+
 .paging {
     top: 100px;
     z-index: 10;
 }
 
-    .paging li a {
-        border: 3px solid #17a2b8;
-        border-radius: 5px !important;
-    }
+.temp {
+    background-color: white;
+    z-index: 5;
+    height: 150px;
+}
+
+.paging li a {
+    border: 3px solid #17a2b8;
+    border-radius: 5px !important;
+}
 
 .hidden {
     display: none;
@@ -56,10 +63,4 @@ a.nav-item, .page-item > a {
 
 .move {
     margin-right: 250px;
-}
-
-.temp {
-    background-color: white;
-    z-index: 5;
-    height: 150px;
 }

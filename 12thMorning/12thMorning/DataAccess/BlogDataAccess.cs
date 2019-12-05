@@ -13,7 +13,7 @@ namespace _12thMorning.Data {
             return GetQueryBlogs(type, month).OrderByDescending(x => x.PostNumber).Skip(page * size).Take(size).Select(x => (Blog)x.Clone()).ToList();
         }
 
-        internal List<DateTime> GetMonths(string type) {
+        public List<DateTime> GetMonths(string type) {
             return GetQueryBlogs(type, new DateTime()).Select(x => new DateTime(x.DateAdded.Year, x.DateAdded.Month, 1))
                 .Distinct().AsEnumerable().OrderBy(x => x).ToList();
         }
