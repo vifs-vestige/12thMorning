@@ -32,6 +32,7 @@ namespace _12thMorning {
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<BlogService>();
+            services.AddSingleton<CommentService>();
             services.AddScoped<SessionStorage>();
             services.AddBootstrapCSS();
             services.AddBlazorStyled();
@@ -60,12 +61,12 @@ namespace _12thMorning {
                 });
             }
 
-            services.AddDbContextPool<_12thMorningContext>( 
-                options => options.UseMySql("Server=localhost;Database=12thmorning;Uid=12thmorning;", 
-                mySqlOptions => {
-                    mySqlOptions.ServerVersion(new Version(10, 1, 41), Pomelo.EntityFrameworkCore.MySql.Infrastructure.ServerType.MariaDb); // replace with your Server Version and Type
-                }
-            ));
+            //services.AddDbContextPool<_12thMorningContext>( 
+            //    options => options.UseMySql("Server=localhost;Database=12thmorning;Uid=12thmorning;", 
+            //    mySqlOptions => {
+            //        mySqlOptions.ServerVersion(new Version(10, 1, 41), Pomelo.EntityFrameworkCore.MySql.Infrastructure.ServerType.MariaDb); // replace with your Server Version and Type
+            //    }
+            //));
 
 
         }

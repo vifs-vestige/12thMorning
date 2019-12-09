@@ -1,0 +1,18 @@
+﻿@implements IDisposable
+
+@code {
+    protected void OnLocationChanges(object sender, LocationChangedEventArgs e) => Refresh();
+
+    protected virtual void Refresh() {
+        StateHasChanged();
+    }
+
+    protected override void OnInitialized() {
+        Refresh();
+        NavManager.LocationChanged += OnLocationChanges;
+    }
+
+    public virtual void Dispose() {
+        NavManager.LocationChanged -= OnLocationChanges;
+    }
+}

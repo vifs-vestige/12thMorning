@@ -1,0 +1,33 @@
+﻿<div class="ml-4">
+    <div class="row">
+        @if (Nest == 0) {
+            <span class="oi oi-chevron-bottom">&nbsp;&nbsp;</span>
+        }
+        else {
+            for (int x = 0; x < Nest; x++) {
+                <span class="oi oi-chevron-right">&nbsp;&nbsp;</span>
+            }
+        }
+        <div class="col">
+            <div class="row">
+                @Comment.Name - @Comment.DateAdded
+            </div>
+            <div class="row">
+                @Comment.Text
+            </div>
+        </div>
+    </div>
+
+    @foreach (var comment in Comment.Replies) {
+        <BlogDisplayComment Nest="@(Nest+1)" Comment="@comment" />
+    }
+</div>
+
+
+@code {
+    [Parameter]
+    public Comment Comment { get; set; }
+    [Parameter]
+    public int Nest { get; set; }
+
+}

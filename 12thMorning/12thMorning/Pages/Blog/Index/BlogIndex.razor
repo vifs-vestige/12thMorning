@@ -1,0 +1,69 @@
+﻿@page "/blogs"
+@page "/blogs/{type}"
+@page "/blogs/{type}/{page:int}"
+@page "/blogs/{type}/{page:int}/{month:datetime}"
+@page "/blogs/{page:int}"
+@page "/blogs/{page:int}/{month:datetime}"
+
+@inherits RefreshPage
+
+@inject BlogService BlogDataService
+
+<h3>The Blogs</h3>
+
+<BlogMonths Type="@Type" />
+
+<BlogPaging Page="@Page" Type="@Type" Count="@count" Month="@Month" />
+
+<div class="@State.MovePostInClass">
+
+    @foreach (var blog in blogs) {
+        <h1><a href="blog/@blog.Id/@Type">@blog.Title</a></h1>
+        <small><small>@blog.DateAdded.ToString("dd MMMM yyyy")</small></small>
+        <div>
+            @((MarkupString)blog.Post)
+        </div>
+        <br />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Type { get; set; }
+    [Parameter]
+    public int Page { get; set; }
+    [Parameter]
+    public DateTime Month { get; set; }
+    private int count;
+    private List<Blog> blogs;
+    private int size = 10;
+    private string TypeUrl = "";
+
+    protected override void Refresh() {
+        if (Type != null)
+            TypeUrl = "/" + Type;
+        State.BlogType = Type;
+        count = BlogDataService.GetPages(size, Type, Month);
+        blogs = BlogDataService.GetBlogPreviewList(Page, size, Type, Month);
+        base.Refresh();
+    }
+
+    protected override void OnInitialized() {
+        State.OnBlog();
+        State.Change += StateHasChanged;
+        base.OnInitialized();
+    }
+
+    public override void Dispose() {
+        Type = "";
+        State.BlogType = Type;
+        State.OffBlog();
+        State.Change -= StateHasChanged;
+        base.Dispose();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        await JSRuntime.InvokeAsync<string>("PR.prettyPrint");
+    }
+
+}

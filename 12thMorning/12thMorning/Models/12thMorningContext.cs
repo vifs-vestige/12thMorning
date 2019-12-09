@@ -2,19 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace _12thMorning.Data {
     public class _12thMorningContext : DbContext {
         public DbSet<Blog> Blog { get; set; }
-
-        public _12thMorningContext(DbContextOptions<_12thMorningContext> a) : base(a) {
-        }
-
-        public _12thMorningContext() {
-
-        }
+        public DbSet<Comment> Comment { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             optionsBuilder.UseMySql(
@@ -23,9 +19,8 @@ namespace _12thMorning.Data {
 
     }
 
-    public class Blog : ICloneable {
+    public class Blog {
         public int Id { get; set; }
-        public int PostNumber { get; set; }
         [Required]
         public string Post{ get; set; }
         public DateTime DateAdded { get; set; }
@@ -34,8 +29,31 @@ namespace _12thMorning.Data {
         [Required]
         public string MainTag { get; set; }
 
-        public object Clone() {
-            return this.MemberwiseClone();
+        [InverseProperty("Blog")]
+        public List<Comment> Comments { get; set; }
+    }
+
+    public class Comment {
+        public Comment() {
+            Replies = new List<Comment>();
         }
+
+        public int Id { get; set; }
+        public int BlogId { get; set; }
+        public string Name { get; set; }
+        [Required]
+        public string Text { get; set; }
+        public int? ReplyTo { get; set; }
+        public DateTime DateAdded { get; set; }
+
+        [InverseProperty("ParentComment")]
+        public virtual List<Comment> Replies { get; set; }
+
+        [ForeignKey("BlogId")]
+        public virtual Blog Blog { get; set; }
+
+        [ForeignKey("ReplyTo")]
+        public virtual Comment ParentComment { get; set; }
+
     }
 }
