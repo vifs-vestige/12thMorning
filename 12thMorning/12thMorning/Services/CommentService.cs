@@ -13,11 +13,31 @@ namespace _12thMorning.Services {
         }
 
         public List<Comment> Get(int Id) {
-            return DB.Comment
-                .Include(x => x.Replies)
-                .ThenInclude(x => x.Replies)
+            //var temp = DB.Comment
+            //    .Include(x => x.Replies)
+            //    .ThenInclude(x => x.Replies)
+            //    .Where(x => x.BlogId == Id && x.ReplyTo == null)
+            //    .ToList();
+            //var temp2 = "a";
+            //return temp;
+
+            var rootComments = DB.Comment
                 .Where(x => x.BlogId == Id && x.ReplyTo == null)
                 .ToList();
+
+            foreach(var comment in rootComments) {
+                GetReplies(comment);
+            }
+            return rootComments;
+        }
+
+        private Comment GetReplies(Comment comment) {
+            var replies = DB.Comment.Where(x => x.ReplyTo == comment.Id).ToList();
+            comment.Replies = replies;
+            foreach (var reply in comment.Replies) {
+                GetReplies(reply);
+            }
+            return comment;
         }
     }
 }

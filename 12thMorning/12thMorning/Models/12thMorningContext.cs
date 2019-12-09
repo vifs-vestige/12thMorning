@@ -47,13 +47,13 @@ namespace _12thMorning.Data {
         public DateTime DateAdded { get; set; }
 
         [InverseProperty("ParentComment")]
-        public virtual List<Comment> Replies { get; set; }
+        public List<Comment> Replies { get; set; }
 
         [ForeignKey("BlogId")]
         public virtual Blog Blog { get; set; }
 
         [ForeignKey("ReplyTo")]
-        public virtual Comment ParentComment { get; set; }
+        public Comment ParentComment { get; set; }
 
     }
 }
