@@ -1,5 +1,5 @@
 ﻿@page "/blogUpdate"
-@page "/blogUpdate/{id}"
+@page "/blogUpdate/{Id:int}"
 
 @inject BlogService BlogDataService
 
@@ -34,31 +34,31 @@
 
 @code {
     [Parameter]
-    public string Id { get; set; }
+    public int? Id { get; set; }
     private bool isVisible { get; set; } = true;
 
-    private int blogId;
     private Blog Blog;
     private MarkupString Post;
 
     protected void Next() {
-        blogId++;
-        Blog = BlogDataService.GetBlogRaw(blogId);
+        if (Id != null) {
+            Id++;
+            Blog = BlogDataService.GetBlogRaw((int)Id);
+        }
 
     }
 
     protected override void OnInitialized() {
-        if (int.TryParse(Id, out blogId)) {
-            Blog = BlogDataService.GetBlogRaw(blogId);
-        }
-        else {
+        if (Id != null)
+            Blog = BlogDataService.GetBlogRaw((int)Id);
+        else
             Blog = new Blog();
-        }
     }
 
     private async void Preview() {
         Post = BlogDataService.GetFullPreview(Blog.Post);
-        await JSRuntime.InvokeAsync<string>("PR.prettyPrint");
+        await JSRuntime.InvokeAsync<string>
+    ("PR.prettyPrint");
     }
 
     private void submit() {

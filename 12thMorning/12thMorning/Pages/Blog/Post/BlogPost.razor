@@ -4,6 +4,7 @@
 @inherits RefreshPage
 
 @inject BlogService BlogDataService
+@using _12thMorning.Pages.Blog.Post.Comments
 
 <BSPagination Class="paging fixed-top mx-5">
     <BSPaginationItem IsDisabled="@(Previous == null ? true : false)">
@@ -19,7 +20,7 @@
     @((MarkupString)Blog.Post)
 </div>
 
-<BlogComments Id="@Id" />
+<BlogRootComments Id="@Id" />
 
 @code {
     //todo: change color of comments
@@ -30,6 +31,10 @@
     private Blog Blog;
     private int? Next;
     private int? Previous;
+
+    //protected override void OnInitialized() {
+    //    Refresh();
+    //}
 
     protected override void Refresh() {
         var nextPrevious = BlogDataService.GetBlogNextAndPrevious(Id, Type);
@@ -50,10 +55,6 @@
         if (Type != null)
             type = "/" + Type;
         return "/blog" + index + type;
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender) {
-        await JSRuntime.InvokeAsync<string>("PR.prettyPrint");
     }
 
 }

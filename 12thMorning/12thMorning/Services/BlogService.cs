@@ -74,13 +74,14 @@ namespace _12thMorning.Services {
 
         public void UpdateBlog(Blog blog) {
             if (Startup.IsDev) {
+                var db = DB;
                 if (blog.Id == 0) {
                     blog.DateAdded = DateTime.Now;
                     blog.Id = DB.Blog.Max(x => x.Id) + 1;
-                }
-
-                DB.Blog.Update(blog);
-                DB.SaveChanges();
+                    db.Blog.Add(blog);
+                } else
+                    db.Blog.Update(blog);
+                db.SaveChanges();
             }
         }
 

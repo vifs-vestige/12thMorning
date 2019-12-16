@@ -13,14 +13,6 @@ namespace _12thMorning.Services {
         }
 
         public List<Comment> Get(int Id) {
-            //var temp = DB.Comment
-            //    .Include(x => x.Replies)
-            //    .ThenInclude(x => x.Replies)
-            //    .Where(x => x.BlogId == Id && x.ReplyTo == null)
-            //    .ToList();
-            //var temp2 = "a";
-            //return temp;
-
             var rootComments = DB.Comment
                 .Where(x => x.BlogId == Id && x.ReplyTo == null)
                 .ToList();
@@ -29,6 +21,12 @@ namespace _12thMorning.Services {
                 GetReplies(comment);
             }
             return rootComments;
+        }
+
+        public void Submit(Comment comment) {
+            var db = DB;
+            db.Comment.Add(comment);
+            db.SaveChanges();
         }
 
         private Comment GetReplies(Comment comment) {

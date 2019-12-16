@@ -6,6 +6,7 @@
 @page "/blogs/{page:int}/{month:datetime}"
 
 @inherits RefreshPage
+@implements IDisposable
 
 @inject BlogService BlogDataService
 
@@ -54,16 +55,12 @@
         base.OnInitialized();
     }
 
-    public override void Dispose() {
+    public void Dispose() {
         Type = "";
         State.BlogType = Type;
         State.OffBlog();
         State.Change -= StateHasChanged;
-        base.Dispose();
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender) {
-        await JSRuntime.InvokeAsync<string>("PR.prettyPrint");
+        StateHasChanged();
     }
 
 }

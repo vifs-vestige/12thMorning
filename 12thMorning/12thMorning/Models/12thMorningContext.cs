@@ -41,7 +41,7 @@ namespace _12thMorning.Data {
         public int Id { get; set; }
         public int BlogId { get; set; }
         public string Name { get; set; }
-        [Required]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Can't be empty")]
         public string Text { get; set; }
         public int? ReplyTo { get; set; }
         public DateTime DateAdded { get; set; }

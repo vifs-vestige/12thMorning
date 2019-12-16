@@ -1,7 +1,4 @@
-﻿@implements IDisposable
-
-@code {
-    protected void OnLocationChanges(object sender, LocationChangedEventArgs e) => Refresh();
+﻿@code {
 
     protected virtual void Refresh() {
         StateHasChanged();
@@ -9,10 +6,11 @@
 
     protected override void OnInitialized() {
         Refresh();
-        NavManager.LocationChanged += OnLocationChanges;
     }
 
-    public virtual void Dispose() {
-        NavManager.LocationChanged -= OnLocationChanges;
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if (!firstRender)
+            Refresh();
+        await JSRuntime.InvokeAsync<string>("PR.prettyPrint");
     }
 }

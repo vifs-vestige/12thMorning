@@ -1,9 +1,12 @@
 ﻿using System;
+using _12thMorning.Pages.Blog.Post.Comments;
+using Microsoft.AspNetCore.Components;
 
 namespace _12thMorning.Services {
     public class SessionStorage {
         public string BlogType;
         public event Action Change;
+        public event Action BlogReply;
 
         private bool CurrentMonthToggle = false;
         public string MonthToggleClass = "hidden";
@@ -41,6 +44,14 @@ namespace _12thMorning.Services {
                 MonthButtonClass = "";
             }
             Change.Invoke();
+        }
+
+        public void ClearReplies() {
+            BlogReply.Invoke();
+        }
+
+        public void ClearReplyEvent() {
+            BlogReply = null;
         }
     }
 }

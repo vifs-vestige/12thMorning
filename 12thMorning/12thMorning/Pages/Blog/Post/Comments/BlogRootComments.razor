@@ -1,0 +1,35 @@
+﻿@inherits RefreshPage
+@implements IDisposable
+@inject CommentService CommentDataService
+
+<div class="container comments">
+    @foreach (var comment in Comments) {
+
+        <BlogDisplayComment Nest="0" Comment="@comment" />
+    }
+</div>
+
+<div class="mx-5">
+    <BlogPostComment BlogId="@Id" />
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private List<Comment> Comments { get; set; }
+
+    protected override void OnInitialized() {
+        State.BlogReply += StateHasChanged;
+        base.OnInitialized();
+    }
+
+    public void Dispose() {
+        State.ClearReplyEvent();
+    }
+
+    protected override void Refresh() {
+        Comments = CommentDataService.Get(Id);
+        base.Refresh();
+    }
+
+}

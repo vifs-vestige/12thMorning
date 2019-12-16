@@ -1,0 +1,60 @@
+﻿<div class="@(Nest < 2 ? "ml-3" : "" )">
+    <div class="row">
+        <button class="btn" @onclick="test">
+            @if (Nest == 0) {
+                <i class="oi oi-chevron-bottom"></i>
+            }
+            else {
+                for (int x = 0; x < Nest; x++) {
+                    <i class="oi oi-chevron-right"></i>
+                }
+            }
+        </button>
+        <div class="col">
+            <div class="row">
+                @Comment.Name - @Comment.DateAdded
+            </div>
+            <div class="row">
+                @Comment.Text
+            </div>
+        </div>
+    </div>
+    <div class="mx-5">
+        @thing
+    </div>
+
+    @foreach (var comment in Comment.Replies) {
+        <BlogDisplayComment Nest="@(Nest+1)" Comment="@comment" />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public Comment Comment { get; set; }
+    [Parameter]
+    public int Nest { get; set; }
+    private bool showComment = true;
+
+    private RenderFragment thing;
+
+    public void test(MouseEventArgs e) {
+        State.ClearReplies();
+        if (showComment) {
+            State.BlogReply += RemoveReply;
+            thing = new RenderFragment(builder => {
+                builder.OpenComponent<BlogPostComment>(0);
+                builder.AddAttribute(1, "ReplyTo", Comment.Id);
+                builder.AddAttribute(2, "BlogId", Comment.BlogId);
+                builder.CloseComponent();
+            });
+        }
+        showComment = !showComment;
+    }
+
+    public void RemoveReply() {
+        if (thing == null)
+            showComment = true;
+        thing = null;
+        State.BlogReply -= RemoveReply;
+    }
+}

@@ -1,0 +1,43 @@
+﻿@inject CommentService CommentDataService
+
+<div class="mx-5 m-5">
+    <hr />
+    <BSForm Model="@comment" OnValidSubmit="@Submit">
+        <DataAnnotationsValidator />
+        <BSFormGroup>
+            <BSLabel>Name (optional)</BSLabel>
+            <BSBasicInput Id="Name" PlaceHolder="name" @bind-Value="comment.Name" />
+        </BSFormGroup>
+        <BSFormGroup>
+            <BSLabel For="Text">Comment</BSLabel>
+            <BSInput InputType="InputType.TextArea" Id="Text" Placeholder="comment" @bind-Value="comment.Text" ValidateOnChange="true" />
+            <BSFormFeedback For="@(() => comment.Text)" ValidMessage="" />
+        </BSFormGroup>
+        <BSButton ButtonType="ButtonType.Submit" Color="Color.Info">
+            Post Comment
+        </BSButton>
+    </BSForm>
+    <hr />
+</div>
+
+@code {
+    [Parameter]
+    public int? ReplyTo { get; set; }
+    [Parameter]
+    public int BlogId { get; set; }
+    private Comment comment;
+
+    protected override void OnInitialized() {
+        comment = new Comment();
+    }
+
+
+    private void Submit() {
+        comment.BlogId = BlogId;
+        comment.ReplyTo = ReplyTo;
+        comment.DateAdded = DateTime.Now;
+        comment.Text = comment.Text.Trim();
+        CommentDataService.Submit(comment);
+        State.ClearReplies();
+    }
+}
