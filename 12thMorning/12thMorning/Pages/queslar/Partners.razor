@@ -12,7 +12,7 @@
 
 @name
 @if (PlayerInfo != null) {
-    <h3>current partners</h3> <BSButton OnClick="Refresh">Refresh</BSButton>
+    <h3>current partners</h3> <BSButton OnClick="Refresh">Refresh</BSButton> <BSButton OnClick="Unload">Unload</BSButton>
     <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
         <thead>
             <tr>
@@ -139,6 +139,11 @@
         getInfo(true);
     }
 
+    protected void Unload(MouseEventArgs e) {
+        localStorage.RemoveItemAsync("apiKey");
+        getInfo();
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         if (firstRender) {
             getInfo();
@@ -147,7 +152,7 @@
 
     private async void getInfo(bool refresh = false) {
         var key = await localStorage.GetItemAsync<string>("apiKey");
-        var playerInfo = await localStorage.GetItemAsync<Root>("playerInfo");
+        Root playerInfo = null;
         if (key == null || key == "") {
             key = await JSRuntime.InvokeAsync<string>("prompt", "Enter API key");
             try {
@@ -162,7 +167,14 @@
             await localStorage.SetItemAsync("playerInfo", PlayerInfo);
         }
         if (PlayerInfo == null || refresh) {
-            playerInfo = await Http.GetFromJsonAsync<Root>("https://queslar.com/api/player/full/" + key);
+            try {
+                playerInfo = await Http.GetFromJsonAsync<Root>("https://queslar.com/api/player/full/" + key);
+            }
+            catch (Exception e) {
+                name = "try again, maybe check API key";
+                StateHasChanged();
+                return;
+            }
         }
         PlayerInfo = new Info(playerInfo);
 

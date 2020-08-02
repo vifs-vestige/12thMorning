@@ -16,7 +16,7 @@ namespace _12thMorning.Services {
     }
 
     public enum ResTypes {
-        Meat, Iron, Wood, Stone
+        Meat=1, Iron=2, Wood=3, Stone=4
     }
 
     public class Info {
@@ -25,7 +25,7 @@ namespace _12thMorning.Services {
 
         public Info(Root root) {
             BaseInfo = root;
-            PartnerInfo = new Partners(root.partners);
+            PartnerInfo = new Partners(root.partners, root.stats);
         }
     }
 
@@ -36,9 +36,9 @@ namespace _12thMorning.Services {
         public int NewPrice;
         public int NewResHour;
 
-        public Partners(List<Partner> partners) {
+        public Partners(List<Partner> partners, Stats stats) {
             foreach (var partner in partners) {
-                PartnerInfos[partner.id] = new PartnerInfo(partner);
+                PartnerInfos[partner.id] = new PartnerInfo(partner, stats);
             }
         }
 
@@ -80,8 +80,9 @@ namespace _12thMorning.Services {
         public PartnerTotal Current = new PartnerTotal();
         public PartnerTotal New = new PartnerTotal();
         
-        public PartnerInfo(Partner baseInfo) {
+        public PartnerInfo(Partner baseInfo, Stats stats) {
             BaseInfo = baseInfo;
+            setType((ResTypes)baseInfo.action_id, stats);
         }
 
         public void setType(ResTypes res, Stats stats) {
