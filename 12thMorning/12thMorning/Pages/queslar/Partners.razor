@@ -1,0 +1,171 @@
+﻿@page "/queslar/partners"
+@layout BlankLayout
+@using System.Net.Http
+@using System.Net.Http.Json
+@using Microsoft.JSInterop
+@using BlazorStrap
+@using BlazorStyled
+@inject QueslarService Queslar
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject HttpClient Http
+@inject IJSRuntime JSRuntime
+
+@if (PlayerInfo != null) {
+    <h3>current partners</h3> <BSButton OnClick="Refresh">Refresh</BSButton>
+    <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
+        <thead>
+            <tr>
+                <th scope="col">name</th>
+                <th>res</th>
+                <th>stat</th>
+                <th>player stat</th>
+                <th>speed</th>
+                <th>int</th>
+                <th>total stats</th>
+                <th>res</th>
+                <th>res/hour</th>
+                <th>Total Spent</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var partner in PlayerInfo.PartnerInfo.PartnerInfos.Values) {
+            <tr>
+                <th scope="row">@partner.BaseInfo.name</th>
+                <th>
+                    <BSDropdown>
+                        <BSDropdownToggle>@partner.Display</BSDropdownToggle>
+                        <BSDropdownMenu>
+                            @foreach (string resType in Enum.GetNames(typeof(ResTypes))) {
+                                <BSDropdownItem @onclick="@(e => OnClick(e, resType, partner.BaseInfo.id))" Href="javascript:void(0);">@resType</BSDropdownItem>
+                            }
+                        </BSDropdownMenu>
+                    </BSDropdown>
+                </th>
+                <th>@partner.Stats</th>
+                <th>@partner.PlayerStat</th>
+                <th>@partner.Current.Speed/@partner.Current.Seconds</th>
+                <th>@partner.Current.Intelligence/@partner.Current.IntPercent</th>
+                <th>@partner.Current.TotalStats</th>
+                <th>@partner.Current.ResPre</th>
+                <th>@partner.Current.ResPerHourPre</th>
+                <th>@partner.New.TotalSpent</th>
+            </tr>
+            }
+        <tr>
+            <th scope="col">Total</th>
+            <th>-</th>
+            <th>-</th>
+            <th>-</th>
+            <th>-</th>
+            <th>-</th>
+            <th>-</th>
+            <th>-</th>
+            <th>@PlayerInfo.PartnerInfo.CurrentResHour</th>
+            <th>@PlayerInfo.PartnerInfo.CurrentPrice</th>
+        </tr>
+
+        </tbody>
+    </BSTable>
+
+    <h3>new partners<small><small>(hit enter to update)</small></small></h3>
+    <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
+        <thead>
+            <tr>
+                <th scope="col">name</th>
+                <th>res</th>
+                <th>speed</th>
+                <th>seconds</th>
+                <th>int</th>
+                <th>int%</th>
+                <th>total stats</th>
+                <th>res</th>
+                <th>res/hour</th>
+                <th>Total Spent</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var partner in PlayerInfo.PartnerInfo.PartnerInfos.Values) {
+                <tr>
+                    <th scope="row">@partner.BaseInfo.name</th>
+                    <th>@partner.Display</th>
+                    <th><BSBasicInput @bind-Value="partner.New.Speed" @onkeyup="PlayerInfo.PartnerInfo.updateNew" InputType="InputType.Text" /></th>
+                    <th>@partner.New.Seconds</th>
+                    <th><BSBasicInput @bind-Value="partner.New.Intelligence" @onkeyup="PlayerInfo.PartnerInfo.updateNew" InputType="InputType.Text" /></th>
+                    <th>@partner.New.IntPercent</th>
+                    <th>@partner.New.TotalStats</th>
+                    <th>@partner.New.ResPre</th>
+                    <th>@partner.New.ResPerHourPre</th>
+                    <th>@partner.New.TotalSpent</th>
+                </tr>
+            }
+
+        <tr>
+            <th scope="col">Total</th>
+            <th>-</th>
+            <th>-</th>
+            <th>-</th>
+            <th>-</th>
+            <th>-</th>
+            <th>-</th>
+            <th>-</th>
+            <th>@PlayerInfo.PartnerInfo.NewResHour</th>
+            <th>@PlayerInfo.PartnerInfo.NewPrice</th>
+        </tr>
+
+        </tbody>
+    </BSTable>
+
+    <span>
+        Current Total (@PlayerInfo.PartnerInfo.CurrentPrice) - New Total(@PlayerInfo.PartnerInfo.NewPrice) - Bound Gold (@PlayerInfo.BaseInfo.currency.shattered_partner_gold) =
+        Needed <b>@(PlayerInfo.PartnerInfo.NewPrice - PlayerInfo.PartnerInfo.CurrentPrice - PlayerInfo.BaseInfo.currency.shattered_partner_gold)</b>
+    </span>
+}
+
+@code {
+    public string name;
+    public Info PlayerInfo = null;
+
+
+    protected void OnClick(MouseEventArgs e, string resType, int partnerId) {
+        PlayerInfo.PartnerInfo.SetRes(partnerId, (ResTypes)Enum.Parse(typeof(ResTypes), resType), PlayerInfo.BaseInfo.stats);
+    }
+
+    protected override void OnInitialized() {
+        name = "a";
+    }
+
+    protected void Refresh(MouseEventArgs e) {
+        getInfo(true);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if (firstRender) {
+            getInfo();
+        }
+    }
+
+    private async void getInfo(bool refresh = false) {
+        var key = await localStorage.GetItemAsync<string>("apiKey");
+        var playerInfo = await localStorage.GetItemAsync<Root>("playerInfo");
+        if (key == null) {
+            key = await JSRuntime.InvokeAsync<string>("prompt", "Enter API key");
+            try {
+                playerInfo = await Http.GetFromJsonAsync<Root>("https://queslar.com/api/player/full/" + key);
+            }
+            catch (Exception e) {
+                name = "you fucked up";
+            }
+            await localStorage.SetItemAsync("apiKey", key);
+            await localStorage.SetItemAsync("playerInfo", PlayerInfo);
+        }
+        if (PlayerInfo == null || refresh) {
+            playerInfo = await Http.GetFromJsonAsync<Root>("https://queslar.com/api/player/full/" + key);
+        }
+        name = playerInfo.player.username;
+        PlayerInfo = new Info(playerInfo);
+
+        StateHasChanged();
+    }
+
+
+}

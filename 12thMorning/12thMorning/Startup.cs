@@ -1,5 +1,6 @@
 using _12thMorning.Data;
 using _12thMorning.Services;
+using Blazored.LocalStorage;
 using BlazorStrap;
 using BlazorStyled;
 using Microsoft.AspNetCore.Builder;
@@ -33,9 +34,11 @@ namespace _12thMorning {
             services.AddServerSideBlazor();
             services.AddSingleton<BlogService>();
             services.AddSingleton<CommentService>();
+            services.AddSingleton<QueslarService>();
             services.AddScoped<SessionStorage>();
             services.AddBootstrapCSS();
             services.AddBlazorStyled();
+            services.AddBlazoredLocalStorage();
 
             services.AddServerSideBlazor().AddCircuitOptions(o =>
             {

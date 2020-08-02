@@ -12,6 +12,7 @@ namespace _12thMorning.Services {
             get { return new _12thMorningContext(); }
         }
 
+//comment color too dark :(
         #region get blog(s)
         public List<Blog> GetBlogPreviewList(int page, int size, string type, DateTime month) {
             return GetQueryBlogs(type, month)
