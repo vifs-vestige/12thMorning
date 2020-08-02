@@ -10,6 +10,7 @@
 @inject HttpClient Http
 @inject IJSRuntime JSRuntime
 
+@name
 @if (PlayerInfo != null) {
     <h3>current partners</h3> <BSButton OnClick="Refresh">Refresh</BSButton>
     <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
@@ -147,13 +148,15 @@
     private async void getInfo(bool refresh = false) {
         var key = await localStorage.GetItemAsync<string>("apiKey");
         var playerInfo = await localStorage.GetItemAsync<Root>("playerInfo");
-        if (key == null) {
+        if (key == null || key == "") {
             key = await JSRuntime.InvokeAsync<string>("prompt", "Enter API key");
             try {
                 playerInfo = await Http.GetFromJsonAsync<Root>("https://queslar.com/api/player/full/" + key);
             }
             catch (Exception e) {
                 name = "you fucked up";
+                StateHasChanged();
+                return;
             }
             await localStorage.SetItemAsync("apiKey", key);
             await localStorage.SetItemAsync("playerInfo", PlayerInfo);
@@ -161,7 +164,6 @@
         if (PlayerInfo == null || refresh) {
             playerInfo = await Http.GetFromJsonAsync<Root>("https://queslar.com/api/player/full/" + key);
         }
-        name = playerInfo.player.username;
         PlayerInfo = new Info(playerInfo);
 
         StateHasChanged();
