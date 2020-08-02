@@ -12,7 +12,8 @@
 
 @name
 @if (PlayerInfo != null) {
-    <h3>current partners</h3> <BSButton OnClick="Refresh">Refresh</BSButton> <BSButton OnClick="Unload">Unload</BSButton>
+    <BSButton OnClick="Refresh">Refresh</BSButton> <BSButton OnClick="Unload">Unload</BSButton>
+    <h2>current partners</h2>
     <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
         <thead>
             <tr>
@@ -30,45 +31,44 @@
         </thead>
         <tbody>
             @foreach (var partner in PlayerInfo.PartnerInfo.PartnerInfos.Values) {
-            <tr>
-                <th scope="row">@partner.BaseInfo.name</th>
-                <th>
-                    <BSDropdown>
-                        <BSDropdownToggle>@partner.Display</BSDropdownToggle>
-                        <BSDropdownMenu>
-                            @foreach (string resType in Enum.GetNames(typeof(ResTypes))) {
-                                <BSDropdownItem @onclick="@(e => OnClick(e, resType, partner.BaseInfo.id))" Href="javascript:void(0);">@resType</BSDropdownItem>
-                            }
-                        </BSDropdownMenu>
-                    </BSDropdown>
-                </th>
-                <th>@partner.Stats</th>
-                <th>@partner.PlayerStat</th>
-                <th>@partner.Current.Speed/@partner.Current.Seconds</th>
-                <th>@partner.Current.Intelligence/@partner.Current.IntPercent</th>
-                <th>@partner.Current.TotalStats</th>
-                <th>@partner.Current.ResPre</th>
-                <th>@partner.Current.ResPerHourPre</th>
-                <th>@partner.New.TotalSpent</th>
-            </tr>
+                <tr>
+                    <th scope="row">@partner.BaseInfo.name</th>
+                    <th>
+                        <BSDropdown>
+                            <BSDropdownToggle>@partner.Display</BSDropdownToggle>
+                            <BSDropdownMenu>
+                                @foreach (string resType in Enum.GetNames(typeof(ResTypes))) {
+                                    <BSDropdownItem @onclick="@(e => OnClick(e, resType, partner.BaseInfo.id))" Href="javascript:void(0);">@resType</BSDropdownItem>
+                                }
+                            </BSDropdownMenu>
+                        </BSDropdown>
+                    </th>
+                    <th>@partner.Stats</th>
+                    <th>@partner.PlayerStat</th>
+                    <th>@partner.Current.Speed/@partner.Current.Seconds</th>
+                    <th>@partner.Current.Intelligence/@partner.Current.IntPercent.ToString("0.####")</th>
+                    <th>@partner.Current.TotalStats.ToString("N0")</th>
+                    <th>@partner.Current.ResPre</th>
+                    <th>@partner.Current.ResPerHourPre.ToString("N0")</th>
+                    <th>@partner.New.TotalSpent.ToString("N0")</th>
+                </tr>
             }
-        <tr>
-            <th scope="col">Total</th>
-            <th>-</th>
-            <th>-</th>
-            <th>-</th>
-            <th>-</th>
-            <th>-</th>
-            <th>-</th>
-            <th>-</th>
-            <th>@PlayerInfo.PartnerInfo.CurrentResHour</th>
-            <th>@PlayerInfo.PartnerInfo.CurrentPrice</th>
-        </tr>
+            <tr>
+                <th scope="col">Total</th>
+                <th>-</th>
+                <th>-</th>
+                <th>-</th>
+                <th>-</th>
+                <th>-</th>
+                <th>-</th>
+                <th>-</th>
+                <th>@PlayerInfo.PartnerInfo.CurrentResHour.ToString("N0")</th>
+                <th>@PlayerInfo.PartnerInfo.CurrentPrice.ToString("N0")</th>
+            </tr>
 
         </tbody>
     </BSTable>
-
-    <h3>new partners<small><small>(hit enter to update)</small></small></h3>
+    <h2>new partners <small><small>(hit enter to update)</small></small></h2>
     <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
         <thead>
             <tr>
@@ -89,74 +89,108 @@
                 <tr>
                     <th scope="row">@partner.BaseInfo.name</th>
                     <th>@partner.Display</th>
-                    <th><BSBasicInput @bind-Value="partner.New.Speed" @onkeyup="PlayerInfo.PartnerInfo.updateNew" InputType="InputType.Text" /></th>
+                    <th><BSBasicInput @bind-Value="partner.New.Speed" @onkeyup="PlayerInfo.PartnerInfo.updateNew" InputType="InputType.Number" /></th>
                     <th>@partner.New.Seconds</th>
-                    <th><BSBasicInput @bind-Value="partner.New.Intelligence" @onkeyup="PlayerInfo.PartnerInfo.updateNew" InputType="InputType.Text" /></th>
-                    <th>@partner.New.IntPercent</th>
-                    <th>@partner.New.TotalStats</th>
+                    <th><BSBasicInput @bind-Value="partner.New.Intelligence" @onkeyup="PlayerInfo.PartnerInfo.updateNew" InputType="InputType.Number" /></th>
+                    <th>@partner.New.IntPercent.ToString("0.####")</th>
+                    <th>@partner.New.TotalStats.ToString("N0")</th>
                     <th>@partner.New.ResPre</th>
-                    <th>@partner.New.ResPerHourPre</th>
-                    <th>@partner.New.TotalSpent</th>
+                    <th>@partner.New.ResPerHourPre.ToString("N0")</th>
+                    <th>@partner.New.TotalSpent.ToString("N0")</th>
                 </tr>
             }
 
-        <tr>
-            <th scope="col">Total</th>
-            <th>-</th>
-            <th>-</th>
-            <th>-</th>
-            <th>-</th>
-            <th>-</th>
-            <th>-</th>
-            <th>-</th>
-            <th>@PlayerInfo.PartnerInfo.NewResHour</th>
-            <th>@PlayerInfo.PartnerInfo.NewPrice</th>
-        </tr>
+            <tr>
+                <th scope="col">Total</th>
+                <th>-</th>
+                <th>-</th>
+                <th>-</th>
+                <th>-</th>
+                <th>-</th>
+                <th>-</th>
+                <th>-</th>
+                <th>@PlayerInfo.PartnerInfo.NewResHour.ToString("N0")</th>
+                <th>@PlayerInfo.PartnerInfo.NewPrice.ToString("N0")</th>
+            </tr>
 
         </tbody>
     </BSTable>
-
     <span>
-        Current Total (@PlayerInfo.PartnerInfo.CurrentPrice) - New Total(@PlayerInfo.PartnerInfo.NewPrice) - Bound Gold (@PlayerInfo.BaseInfo.currency.shattered_partner_gold) =
-        Needed <b>@(PlayerInfo.PartnerInfo.NewPrice - PlayerInfo.PartnerInfo.CurrentPrice - PlayerInfo.BaseInfo.currency.shattered_partner_gold)</b>
+        Current Total (@PlayerInfo.PartnerInfo.CurrentPrice.ToString("N0")) - New Total(@PlayerInfo.PartnerInfo.NewPrice.ToString("N0")) - Bound Gold (@PlayerInfo.BaseInfo.currency.shattered_partner_gold.ToString("N0")) =
+        Needed <b>@((PlayerInfo.PartnerInfo.NewPrice - PlayerInfo.PartnerInfo.CurrentPrice - PlayerInfo.BaseInfo.currency.shattered_partner_gold).ToString("N0"))</b>
     </span>
+    <h2>boosts <small><small>(based on new partners)</small></small></h2>
+    <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
+        <thead>
+            <tr>
+                <th scope="col">name</th>
+                <th>relic boost</th>
+                <th>bonus</th>
+                <th>house</th>
+                <th>clan boost</th>
+                <th>vip</th>
+                <th>level</th>
+                <th>tax</th>
+                <th>taxed</th>
+                <th>res</th>
+                <th>after tax</th>
+                <th>res/hour</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var partner in PlayerInfo.PartnerInfo.PartnerInfos.Values) {
+                <tr>
+                    <th>@partner.BaseInfo.name</th>
+                    <th><BSBasicInput @bind-Value="partner.Boost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" /></th>
+                    <th>@((partner.Boost * .025).ToString("0.###"))</th>
+                    <th><BSBasicInput @bind-Value="partner.HouseBoost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" /></th>
+                    <th><BSBasicInput @bind-Value="PlayerInfo.BaseInfo.village.boosts.mill" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" /></th>
+                    <th><BSBasicInput @bind-Value="PlayerInfo.Vip" @onchange="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Checkbox" /></th>
+                    <th>@partner.Level</th>
+                    <th><BSBasicInput @bind-Value="PlayerInfo.PartnerInfo.Tax" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" /></th>
+                    <th>@partner.Taxed</th>
+                    <th>@partner.Res.ToString("0.####") (@Math.Round(partner.Res))</th>
+                    <th>@partner.ResPostTax</th>
+                    <th>@partner.ResHour.ToString("N0")</th>
+
+                </tr>
+            }
+        </tbody>
+
+    </BSTable>
 }
 
 @code {
     public string name;
-    public Info PlayerInfo = null;
+    public RootWrapper PlayerInfo;
 
 
     protected void OnClick(MouseEventArgs e, string resType, int partnerId) {
-        PlayerInfo.PartnerInfo.SetRes(partnerId, (ResTypes)Enum.Parse(typeof(ResTypes), resType), PlayerInfo.BaseInfo.stats);
-    }
-
-    protected override void OnInitialized() {
-        name = "a";
+        PlayerInfo.PartnerInfo.SetRes(partnerId, (ResTypes)Enum.Parse(typeof(ResTypes), resType));
     }
 
     protected void Refresh(MouseEventArgs e) {
-        getInfo(true);
+        getPlayerInfo(true);
     }
 
     protected void Unload(MouseEventArgs e) {
         localStorage.RemoveItemAsync("apiKey");
-        getInfo();
+        getPlayerInfo();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         if (firstRender) {
-            getInfo();
+            getPlayerInfo();
         }
     }
 
-    private async void getInfo(bool refresh = false) {
+    private async void getPlayerInfo(bool refresh = false) {
         var key = await localStorage.GetItemAsync<string>("apiKey");
-        Root playerInfo = null;
+        Root playerPlayerInfo = null;
         if (key == null || key == "") {
             key = await JSRuntime.InvokeAsync<string>("prompt", "Enter API key");
             try {
-                playerInfo = await Http.GetFromJsonAsync<Root>("https://queslar.com/api/player/full/" + key);
+                playerPlayerInfo = await Http.GetFromJsonAsync<Root>("https://queslar.com/api/player/full/" + key);
             }
             catch (Exception e) {
                 name = "you fucked up";
@@ -164,11 +198,10 @@
                 return;
             }
             await localStorage.SetItemAsync("apiKey", key);
-            await localStorage.SetItemAsync("playerInfo", PlayerInfo);
         }
         if (PlayerInfo == null || refresh) {
             try {
-                playerInfo = await Http.GetFromJsonAsync<Root>("https://queslar.com/api/player/full/" + key);
+                playerPlayerInfo = await Http.GetFromJsonAsync<Root>("https://queslar.com/api/player/full/" + key);
             }
             catch (Exception e) {
                 name = "try again, maybe check API key";
@@ -176,7 +209,7 @@
                 return;
             }
         }
-        PlayerInfo = new Info(playerInfo);
+        PlayerInfo = new RootWrapper(playerPlayerInfo);
 
         StateHasChanged();
     }

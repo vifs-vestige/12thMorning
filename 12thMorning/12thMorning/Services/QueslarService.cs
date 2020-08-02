@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components;
 using Blazored.LocalStorage;
 using System.Text.Json.Serialization;
 using System.Security.Cryptography.X509Certificates;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace _12thMorning.Services {
     public class QueslarService {
@@ -19,13 +20,19 @@ namespace _12thMorning.Services {
         Meat=1, Iron=2, Wood=3, Stone=4
     }
 
-    public class Info {
+
+    public class RootWrapper {
         public Root BaseInfo;
         public Partners PartnerInfo;
+        public bool Vip;
 
-        public Info(Root root) {
+        public RootWrapper(Root root) {
             BaseInfo = root;
-            PartnerInfo = new Partners(root.partners, root.stats);
+            Vip = root.player.vip_time != null;
+            PartnerInfo = new Partners(this);
+            foreach(var partner in PartnerInfo.PartnerInfos.Values) {
+                partner.UpdateBoosts();
+            }
         }
     }
 
@@ -35,15 +42,19 @@ namespace _12thMorning.Services {
         public int CurrentResHour;
         public int NewPrice;
         public int NewResHour;
+        public int Tax = 0;
+        private RootWrapper RootInfo;
 
-        public Partners(List<Partner> partners, Stats stats) {
-            foreach (var partner in partners) {
-                PartnerInfos[partner.id] = new PartnerInfo(partner, stats);
+        public Partners(RootWrapper info) {
+            RootInfo = info;
+            foreach (var partner in info.BaseInfo.partners) {
+                PartnerInfos[partner.id] = new PartnerInfo(partner, info);
             }
+            UpdateTotals();
         }
 
-        public void SetRes(int id, ResTypes res, Stats stats) {
-            PartnerInfos[id].setType(res, stats);
+        public void SetRes(int id, ResTypes res) {
+            PartnerInfos[id].setType(res);
             UpdateTotals();
         }
 
@@ -52,6 +63,7 @@ namespace _12thMorning.Services {
                 partner.New.update();
             }
             UpdateTotals();
+            UpdateBoosts();
         }
 
         public void UpdateTotals() {
@@ -66,6 +78,12 @@ namespace _12thMorning.Services {
                 CurrentResHour += partner.Current.ResPerHourPre;
             }
         }
+
+        public void UpdateBoosts() {
+            foreach (var partner in PartnerInfos.Values) {
+                partner.UpdateBoosts();
+            }
+        }
     }
 
     public class PartnerInfo {
@@ -75,37 +93,75 @@ namespace _12thMorning.Services {
         public int Stats;
         public int PlayerStat;
         public int TotalStat;
-        public int Res;
+        public double Res;
+        public int Taxed;
+        public int ResPostTax;
+        public double Boost;
+        public int HouseBoost;
+        public int ResHour;
         public string Display = "res";
         public PartnerTotal Current = new PartnerTotal();
         public PartnerTotal New = new PartnerTotal();
-        
-        public PartnerInfo(Partner baseInfo, Stats stats) {
+        private RootWrapper RootInfo;
+
+        public PartnerInfo(Partner baseInfo, RootWrapper info) {
+            RootInfo = info;
             BaseInfo = baseInfo;
-            setType((ResTypes)baseInfo.action_id, stats);
+            setType((ResTypes)baseInfo.action_id);
         }
 
-        public void setType(ResTypes res, Stats stats) {
+        public void UpdateBoosts() {
+            var vipBonus = RootInfo.Vip ? 1.10 : 1;
+            Res = ((1 + ((Boost * .025) + HouseBoost + Level / 100) / 100) * (1 + (RootInfo.BaseInfo.village.boosts.mill) / 100) * (vipBonus)) * New.ResPre;
+            Taxed =  (int) Math.Floor(Res * (RootInfo.PartnerInfo.Tax / 100.0));
+            ResPostTax = (int) Math.Round(Res) - Taxed;
+            ResHour = (int) Math.Floor((3600.0 / New.Seconds) * ResPostTax);
+        }
+
+        public void getResBoost() {
+            var boost = 0;
+            switch (ResType) {
+                case ResTypes.Meat:
+                    boost = RootInfo.BaseInfo.boosts.hunting;
+                    HouseBoost = RootInfo.BaseInfo.house.pitchfork;
+                    break;
+                case ResTypes.Iron:
+                    boost = RootInfo.BaseInfo.boosts.mining;
+                    HouseBoost = RootInfo.BaseInfo.house.fountain;
+                    break;
+                case ResTypes.Wood:
+                    boost = RootInfo.BaseInfo.boosts.woodcutting;
+                    HouseBoost = RootInfo.BaseInfo.house.shed;
+                    break;
+                case ResTypes.Stone:
+                    boost = RootInfo.BaseInfo.boosts.stonecarving;
+                    HouseBoost = RootInfo.BaseInfo.house.tools;
+                    break;
+            }
+            Boost = boost;
+        }
+
+        public void setType(ResTypes res) {
             ResType = res;
             Display = res.ToString();
             switch(res) {
                 case ResTypes.Meat:
-                    PlayerStat = stats.strength;
+                    PlayerStat = RootInfo.BaseInfo.stats.strength;
                     Level = BaseInfo.hunting;
                     Stats = BaseInfo.strength;
                     break;
                 case ResTypes.Iron:
-                    PlayerStat = stats.health;
+                    PlayerStat = RootInfo.BaseInfo.stats.health;
                     Level = BaseInfo.mining;
                     Stats = BaseInfo.health;
                     break;
                 case ResTypes.Wood:
-                    PlayerStat = stats.agility;
+                    PlayerStat = RootInfo.BaseInfo.stats.agility;
                     Level = BaseInfo.woodcutting;
                     Stats = BaseInfo.agility;
                     break;
                 case ResTypes.Stone:
-                    PlayerStat = stats.dexterity;
+                    PlayerStat = RootInfo.BaseInfo.stats.dexterity;
                     Level = BaseInfo.stonecarving;
                     Stats = BaseInfo.dexterity;
                     break;
@@ -113,7 +169,9 @@ namespace _12thMorning.Services {
 
             Current.update(this, BaseInfo.speed, BaseInfo.intelligence);
             New.update(this, BaseInfo.speed, BaseInfo.intelligence);
-            
+            getResBoost();
+
+
         }
     }
 
