@@ -28,7 +28,13 @@ namespace _12thMorning.Services {
 
         public RootWrapper(Root root) {
             BaseInfo = root;
-            Vip = root.player.vip_time != null;
+            Vip = false;
+            if(root.player.vip_time != "0000-00-00 00:00:00") {
+                var viptime = DateTime.Parse(root.player.vip_time);
+                if(viptime > DateTime.Now) {
+                    Vip = true;
+                }
+            }
             PartnerInfo = new Partners(this);
             foreach(var partner in PartnerInfo.PartnerInfos.Values) {
                 partner.UpdateBoosts();
@@ -215,9 +221,9 @@ namespace _12thMorning.Services {
         public int guest_account { get; set; }
         public int village_id { get; set; }
         public int party_id { get; set; }
-        public DateTime vip_time { get; set; }
+        public string vip_time { get; set; }
         public int toggle_vip_icon { get; set; }
-        public DateTime qol_time { get; set; }
+        public string qol_time { get; set; }
         public int toggle_qol_icon { get; set; }
         public int qol_destroy_item_toggle { get; set; }
         public string qol_destroy_item_rarity { get; set; }
