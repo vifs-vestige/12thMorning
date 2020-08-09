@@ -52,7 +52,7 @@ namespace _12thMorning.Services {
             apiKey = apiKey.Trim();
             try {
                 info = await client.GetFromJsonAsync<T>("https://queslar.com/api/" + info.ApiPath + apiKey);
-
+                Values[typeof(T)] = info;
                 if(info.GetType() == typeof(Full)) {
                     FullWrapper = new FullWrapper((Full)info);
                 }

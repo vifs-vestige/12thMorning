@@ -28,6 +28,8 @@
             } else {
                 returnValue = Queslar.Parse<Full>(key, full);
             }
+        } else {
+            await Queslar.Update<Full>();
         }
         return returnValue;
     }
