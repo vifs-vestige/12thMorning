@@ -1,0 +1,20 @@
+﻿@inherits LayoutComponentBase
+
+    <BSNavbar IsExpand="@true" IsDark="@true" Color="Color.Dark">
+        <BSNav IsPills="@true" IsNavbar="@true">
+            <BSNavItem>
+                <BSNavLink Class="btn btn-outline-info mx-2" href="/queslar/api">
+                    API
+                </BSNavLink>
+            </BSNavItem>
+            <BSNavItem>
+                <BSNavLink Class="btn btn-outline-info mx-2" href="/queslar/partners">
+                    Partners
+                </BSNavLink>
+            </BSNavItem>
+        </BSNav>
+    </BSNavbar>
+
+<div class="mx-2">
+    @Body
+</div>

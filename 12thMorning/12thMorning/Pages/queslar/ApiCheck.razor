@@ -1,0 +1,38 @@
+﻿@layout QueslarLayout
+@inject QueslarService Queslar
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@using _12thMorning.Models.Queslar.Player
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if (firstRender) {
+            var hasInfo = await CheckInfo();
+            if(!hasInfo) {
+                NavManager.NavigateTo("/queslar/api", true);
+                StateHasChanged();
+            }
+        }
+    }
+
+    protected async Task<bool> CheckInfo() {
+        bool returnValue = true;
+        if (!Queslar.Valid) {
+            var key = await localStorage.GetItemAsStringAsync(Queslar.LocalApiKey);
+            if (key == null || key == "") {
+                returnValue = false;
+            }
+            var full = await localStorage.GetItemAsStringAsync(Full.LocalKey);
+            if ((full == null || full == "")) {
+                returnValue = false;
+            } else {
+                returnValue = Queslar.Parse<Full>(key, full);
+            }
+        }
+        return returnValue;
+    }
+
+    protected async void SaveLocal(string key, string value) {
+        await localStorage.SetItemAsync<string>(key, value);
+    }
+}

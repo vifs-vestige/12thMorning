@@ -1,18 +1,14 @@
 ﻿@page "/queslar/partners"
-@layout BlankLayout
+@inherits ApiCheck
 @using System.Net.Http
-@using System.Net.Http.Json
-@using Microsoft.JSInterop
-@using BlazorStrap
-@using BlazorStyled
 @inject QueslarService Queslar
-@inject Blazored.LocalStorage.ILocalStorageService localStorage
 @inject HttpClient Http
 @inject IJSRuntime JSRuntime
+@using _12thMorning.Models.Queslar.Player
 
 @name
 @if (PlayerInfo != null) {
-    <BSButton OnClick="Refresh">Refresh</BSButton> <BSButton OnClick="Unload">Unload</BSButton> <span><small> you can support the creator of this tool at "VifsVestige" enchanting service</small></span>
+    <BSButton OnClick="Refresh">Refresh</BSButton><span><small> you can support the creator of this tool at "VifsVestige" enchanting service</small></span>
     <h2>current partners</h2>
     <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
         <thead>
@@ -73,7 +69,6 @@
         <thead>
             <tr>
                 <th scope="col">name</th>
-                <th>res</th>
                 <th>speed</th>
                 <th>seconds</th>
                 <th>int</th>
@@ -87,11 +82,10 @@
         <tbody>
             @foreach (var partner in PlayerInfo.PartnerInfo.PartnerInfos.Values) {
                 <tr>
-                    <th scope="row">@partner.BaseInfo.name</th>
-                    <th>@partner.Display</th>
-                    <th><BSBasicInput @bind-Value="partner.New.Speed" @onkeyup="PlayerInfo.PartnerInfo.updateNew" InputType="InputType.Number" /></th>
+                    <th scope="row">@(partner.BaseInfo.name) (@partner.Display)</th>
+                    <th><BSBasicInput @bind-Value="partner.New.Speed" @onkeyup="PlayerInfo.PartnerInfo.updateNew" InputType="InputType.Number" tabindex="1"/></th>
                     <th>@partner.New.Seconds</th>
-                    <th><BSBasicInput @bind-Value="partner.New.Intelligence" @onkeyup="PlayerInfo.PartnerInfo.updateNew" InputType="InputType.Number" /></th>
+                    <th><BSBasicInput @bind-Value="partner.New.Intelligence" @onkeyup="PlayerInfo.PartnerInfo.updateNew" InputType="InputType.Number" tabindex="2"/></th>
                     <th>@partner.New.IntPercent.ToString("0.####")</th>
                     <th>@partner.New.TotalStats.ToString("N0")</th>
                     <th>@partner.New.ResPre</th>
@@ -102,7 +96,6 @@
 
             <tr>
                 <th scope="col">Total</th>
-                <th>-</th>
                 <th>-</th>
                 <th>-</th>
                 <th>-</th>
@@ -130,6 +123,7 @@
                 <th>clan boost</th>
                 <th>vip</th>
                 <th>level</th>
+                <th>kingdom</th>
                 <th>tax</th>
                 <th>taxed</th>
                 <th>res</th>
@@ -140,13 +134,14 @@
         <tbody>
             @foreach (var partner in PlayerInfo.PartnerInfo.PartnerInfos.Values) {
                 <tr>
-                    <th>@partner.BaseInfo.name</th>
-                    <th><BSBasicInput @bind-Value="partner.Boost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" /></th>
+                    <th>@(partner.BaseInfo.name) (@partner.Display)</th>
+                    <th><BSBasicInput @bind-Value="partner.Boost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" tabindex="3"/></th>
                     <th>@((partner.Boost * .025).ToString("0.###"))</th>
                     <th><BSBasicInput @bind-Value="partner.HouseBoost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" /></th>
                     <th><BSBasicInput @bind-Value="PlayerInfo.BaseInfo.village.boosts.mill" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" /></th>
                     <th><BSBasicInput @bind-Value="PlayerInfo.Vip" @onchange="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Checkbox" /></th>
                     <th>@partner.Level</th>
+                    <th>@PlayerInfo.PartnerInfo.KingdomBonus</th>
                     <th><BSBasicInput @bind-Value="PlayerInfo.PartnerInfo.Tax" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" /></th>
                     <th>@partner.Taxed</th>
                     <th>@partner.Res.ToString("0.####") (@Math.Round(partner.Res))</th>
@@ -162,35 +157,36 @@
 
 @code {
     public string name;
-    public RootWrapper PlayerInfo;
-
+    public FullWrapper PlayerInfo;
 
     protected void OnClick(MouseEventArgs e, string resType, int partnerId) {
         PlayerInfo.PartnerInfo.SetRes(partnerId, (ResTypes)Enum.Parse(typeof(ResTypes), resType));
     }
 
-    protected void Refresh(MouseEventArgs e) {
-        getPlayerInfo(true);
-    }
-
-    protected void Unload(MouseEventArgs e) {
-        localStorage.RemoveItemAsync("apiKey");
-        getPlayerInfo();
+    protected async void Refresh(MouseEventArgs e) {
+        await Queslar.Update<Full>();
+        PlayerInfo = Queslar.GetFullWrapper();
+        StateHasChanged();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         if (firstRender) {
-            getPlayerInfo();
+            await base.OnAfterRenderAsync(firstRender);
+            if(Queslar.Values[typeof(Full)] != null) {
+                PlayerInfo = Queslar.GetFullWrapper();
+                StateHasChanged();
+            }
         }
     }
 
     private async void getPlayerInfo(bool refresh = false) {
         var key = await localStorage.GetItemAsync<string>("apiKey");
-        Root playerPlayerInfo = null;
+        Full playerPlayerInfo = null;
         if (key == null || key == "") {
             key = await JSRuntime.InvokeAsync<string>("prompt", "Enter API key");
             try {
-                playerPlayerInfo = await Http.GetFromJsonAsync<Root>("https://queslar.com/api/player/full/" + key);
+                //playerPlayerInfo = await Http.GetFromJsonAsync<Full>("https://queslar.com/api/player/full/" + key);
+                playerPlayerInfo = await Queslar.Test<Full>(key);
             }
             catch (Exception e) {
                 name = e.Message;
@@ -201,7 +197,8 @@
         }
         if (PlayerInfo == null || refresh) {
             try {
-                playerPlayerInfo = await Http.GetFromJsonAsync<Root>("https://queslar.com/api/player/full/" + key);
+                //playerPlayerInfo = await Http.GetFromJsonAsync<Full>("https://queslar.com/api/player/full/" + key);
+                playerPlayerInfo = await Queslar.Test<Full>(key);
             }
             catch (Exception e) {
                 name = "try again, maybe check API key";
@@ -209,7 +206,8 @@
                 return;
             }
         }
-        PlayerInfo = new RootWrapper(playerPlayerInfo);
+        PlayerInfo = new FullWrapper(playerPlayerInfo);
+        Queslar.ApiKey = key;
 
         StateHasChanged();
     }

@@ -1,0 +1,67 @@
+﻿@page "/queslar/api"
+@inherits ApiCheck
+@inject QueslarService Queslar
+@using _12thMorning.Models.Queslar.Player
+
+<h3>Api</h3>
+<BSFormGroup>
+    <BSLabel>API Key </BSLabel>
+    @if (Valid) {
+        <BSBadge Color="Color.Success">Key Valid</BSBadge>
+    }
+    else {
+        <BSBadge Color="Color.Danger">Key Invalid</BSBadge>
+    }
+    <BSBasicInput ID="apiKey" @bind-Value="ApiKey" InputType="InputType.Text" />
+</BSFormGroup>
+<BSButton ButtonType="ButtonType.Submit" OnClick="@Submit">
+    Test
+</BSButton>
+<BSButton ButtonType="ButtonType.Submit" OnClick="@Unload">
+    Unload
+</BSButton>
+<p>@dump</p>
+
+@code {
+    private string ApiKey = "";
+    private bool Valid = false;
+    public string dump;
+
+    protected override void OnInitialized() {
+        GetInfo();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if(firstRender) {
+            await CheckInfo();
+        }
+    }
+
+    private async void Submit() {
+        var info = await Queslar.Test<Full>(ApiKey);
+        if (info != null) {
+            SaveLocal(Queslar.LocalApiKey, ApiKey);
+            dump = System.Text.Json.JsonSerializer.Serialize(info);
+            SaveLocal(Full.LocalKey, dump);
+            GetInfo();
+        }
+        else {
+            ApiKey = "";
+            Valid = false;
+        }
+    }
+
+    private void GetInfo() {
+        ApiKey = Queslar.ApiKey;
+        Valid = Queslar.Valid;
+        StateHasChanged();
+    }
+
+    private async void Unload() {
+        await localStorage.ClearAsync();
+        Queslar.ApiKey = "";
+        
+        GetInfo();
+    }
+
+}
