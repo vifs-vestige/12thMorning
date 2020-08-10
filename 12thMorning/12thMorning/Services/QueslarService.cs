@@ -262,7 +262,7 @@ namespace _12thMorning.Services {
 
     public class PartnerTotal {
         public int Speed;
-        public int Seconds;
+        public double Seconds;
         public int Intelligence;
         public double IntPercent;
         public int TotalStats;
@@ -273,7 +273,7 @@ namespace _12thMorning.Services {
         public int TotalSpent;
         
         public void update() {
-            Seconds = (int)Math.Ceiling(Math.Truncate((6.0 / (0.1 + Speed / (Speed + 2500.0)))*100)/100);
+            Seconds = Math.Truncate((6.0 / (0.1 + Speed / (Speed + 2500.0)))*100)/100;
             IntPercent = 20.0 + Intelligence / (Intelligence + 250.0) * 100.0;
             TotalStats = (int)Math.Round(IntPercent / 100.0 * PlayerStat) + PartnerStat;
             ResPre = ((int)Math.Floor(TotalStats / 100.0)) + 1;
