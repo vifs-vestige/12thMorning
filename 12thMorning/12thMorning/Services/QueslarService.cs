@@ -216,11 +216,11 @@ namespace _12thMorning.Services {
                     break;
                 case ResTypes.Wood:
                     boost = RootInfo.BaseInfo.boosts.woodcutting;
-                    HouseBoost = RootInfo.BaseInfo.house.shed;
+                    HouseBoost = RootInfo.BaseInfo.house.tools;
                     break;
                 case ResTypes.Stone:
                     boost = RootInfo.BaseInfo.boosts.stonecarving;
-                    HouseBoost = RootInfo.BaseInfo.house.tools;
+                    HouseBoost = RootInfo.BaseInfo.house.shed;
                     break;
             }
             Boost = boost;
