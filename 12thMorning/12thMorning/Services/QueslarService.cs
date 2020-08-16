@@ -195,7 +195,7 @@ namespace _12thMorning.Services {
 
         public void UpdateBoosts() {
             var vipBonus = RootInfo.Vip ? 1.10 : 1;
-            Res = ((1 + ((Boost * .025) + HouseBoost + (Level / 100.0)) / 100.0) * (1 + (RootInfo.BaseInfo.village.boosts.mill) / 100.0) * (vipBonus) * (1+RootInfo.PartnerInfo.KingdomBonus/100.0)) * New.ResPre;
+            Res = ((1 + ((Boost * .025) + HouseBoost + RootInfo.BaseInfo.village.boosts.mill + (Level / 100.0)) / 100.0) * (vipBonus) * (1+RootInfo.PartnerInfo.KingdomBonus/100.0)) * New.ResPre;
             if (RootInfo.PartnerInfo.Tax != 0) {
                 Taxed = (int)Math.Floor(Res * (RootInfo.PartnerInfo.Tax / 100.0));
             }
