@@ -5,18 +5,20 @@ using System.Threading.Tasks;
 
 namespace _12thMorning.Models.Queslar.Player {
     public class Kingdom {
-        public List<Titles> titles = new List<Titles>();
+        public List<Tiles> tiles { get; set; }
     }
 
-    public class Titles {
-        public int id;
-        public string type;
-        public int kingdom_id;
-        public string resource_one_type;
-        public string resource_two_type;
-        public string resource_three_type;
-        public int reources_one_value;
-        public int reources_two_value;
-        public int reources_three_value;
+    public class Tiles {
+        public int id { get; set; }
+        public string type { get; set; }
+        public string name { get; set; }
+        public int kingdom_id { get; set; }
+        public string resource_one_type { get; set; }
+        public string resource_two_type { get; set; }
+        public string resource_three_type { get; set; }
+        public int? resource_one_value { get; set; }
+        public int? resource_two_value { get; set; }
+        public int? resource_three_value { get; set; }
+        public DateTime captured_time { get; set; }
     }
 }

@@ -122,15 +122,15 @@ namespace _12thMorning.Services {
             foreach (var partner in info.BaseInfo.partners) {
                 PartnerInfos[partner.id] = new PartnerInfo(partner, info);
             }
-            foreach(var kingdomTiles in RootInfo.BaseInfo.kingdom.titles) {
-                if(kingdomTiles.resource_one_type == "resources") {
-                    KingdomBonus += kingdomTiles.reources_one_value;
+            foreach(var kingdomTiles in RootInfo.BaseInfo.kingdom.tiles) {
+                if(kingdomTiles.resource_one_type == "resource") {
+                    KingdomBonus += (int)kingdomTiles.resource_one_value;
                 }
-                if (kingdomTiles.resource_two_type == "resources") {
-                    KingdomBonus += kingdomTiles.reources_two_value;
+                if (kingdomTiles.resource_two_type == "resource") {
+                    KingdomBonus += (int)kingdomTiles.resource_two_value;
                 }
-                if (kingdomTiles.resource_three_type == "resources") {
-                    KingdomBonus += kingdomTiles.reources_three_value;
+                if (kingdomTiles.resource_three_type == "resource") {
+                    KingdomBonus += (int)kingdomTiles.resource_three_value;
                 }
             }
             UpdateTotals();
