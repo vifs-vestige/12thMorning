@@ -11,10 +11,10 @@ namespace _12thMorning.Models.Queslar.Player {
         public int critDamage { get; set; }
         public int multistrike { get; set; }
         public int healing { get; set; }
-        public int hunting { get; set; }
-        public int mining { get; set; }
-        public int woodcutting { get; set; }
-        public int stonecarving { get; set; }
+        public int hunting_boost { get; set; }
+        public int mining_boost { get; set; }
+        public int woodcutting_boost { get; set; }
+        public int stonecarving_boost { get; set; }
         public int luck { get; set; }
         public int power { get; set; }
         public int crafting { get; set; }

@@ -207,19 +207,19 @@ namespace _12thMorning.Services {
             var boost = 0;
             switch (ResType) {
                 case ResTypes.Meat:
-                    boost = RootInfo.BaseInfo.boosts.hunting;
+                    boost = RootInfo.BaseInfo.boosts.hunting_boost;
                     HouseBoost = RootInfo.BaseInfo.house.pitchfork;
                     break;
                 case ResTypes.Iron:
-                    boost = RootInfo.BaseInfo.boosts.mining;
+                    boost = RootInfo.BaseInfo.boosts.mining_boost;
                     HouseBoost = RootInfo.BaseInfo.house.fountain;
                     break;
                 case ResTypes.Wood:
-                    boost = RootInfo.BaseInfo.boosts.woodcutting;
+                    boost = RootInfo.BaseInfo.boosts.woodcutting_boost;
                     HouseBoost = RootInfo.BaseInfo.house.tools;
                     break;
                 case ResTypes.Stone:
-                    boost = RootInfo.BaseInfo.boosts.stonecarving;
+                    boost = RootInfo.BaseInfo.boosts.stonecarving_boost;
                     HouseBoost = RootInfo.BaseInfo.house.shed;
                     break;
             }
