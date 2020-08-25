@@ -120,6 +120,7 @@
                 <th>relic boost</th>
                 <th>bonus</th>
                 <th>house</th>
+                <th>enchants</th>
                 <th>clan boost</th>
                 <th>vip</th>
                 <th>level</th>
@@ -138,6 +139,7 @@
                     <th><BSBasicInput @bind-Value="partner.Boost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" tabindex="3"/></th>
                     <th>@((partner.Boost * .025).ToString("0.###"))</th>
                     <th><BSBasicInput @bind-Value="partner.HouseBoost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" /></th>
+                    <td>@partner.EnchantBoost</td>
                     <th><BSBasicInput @bind-Value="PlayerInfo.BaseInfo.village.boosts.mill" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" /></th>
                     <th><BSBasicInput @bind-Value="PlayerInfo.Vip" @onchange="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Checkbox" /></th>
                     <th>@partner.Level</th>
@@ -185,7 +187,6 @@
         if (key == null || key == "") {
             key = await JSRuntime.InvokeAsync<string>("prompt", "Enter API key");
             try {
-                //playerPlayerInfo = await Http.GetFromJsonAsync<Full>("https://queslar.com/api/player/full/" + key);
                 playerPlayerInfo = await Queslar.Test<Full>(key);
             }
             catch (Exception e) {
@@ -197,7 +198,6 @@
         }
         if (PlayerInfo == null || refresh) {
             try {
-                //playerPlayerInfo = await Http.GetFromJsonAsync<Full>("https://queslar.com/api/player/full/" + key);
                 playerPlayerInfo = await Queslar.Test<Full>(key);
             }
             catch (Exception e) {
