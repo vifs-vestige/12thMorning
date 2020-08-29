@@ -148,7 +148,7 @@ namespace _12thMorning.Services {
             UpdateTotals();
             UpdateBoosts();
         }
-
+        
         public void UpdateTotals() {
             NewPrice = 0;
             NewResHour = 0;
@@ -209,6 +209,12 @@ namespace _12thMorning.Services {
             }
             ResPostTax = (int) Math.Round(Res) - Taxed;
             ResHour = (int) Math.Floor((3600.0 / New.Seconds) * ResPostTax);
+        }
+
+        public void UpdateStats() {
+
+            Current.update(this, BaseInfo.speed, BaseInfo.intelligence);
+            New.update(this, BaseInfo.speed, BaseInfo.intelligence);
         }
 
         public void getResBoost() {

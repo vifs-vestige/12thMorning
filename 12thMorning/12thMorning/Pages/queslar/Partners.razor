@@ -40,7 +40,7 @@
                         </BSDropdown>
                     </th>
                     <th>@partner.Stats</th>
-                    <th>@partner.PlayerStat</th>
+                    <th><BSBasicInput @bind-Value="partner.PlayerStat" @onkeyup="partner.UpdateStats" InputType="InputType.Number" /></th>
                     <th>@partner.Current.Speed/@partner.Current.Seconds</th>
                     <th>@partner.Current.Intelligence/@partner.Current.IntPercent.ToString("0.####")</th>
                     <th>@partner.Current.TotalStats.ToString("N0")</th>
