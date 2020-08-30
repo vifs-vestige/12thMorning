@@ -14,6 +14,7 @@ using Blazored.LocalStorage;
 using System.Security.Principal;
 using _12thMorning.Models.Queslar;
 using System.Text.Json;
+using System.Reflection.Metadata.Ecma335;
 
 namespace _12thMorning.Services {
     public class QueslarService {
@@ -85,10 +86,10 @@ namespace _12thMorning.Services {
         Meat=1, Iron=2, Wood=3, Stone=4
     }
 
-
     public class FullWrapper {
         public Full BaseInfo;
         public Partners PartnerInfo;
+        public FighterWrapper FighterInfo;
         public bool Vip;
 
         public FullWrapper(Full root) {
@@ -104,8 +105,124 @@ namespace _12thMorning.Services {
             foreach(var partner in PartnerInfo.PartnerInfos.Values) {
                 partner.UpdateBoosts();
             }
+            //FighterInfo = new FighterWrapper(this);
         }
     }
+
+    #region fighters
+
+    public class FighterWrapper {
+        public List<Mob> Mobs;
+        public List<FighterInfo> Fighters;
+        private FullWrapper RootInfo;
+        public double RoundsToWin = 0;
+        public double RoundsToLose = 0;
+        public double WinChance = 0;
+
+        
+        public FighterWrapper(FullWrapper info) {
+            RootInfo = info;
+            SetupMobs();
+            SetupFighters();
+            DoMath();
+        }
+
+        public void SetupMobs() {
+            Mobs = new List<Mob>();
+            var mobs = Math.Ceiling((RootInfo.BaseInfo.playerFighterData.dungeon_level + 1 ) / 50.0);
+            for (int i = 0; i < mobs; i++) {
+                Mobs.Add(new Mob(RootInfo.BaseInfo.playerFighterData.dungeon_level - (i * 25)));
+            }
+        }
+
+        public void SetupFighters() {
+            Fighters = new List<FighterInfo>();
+            foreach(var fighter in RootInfo.BaseInfo.fighters) {
+                Fighters.Add(new FighterInfo(fighter, RootInfo.BaseInfo.fighters.Count));
+            }
+        }
+
+        public void DoMath() {
+            double mobDamage = 0;
+            double mobHp = 0;
+            double fighterDamage = 0;
+            double fighterHp = 0;
+            foreach(var mob in Mobs) {
+                //todo get hit and def from knight, if they don't use knight, get fucked
+                double hitRate = mob.Hit / (mob.Hit + 7200.0);
+                double baseDamage = (mob.Damage - 70);
+                double afterToHit = baseDamage * hitRate;
+                double afterCrit = (afterToHit * ((1+mob.Crit)*.01)) + afterToHit;
+                //assume priest for now
+                if(mobDamage == 0) {
+                    afterCrit = afterCrit / 1.1;
+                }
+                mobDamage += afterCrit;
+                mobHp += mob.Hp;
+            }
+            foreach(var fighter in Fighters) {
+                if(fighter.classType == "healer") {
+                    mobDamage -= (int) Math.Floor(fighter.Damage * .75);
+                } else if(fighter.classType == "knight") {
+                    mobDamage = (int)Math.Floor(mobDamage * .6);
+                    fighterHp += fighter.Hp;
+                } else if(fighter.classType == "cavalry") {
+                    double toHit = (fighter.Hit * 2.0) / ((fighter.Hit * 2) + Mobs.First().Dodge);
+                    var damage = (fighter.Damage - Mobs.First().Def) * toHit;
+                    fighterDamage += damage;
+                }
+            }
+            RoundsToWin = mobHp / fighterDamage;
+            RoundsToLose = fighterHp / mobDamage;
+            WinChance = RoundsToLose / RoundsToWin;
+        }
+    }
+
+    public class Mob {
+        public int Level;
+        public int Hp;
+        public int Def;
+        public int Damage;
+        public double Crit;
+        public int Hit;
+        public int Dodge;
+
+        public Mob(int level) {
+            Level = level;
+            level = level - 1;
+            Hp = 500 + level * 400;
+            Def = 30 + level * 10;
+            Damage = 100 + level * 40;
+            Crit = .25 + level * .25;
+            Hit = 80 + level * 30;
+            Dodge = Hit;
+        }
+    }
+
+    public class FighterInfo {
+        public string classType;
+        public int Hp;
+        public int Def;
+        public int Damage;
+        public double Crit;
+        public int Hit;
+        public int Dodge;
+
+        public FighterInfo(Fighter fighter, int numberOfFighters) {
+            classType = fighter.fighterClass;
+            Hp = (int) Math.Floor((fighter.health * 100 + 500) * (1 + numberOfFighters * .25));
+            Def = (int) Math.Floor((fighter.defense * 10 + 25) * (1 + numberOfFighters * .25));
+            Damage = (int) Math.Floor((fighter.damage * 25 + 100) * (1 + numberOfFighters * .25));
+            Crit = (int) Math.Floor((fighter.crit_damage * .25) * (1 + numberOfFighters * .25));
+            Hit = (int) Math.Floor((fighter.hit * 50 + 50) * (1 + numberOfFighters * .25));
+            Dodge = (int) Math.Floor((fighter.dodge * 10 + 50) * (1 + numberOfFighters * .25));
+        }
+
+    }
+
+    #endregion
+
+    #region partners
 
     public class Partners {
         public Dictionary<int, PartnerInfo> PartnerInfos = new Dictionary<int, PartnerInfo>();
@@ -122,15 +239,17 @@ namespace _12thMorning.Services {
             foreach (var partner in info.BaseInfo.partners) {
                 PartnerInfos[partner.id] = new PartnerInfo(partner, info);
             }
-            foreach(var kingdomTiles in RootInfo.BaseInfo.kingdom.tiles) {
-                if(kingdomTiles.resource_one_type == "resource") {
-                    KingdomBonus += (int)kingdomTiles.resource_one_value;
-                }
-                if (kingdomTiles.resource_two_type == "resource") {
-                    KingdomBonus += (int)kingdomTiles.resource_two_value;
-                }
-                if (kingdomTiles.resource_three_type == "resource") {
-                    KingdomBonus += (int)kingdomTiles.resource_three_value;
+            if (RootInfo.BaseInfo.kingdom.tiles != null) {
+                foreach (var kingdomTiles in RootInfo.BaseInfo.kingdom.tiles) {
+                    if (kingdomTiles.resource_one_type == "resource") {
+                        KingdomBonus += (int)kingdomTiles.resource_one_value;
+                    }
+                    if (kingdomTiles.resource_two_type == "resource") {
+                        KingdomBonus += (int)kingdomTiles.resource_two_value;
+                    }
+                    if (kingdomTiles.resource_three_type == "resource") {
+                        KingdomBonus += (int)kingdomTiles.resource_three_value;
+                    }
                 }
             }
             UpdateTotals();
@@ -303,5 +422,7 @@ namespace _12thMorning.Services {
             update();
         }
     }
+
+    #endregion
 
 }

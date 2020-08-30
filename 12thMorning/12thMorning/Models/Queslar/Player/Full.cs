@@ -20,6 +20,7 @@ namespace _12thMorning.Models.Queslar.Player {
         public List<EquipmentEquipped> equipmentEquipped { get; set; }
         public EquipmentSlots equipmentSlots { get; set; }
         public List<Fighter> fighters { get; set; }
+        public PlayerFighterData playerFighterData { get; set; }
         public Party partyActions { get; set; }
         public Actions actions { get; set; }
         public Village village { get; set; }
@@ -104,6 +105,15 @@ namespace _12thMorning.Models.Queslar.Player {
         public int dodge { get; set; }
         public int defense { get; set; }
         public int crit_damage { get; set; }
+    }
+
+    public class PlayerFighterData {
+        public int id { get; set; }
+        public int player_id { get; set; }
+        public int daily_attacks_used { get; set; }
+        public int fighters { get; set; }
+        public int elo { get; set; }
+        public int dungeon_level { get; set; }
     }
 
     public class Overview {

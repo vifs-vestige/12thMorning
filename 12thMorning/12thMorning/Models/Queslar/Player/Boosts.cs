@@ -21,7 +21,7 @@ namespace _12thMorning.Models.Queslar.Player {
         public int consistency { get; set; }
         public int fortune { get; set; }
         public int capacity { get; set; }
-        public int enchanting { get; set; }
+        public int enchanting_boost { get; set; }
         public int stability { get; set; }
         public int battle { get; set; }
         public int harvest { get; set; }
