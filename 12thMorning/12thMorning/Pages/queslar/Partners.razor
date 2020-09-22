@@ -9,157 +9,216 @@
 @name
 @if (PlayerInfo != null) {
     <BSButton OnClick="Refresh">Refresh</BSButton><span><small> you can support the creator of this tool at "VifsVestige" enchanting service</small></span>
-    <h2>current partners</h2>
-    <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
-        <thead>
-            <tr>
-                <th scope="col">name</th>
-                <th>res</th>
-                <th>stat</th>
-                <th>player stat</th>
-                <th>speed</th>
-                <th>int</th>
-                <th>total stats</th>
-                <th>res</th>
-                <th>res/hour</th>
-                <th>Total Spent</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var partner in PlayerInfo.PartnerInfo.PartnerInfos.Values) {
+    <br/>
+    <BSButton Color="Color.Primary" OnClick="toggleCurrent">current partners</BSButton>
+    <BSCollapse IsOpen="@CurrentIsOpen">
+        <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
+            <thead>
                 <tr>
-                    <th scope="row">@partner.BaseInfo.name</th>
-                    <th>
-                        <BSDropdown>
-                            <BSDropdownToggle>@partner.Display</BSDropdownToggle>
-                            <BSDropdownMenu>
-                                @foreach (string resType in Enum.GetNames(typeof(ResTypes))) {
-                                    <BSDropdownItem @onclick="@(e => OnClick(e, resType, partner.BaseInfo.id))" Href="javascript:void(0);">@resType</BSDropdownItem>
-                                }
-                            </BSDropdownMenu>
-                        </BSDropdown>
-                    </th>
-                    <th>@partner.Stats</th>
-                    <th><BSBasicInput @bind-Value="partner.PlayerStat" @onkeyup="partner.UpdateStats" InputType="InputType.Number" /></th>
-                    <th>@partner.Current.Speed/@partner.Current.Seconds</th>
-                    <th>@partner.Current.Intelligence/@partner.Current.IntPercent.ToString("0.####")</th>
-                    <th>@partner.Current.TotalStats.ToString("N0")</th>
-                    <th>@partner.Current.ResPre</th>
-                    <th>@partner.Current.ResPerHourPre.ToString("N0")</th>
-                    <th>@partner.New.TotalSpent.ToString("N0")</th>
+                    <th scope="col">name</th>
+                    <th>res</th>
+                    <th>stat</th>
+                    <th>player stat</th>
+                    <th>speed</th>
+                    <th>int</th>
+                    <th>total stats</th>
+                    <th>res</th>
+                    <th>res/hour</th>
+                    <th>Total Spent</th>
                 </tr>
-            }
-            <tr>
-                <th scope="col">Total</th>
-                <th>-</th>
-                <th>-</th>
-                <th>-</th>
-                <th>-</th>
-                <th>-</th>
-                <th>-</th>
-                <th>-</th>
-                <th>@PlayerInfo.PartnerInfo.CurrentResHour.ToString("N0")</th>
-                <th>@PlayerInfo.PartnerInfo.CurrentPrice.ToString("N0")</th>
-            </tr>
-
-        </tbody>
-    </BSTable>
-    <h2>new partners <small><small>(hit enter to update)</small></small></h2>
-    <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
-        <thead>
-            <tr>
-                <th scope="col">name</th>
-                <th>speed</th>
-                <th>seconds</th>
-                <th>int</th>
-                <th>int%</th>
-                <th>total stats</th>
-                <th>res</th>
-                <th>res/hour</th>
-                <th>Total Spent</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var partner in PlayerInfo.PartnerInfo.PartnerInfos.Values) {
+            </thead>
+            <tbody>
+                @foreach (var partner in PlayerInfo.PartnerInfo.PartnerInfos.Values) {
+                    <tr>
+                        <th scope="row">@partner.BaseInfo.name</th>
+                        <th>
+                            <BSDropdown>
+                                <BSDropdownToggle>@partner.Display</BSDropdownToggle>
+                                <BSDropdownMenu>
+                                    @foreach (string resType in Enum.GetNames(typeof(ResTypes))) {
+                                        <BSDropdownItem @onclick="@(e => OnClick(e, resType, partner.BaseInfo.id))" Href="javascript:void(0);">@resType</BSDropdownItem>
+                                    }
+                                </BSDropdownMenu>
+                            </BSDropdown>
+                        </th>
+                        <th>@partner.Stats</th>
+                        <th><BSBasicInput @bind-Value="partner.PlayerStat" @onkeyup="partner.UpdateStats" InputType="InputType.Number" /></th>
+                        <th>@partner.Current.Speed/@partner.Current.Seconds</th>
+                        <th>@partner.Current.Intelligence/@partner.Current.IntPercent.ToString("0.####")</th>
+                        <th>@partner.Current.TotalStats.ToString("N0")</th>
+                        <th>@partner.Current.ResPre</th>
+                        <th>@partner.Current.ResPerHourPre.ToString("N0")</th>
+                        <th>@partner.New.TotalSpent.ToString("N0")</th>
+                    </tr>
+                }
                 <tr>
-                    <th scope="row">@(partner.BaseInfo.name) (@partner.Display)</th>
-                    <th><BSBasicInput @bind-Value="partner.New.Speed" @onkeyup="PlayerInfo.PartnerInfo.updateNew" InputType="InputType.Number" tabindex="1"/></th>
-                    <th>@partner.New.Seconds</th>
-                    <th><BSBasicInput @bind-Value="partner.New.Intelligence" @onkeyup="PlayerInfo.PartnerInfo.updateNew" InputType="InputType.Number" tabindex="2"/></th>
-                    <th>@partner.New.IntPercent.ToString("0.####")</th>
-                    <th>@partner.New.TotalStats.ToString("N0")</th>
-                    <th>@partner.New.ResPre</th>
-                    <th>@partner.New.ResPerHourPre.ToString("N0")</th>
-                    <th>@partner.New.TotalSpent.ToString("N0")</th>
+                    <th scope="col">Total</th>
+                    <th>-</th>
+                    <th>-</th>
+                    <th>-</th>
+                    <th>-</th>
+                    <th>-</th>
+                    <th>-</th>
+                    <th>-</th>
+                    <th>@PlayerInfo.PartnerInfo.CurrentResHour.ToString("N0")</th>
+                    <th>@PlayerInfo.PartnerInfo.CurrentPrice.ToString("N0")</th>
                 </tr>
-            }
 
-            <tr>
-                <th scope="col">Total</th>
-                <th>-</th>
-                <th>-</th>
-                <th>-</th>
-                <th>-</th>
-                <th>-</th>
-                <th>-</th>
-                <th>@PlayerInfo.PartnerInfo.NewResHour.ToString("N0")</th>
-                <th>@PlayerInfo.PartnerInfo.NewPrice.ToString("N0")</th>
-            </tr>
-
-        </tbody>
-    </BSTable>
-    <span>
-        Current Total (@PlayerInfo.PartnerInfo.CurrentPrice.ToString("N0")) - New Total(@PlayerInfo.PartnerInfo.NewPrice.ToString("N0")) - Bound Gold (@PlayerInfo.BaseInfo.currency.shattered_partner_gold.ToString("N0")) =
-        Needed <b>@((PlayerInfo.PartnerInfo.NewPrice - PlayerInfo.PartnerInfo.CurrentPrice - PlayerInfo.BaseInfo.currency.shattered_partner_gold).ToString("N0"))</b>
-    </span>
-    <h2>boosts <small><small>(based on new partners)</small></small></h2>
-    <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
-        <thead>
-            <tr>
-                <th scope="col">name</th>
-                <th>relic boost</th>
-                <th>bonus</th>
-                <th>house</th>
-                <th>enchants</th>
-                <th>clan boost</th>
-                <th>vip</th>
-                <th>level</th>
-                <th>kingdom</th>
-                <th>tax</th>
-                <th>taxed</th>
-                <th>res</th>
-                <th>after tax</th>
-                <th>res/hour</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var partner in PlayerInfo.PartnerInfo.PartnerInfos.Values) {
+            </tbody>
+        </BSTable>
+    </BSCollapse>
+    <br/>
+    <BSButton Color="Color.Primary" OnClick="toggleNew">new partners</BSButton>
+    <BSCollapse IsOpen="@NewIsOpen">
+        <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
+            <thead>
                 <tr>
-                    <th>@(partner.BaseInfo.name) (@partner.Display)</th>
-                    <th><BSBasicInput @bind-Value="partner.Boost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" tabindex="3"/></th>
-                    <th>@((partner.Boost * .025).ToString("0.###"))</th>
-                    <th><BSBasicInput @bind-Value="partner.HouseBoost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" /></th>
-                    <td>@partner.EnchantBoost</td>
-                    <th><BSBasicInput @bind-Value="PlayerInfo.BaseInfo.village.boosts.mill" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" /></th>
-                    <th><BSBasicInput @bind-Value="PlayerInfo.Vip" @onchange="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Checkbox" /></th>
-                    <th>@partner.Level</th>
-                    <th>@PlayerInfo.PartnerInfo.KingdomBonus</th>
-                    <th><BSBasicInput @bind-Value="PlayerInfo.PartnerInfo.Tax" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" /></th>
-                    <th>@partner.Taxed</th>
-                    <th>@partner.Res.ToString("0.####") (@Math.Round(partner.Res))</th>
-                    <th>@partner.ResPostTax</th>
-                    <th>@partner.ResHour.ToString("N0")</th>
-
+                    <th scope="col">name</th>
+                    <th>speed</th>
+                    <th>seconds</th>
+                    <th>int</th>
+                    <th>int%</th>
+                    <th>total stats</th>
+                    <th>res</th>
+                    <th>res/hour</th>
+                    <th>Total Spent</th>
                 </tr>
-            }
-        </tbody>
+            </thead>
+            <tbody>
+                @foreach (var partner in PlayerInfo.PartnerInfo.PartnerInfos.Values) {
+                    <tr>
+                        <th scope="row">@(partner.BaseInfo.name) (@partner.Display)</th>
+                        <th><BSBasicInput @bind-Value="partner.New.Speed" @onkeyup="PlayerInfo.PartnerInfo.updateNew" InputType="InputType.Number" tabindex="1" /></th>
+                        <th>@partner.New.Seconds</th>
+                        <th><BSBasicInput @bind-Value="partner.New.Intelligence" @onkeyup="PlayerInfo.PartnerInfo.updateNew" InputType="InputType.Number" tabindex="2" /></th>
+                        <th>@partner.New.IntPercent.ToString("0.####")</th>
+                        <th>@partner.New.TotalStats.ToString("N0")</th>
+                        <th>@partner.New.ResPre</th>
+                        <th>@partner.New.ResPerHourPre.ToString("N0")</th>
+                        <th>@partner.New.TotalSpent.ToString("N0")</th>
+                    </tr>
+                }
 
-    </BSTable>
+                <tr>
+                    <th scope="col">Total</th>
+                    <th>-</th>
+                    <th>-</th>
+                    <th>-</th>
+                    <th>-</th>
+                    <th>-</th>
+                    <th>-</th>
+                    <th>@PlayerInfo.PartnerInfo.NewResHour.ToString("N0")</th>
+                    <th>@PlayerInfo.PartnerInfo.NewPrice.ToString("N0")</th>
+                </tr>
+
+            </tbody>
+        </BSTable>
+        <span>
+            Current Total (@PlayerInfo.PartnerInfo.CurrentPrice.ToString("N0")) - New Total(@PlayerInfo.PartnerInfo.NewPrice.ToString("N0")) - Bound Gold (@PlayerInfo.BaseInfo.currency.shattered_partner_gold.ToString("N0")) =
+            Needed <b>@((PlayerInfo.PartnerInfo.NewPrice - PlayerInfo.PartnerInfo.CurrentPrice - PlayerInfo.BaseInfo.currency.shattered_partner_gold).ToString("N0"))</b>
+        </span>
+    </BSCollapse>
+    <br/>
+    <BSButton Color="Color.Primary" OnClick="toggleBoosts">boosts</BSButton>
+    <BSCollapse IsOpen="@BoostsIsOpen">
+        <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
+            <thead>
+                <tr>
+                    <th scope="col">name</th>
+                    <th>relic boost</th>
+                    <th>bonus</th>
+                    <th>house</th>
+                    <th>enchants</th>
+                    <th>clan boost</th>
+                    <th>vip</th>
+                    <th>level</th>
+                    <th>kingdom</th>
+                    <th>tax</th>
+                    <th>taxed</th>
+                    <th>res</th>
+                    <th>after tax</th>
+                    <th>res/hour</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var partner in PlayerInfo.PartnerInfo.PartnerInfos.Values) {
+                    <tr>
+                        <th>@(partner.BaseInfo.name) (@partner.Display)</th>
+                        <th><BSBasicInput @bind-Value="partner.Boost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" tabindex="3" /></th>
+                        <th>@((partner.Boost * .025).ToString("0.###"))</th>
+                        <th><BSBasicInput @bind-Value="partner.HouseBoost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" /></th>
+                        <td>@partner.EnchantBoost</td>
+                        <th><BSBasicInput @bind-Value="PlayerInfo.BaseInfo.village.boosts.mill" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" /></th>
+                        <th><BSBasicInput @bind-Value="PlayerInfo.Vip" @onchange="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Checkbox" /></th>
+                        <th>@partner.Level</th>
+                        <th>@PlayerInfo.PartnerInfo.KingdomBonus</th>
+                        <th><BSBasicInput @bind-Value="PlayerInfo.PartnerInfo.Tax" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" /></th>
+                        <th>@partner.Taxed</th>
+                        <th>@partner.Res.ToString("0.####") (@Math.Round(partner.Res))</th>
+                        <th>@partner.ResPostTax</th>
+                        <th>@partner.ResHour.ToString("N0")</th>
+
+                    </tr>
+                }
+            </tbody>
+        </BSTable>
+
+    </BSCollapse>
+    <br/>
+    <BSButton Color="Color.Primary" OnClick="toggleFinal">final</BSButton>
+    <BSCollapse IsOpen="@FinalIsOpen">
+        <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
+            <thead>
+                <tr>
+                    <th scope="col">type</th>
+                    <th>pet food</th>
+                    <th>taxed/hour</th>
+                    <th>pet food/hour</th>
+                    <th>final/hour</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var partner in PlayerInfo.PartnerInfo.FinalPartners) {
+                    <tr>
+                        <th>@partner.Key</th>
+                        <th><BSBasicInput @bind-Value="partner.Value.PetFood" @onkeyup="partner.Value.updatePetPerHour" InputType="InputType.Number"></BSBasicInput></th>
+                        <th>@partner.Value.TaxedPerHour.ToString("N0")</th>
+                        <th>@partner.Value.PetFoodPerHour.ToString("N0")</th>
+                        <th>@partner.Value.FinalPerHour.ToString("N0")</th>
+                    </tr>
+                }
+            </tbody>
+        </BSTable>
+    </BSCollapse>
 }
 
 @code {
     public string name;
     public FullWrapper PlayerInfo;
+    bool CurrentIsOpen { get; set; } = true;
+    bool NewIsOpen { get; set; } = true;
+    bool BoostsIsOpen { get; set; } = true;
+    bool FinalIsOpen { get; set; } = true;
+
+    private void toggleCurrent(MouseEventArgs e) {
+        CurrentIsOpen = !CurrentIsOpen;
+        StateHasChanged();
+    }
+
+    private void toggleNew(MouseEventArgs e) {
+        NewIsOpen = !NewIsOpen;
+        StateHasChanged();
+    }
+
+    private void toggleBoosts(MouseEventArgs e) {
+        BoostsIsOpen = !BoostsIsOpen;
+        StateHasChanged();
+    }
+
+    private void toggleFinal(MouseEventArgs e) {
+        FinalIsOpen = !FinalIsOpen;
+        StateHasChanged();
+    }
 
     protected void OnClick(MouseEventArgs e, string resType, int partnerId) {
         PlayerInfo.PartnerInfo.SetRes(partnerId, (ResTypes)Enum.Parse(typeof(ResTypes), resType));
@@ -174,7 +233,7 @@
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         if (firstRender) {
             await base.OnAfterRenderAsync(firstRender);
-            if(Queslar.Values.ContainsKey(typeof(Full)) && Queslar.Values[typeof(Full)] != null) {
+            if (Queslar.Values.ContainsKey(typeof(Full)) && Queslar.Values[typeof(Full)] != null) {
                 PlayerInfo = Queslar.GetFullWrapper();
                 StateHasChanged();
             }

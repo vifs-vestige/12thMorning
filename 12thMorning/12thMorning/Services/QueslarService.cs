@@ -233,6 +233,7 @@ namespace _12thMorning.Services {
         public int Tax = 0;
         private FullWrapper RootInfo;
         public int KingdomBonus;
+        public Dictionary<ResTypes, PartnerFinal> FinalPartners;
 
         public Partners(FullWrapper info) {
             RootInfo = info;
@@ -251,6 +252,10 @@ namespace _12thMorning.Services {
                         KingdomBonus += (int)kingdomTiles.resource_three_value;
                     }
                 }
+            }
+            FinalPartners = new Dictionary<ResTypes, PartnerFinal>();
+            foreach(ResTypes resType in Enum.GetValues(typeof(ResTypes))) {
+                FinalPartners.Add(resType, new PartnerFinal());
             }
             UpdateTotals();
         }
@@ -282,8 +287,16 @@ namespace _12thMorning.Services {
         }
 
         public void UpdateBoosts() {
+            foreach(var x in FinalPartners.Values) {
+                x.clear();
+            }
             foreach (var partner in PartnerInfos.Values) {
                 partner.UpdateBoosts();
+                FinalPartners[partner.ResType].add(partner);
+            }
+
+            foreach (var x in FinalPartners.Values) {
+                x.finalize();
             }
         }
     }
@@ -302,6 +315,7 @@ namespace _12thMorning.Services {
         public int HouseBoost;
         public double EnchantBoost;
         public int ResHour;
+        public int TaxedHour;
         public string Display = "res";
         public PartnerTotal Current = new PartnerTotal();
         public PartnerTotal New = new PartnerTotal();
@@ -313,9 +327,7 @@ namespace _12thMorning.Services {
             setType((ResTypes)baseInfo.action_id);
             EnchantBoost = 0;
             foreach(var x in info.BaseInfo.equipmentEquipped) {
-                var temp = ResType.ToString();
                 if(x.enchant_type == ResType.ToString().ToLower()) {
-                    //EnchantBoost += (double) (x.enchant_value / 2.0 / 100.0);
                     EnchantBoost += (double)(Math.Pow((double)x.enchant_value, 0.925) / 100);
                 }
             }
@@ -329,6 +341,7 @@ namespace _12thMorning.Services {
             }
             ResPostTax = (int) Math.Round(Res) - Taxed;
             ResHour = (int) Math.Floor((3600.0 / New.Seconds) * ResPostTax);
+            TaxedHour = (int)Math.Floor((3600.0 / New.Seconds) * Taxed);
         }
 
         public void UpdateStats() {
@@ -421,6 +434,34 @@ namespace _12thMorning.Services {
             Speed = speed;
             Intelligence = intelligence;
             update();
+        }
+    }
+
+    public class PartnerFinal {
+        public int PetFood;
+        public int TaxedPerHour;
+        public int PetFoodPerHour;
+        private int PrePetPerHour;
+        public int FinalPerHour;
+
+        public void clear() {
+            TaxedPerHour = 0;
+            PrePetPerHour = 0;
+        }
+
+        public void add(PartnerInfo partnerInfo) {
+            TaxedPerHour += partnerInfo.TaxedHour;
+            PrePetPerHour += partnerInfo.ResHour;
+            
+        }
+
+        public void updatePetPerHour() {
+            PetFoodPerHour = PetFood * 600;
+            FinalPerHour = PrePetPerHour - PetFoodPerHour;
+        }
+
+        public void finalize() {
+            FinalPerHour = PrePetPerHour - PetFoodPerHour;
         }
     }
 
