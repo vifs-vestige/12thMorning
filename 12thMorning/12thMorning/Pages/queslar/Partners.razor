@@ -175,6 +175,7 @@
                     <th>taxed/hour</th>
                     <th>pet food/hour</th>
                     <th>final/hour</th>
+                    <th>final/day</th>
                 </tr>
             </thead>
             <tbody>
@@ -185,6 +186,7 @@
                         <th>@partner.Value.TaxedPerHour.ToString("N0")</th>
                         <th>@partner.Value.PetFoodPerHour.ToString("N0")</th>
                         <th>@partner.Value.FinalPerHour.ToString("N0")</th>
+                        <th>@((partner.Value.FinalPerHour * 24).ToString("N0"))</th>
                     </tr>
                 }
             </tbody>

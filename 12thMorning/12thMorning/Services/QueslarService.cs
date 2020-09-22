@@ -105,6 +105,7 @@ namespace _12thMorning.Services {
             foreach(var partner in PartnerInfo.PartnerInfos.Values) {
                 partner.UpdateBoosts();
             }
+            PartnerInfo.UpdateBoosts();
             //FighterInfo = new FighterWrapper(this);
         }
     }
@@ -254,7 +255,7 @@ namespace _12thMorning.Services {
                 }
             }
             FinalPartners = new Dictionary<ResTypes, PartnerFinal>();
-            foreach(ResTypes resType in Enum.GetValues(typeof(ResTypes))) {
+            foreach (ResTypes resType in Enum.GetValues(typeof(ResTypes))) {
                 FinalPartners.Add(resType, new PartnerFinal());
             }
             UpdateTotals();
@@ -438,9 +439,9 @@ namespace _12thMorning.Services {
     }
 
     public class PartnerFinal {
-        public int PetFood;
+        public int PetFood = 0;
         public int TaxedPerHour;
-        public int PetFoodPerHour;
+        public int PetFoodPerHour = 0;
         private int PrePetPerHour;
         public int FinalPerHour;
 
