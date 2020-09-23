@@ -329,7 +329,7 @@ namespace _12thMorning.Services {
             EnchantBoost = 0;
             foreach(var x in info.BaseInfo.equipmentEquipped) {
                 if(x.enchant_type == ResType.ToString().ToLower()) {
-                    EnchantBoost += (double)(Math.Pow((double)x.enchant_value, 0.925) / 100);
+                    EnchantBoost += (double)(Math.Pow((double)x.enchant_value, 0.425) / 100);
                 }
             }
         }
