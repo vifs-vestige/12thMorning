@@ -1,0 +1,39 @@
+﻿@page "/queslar/changelog"
+@layout QueslarLayout
+
+<h2>change log</h2>
+
+
+<BSListGroup Items="ListGroup" ListGroupType="ListGroupType.List" Context="groupItem" >
+    @foreach (var groupItem in ListGroup) {
+    <BSListGroupItem ListGroupType="ListGroupType.List">
+            <BSListGroupItemHeading>
+                <h5 class="mb-1">@groupItem.Header</h5>
+                <small>@groupItem.Updated</small>
+            </BSListGroupItemHeading>
+            @foreach (var content in groupItem.Contents) {
+            <p class="mb-1">@content</p>
+            }
+    </BSListGroupItem>
+    }
+</BSListGroup>
+
+@code {
+    List<item> ListGroup = new List<item> {
+        new item {
+            Header = "V1.0",
+            Updated = "23/9/2020",
+            Contents = new List<string> {
+                "Updated partner enchants to x ^ .425 / 2 scaling", 
+                "pet auto feed loaded from API",
+                "tax saved durrent current session"
+            }
+        },
+    };
+
+    class item {
+        public string Updated { get; set; }
+        public string Header { get; set; }
+        public List<String> Contents { get; set; }
+    }
+}
