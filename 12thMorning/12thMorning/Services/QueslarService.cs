@@ -14,8 +14,8 @@ namespace _12thMorning.Services {
         public bool Valid = false;
         public Dictionary<Type, BaseQueslar> Values = new Dictionary<Type, BaseQueslar>();
         private FullWrapper FullWrapper;
+        public int Tax = 0;
         public string LocalApiKey { get { return "Queslar.ApiKey"; } }
-        public int tax = 0;
 
         public void Unload() {
             ApiKey = "";
@@ -49,7 +49,7 @@ namespace _12thMorning.Services {
                 info = await client.GetFromJsonAsync<T>("https://queslar.com/api/" + info.ApiPath + apiKey);
                 Values[typeof(T)] = info;
                 if(info.GetType() == typeof(Full)) {
-                    FullWrapper = new FullWrapper((Full)info);
+                    FullWrapper = new FullWrapper((Full)info, Tax);
                 }
             }
             catch (Exception e) {
@@ -74,6 +74,10 @@ namespace _12thMorning.Services {
                 return false;
             }
         }
+
+        public void UpdateTax(string tax) {
+            int.TryParse(tax, out Tax);
+        }
     }
 
     public enum ResTypes {
@@ -86,7 +90,7 @@ namespace _12thMorning.Services {
         public FighterWrapper FighterInfo;
         public bool Vip;
 
-        public FullWrapper(Full root) {
+        public FullWrapper(Full root, int tax = 0) {
             BaseInfo = root;
             Vip = false;
             if(root.player.vip_time != "0000-00-00 00:00:00") {
@@ -95,7 +99,7 @@ namespace _12thMorning.Services {
                     Vip = true;
                 }
             }
-            PartnerInfo = new Partners(this);
+            PartnerInfo = new Partners(this, tax);
             foreach(var partner in PartnerInfo.PartnerInfos.Values) {
                 partner.UpdateBoosts();
             }
@@ -226,13 +230,13 @@ namespace _12thMorning.Services {
         public int NewPrice;
         public int NewResHour;
         public int Tax = 0;
-        private static int _Tax = 0;
         private FullWrapper RootInfo;
         public int KingdomBonus;
         public Dictionary<ResTypes, PartnerFinal> FinalPartners;
 
-        public Partners(FullWrapper info) {
+        public Partners(FullWrapper info, int tax) {
             RootInfo = info;
+            Tax = tax;
             foreach (var partner in info.BaseInfo.partners) {
                 PartnerInfos[partner.id] = new PartnerInfo(partner, info);
             }
@@ -254,7 +258,6 @@ namespace _12thMorning.Services {
                 FinalPartners.Add(resType, new PartnerFinal(info.BaseInfo.pets.Where(x => x.active_food == resType.ToString().ToLower()).Sum(x => x.auto_feed)));
             }
             UpdateTotals();
-            Tax = _Tax;
         }
 
         public void SetRes(int id, ResTypes res) {
@@ -296,7 +299,6 @@ namespace _12thMorning.Services {
             foreach (var x in FinalPartners.Values) {
                 x.finalize();
             }
-            _Tax = Tax;
         }
     }
 
