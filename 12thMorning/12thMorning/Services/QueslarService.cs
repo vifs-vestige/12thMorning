@@ -255,7 +255,7 @@ namespace _12thMorning.Services {
             }
             FinalPartners = new Dictionary<ResTypes, PartnerFinal>();
             foreach (ResTypes resType in Enum.GetValues(typeof(ResTypes))) {
-                FinalPartners.Add(resType, new PartnerFinal(info.BaseInfo.pets.Where(x => x.active_food == resType.ToString().ToLower()).Sum(x => x.auto_feed)));
+                FinalPartners.Add(resType, new PartnerFinal(info.BaseInfo.pets.Where(x => x.active_food == resType.ToString().ToLower()).Sum(x => x.efficiency_tier + 1)));
             }
             UpdateTotals();
         }
