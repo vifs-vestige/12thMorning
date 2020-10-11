@@ -8,7 +8,10 @@
 
 @name
 @if (PlayerInfo != null) {
-    <BSButton OnClick="Refresh">Refresh</BSButton><span><small> you can support the creator of this tool at "VifsVestige" enchanting service</small></span>
+    <BSButton OnClick="Refresh">Refresh</BSButton>
+    <BSButton OnClick="UpdateTax">Save Set Tax</BSButton>
+    <span><small> you can support the creator of this tool at "VifsVestige" enchanting service</small></span>
+
     <br/>
     <BSButton Color="Color.Primary" OnClick="toggleCurrent">current partners</BSButton>
     <BSCollapse IsOpen="@CurrentIsOpen">
@@ -202,24 +205,8 @@
     bool BoostsIsOpen { get; set; } = true;
     bool FinalIsOpen { get; set; } = true;
 
-    private void toggleCurrent(MouseEventArgs e) {
-        CurrentIsOpen = !CurrentIsOpen;
-        StateHasChanged();
-    }
-
-    private void toggleNew(MouseEventArgs e) {
-        NewIsOpen = !NewIsOpen;
-        StateHasChanged();
-    }
-
-    private void toggleBoosts(MouseEventArgs e) {
-        BoostsIsOpen = !BoostsIsOpen;
-        StateHasChanged();
-    }
-
-    private void toggleFinal(MouseEventArgs e) {
-        FinalIsOpen = !FinalIsOpen;
-        StateHasChanged();
+    protected async void UpdateTax(MouseEventArgs e) {
+        await localStorage.SetItemAsync("Tax", PlayerInfo.PartnerInfo.Tax);
     }
 
     protected void OnClick(MouseEventArgs e, string resType, int partnerId) {
@@ -273,5 +260,23 @@
         StateHasChanged();
     }
 
+    private void toggleCurrent(MouseEventArgs e) {
+        CurrentIsOpen = !CurrentIsOpen;
+        StateHasChanged();
+    }
 
+    private void toggleNew(MouseEventArgs e) {
+        NewIsOpen = !NewIsOpen;
+        StateHasChanged();
+    }
+
+    private void toggleBoosts(MouseEventArgs e) {
+        BoostsIsOpen = !BoostsIsOpen;
+        StateHasChanged();
+    }
+
+    private void toggleFinal(MouseEventArgs e) {
+        FinalIsOpen = !FinalIsOpen;
+        StateHasChanged();
+    }
 }
