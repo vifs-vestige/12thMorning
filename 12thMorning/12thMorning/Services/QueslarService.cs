@@ -318,6 +318,8 @@ namespace _12thMorning.Services {
         public int ResPostTax;
         public double Boost;
         public int HouseBoost;
+        public int BoostedHouseBoost;
+        public int BoostedVillageBoost;
         public double EnchantBoost;
         public int ResHour;
         public int TaxedHour;
@@ -340,10 +342,10 @@ namespace _12thMorning.Services {
 
         public void UpdateBoosts() {
             var vipBonus = RootInfo.Vip ? 1.10 : 1;
-            var tempHouseBoost = GetBoostedBoost(HouseBoost, 15);
-            var tempVillageBoost = GetBoostedBoost(RootInfo.BaseInfo.village.boosts.mill, 20);
+            BoostedHouseBoost = GetBoostedBoost(HouseBoost, 15);
+            BoostedVillageBoost = GetBoostedBoost(RootInfo.BaseInfo.village.boosts.mill, 20);
 
-            Res = ((1 + ((Boost * .025)+ EnchantBoost + tempHouseBoost + tempVillageBoost + (Level / 100.0)) / 100.0) * (vipBonus) * (1+RootInfo.PartnerInfo.KingdomBonus/100.0)) * New.ResPre;
+            Res = ((1 + ((Boost * .025)+ EnchantBoost + BoostedHouseBoost + BoostedVillageBoost + (Level / 100.0)) / 100.0) * (vipBonus) * (1+RootInfo.PartnerInfo.KingdomBonus/100.0)) * New.ResPre;
             if (RootInfo.PartnerInfo.Tax != 0) {
                 Taxed = (int)Math.Floor(Res * (RootInfo.PartnerInfo.Tax / 100.0));
             }

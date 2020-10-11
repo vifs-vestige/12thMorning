@@ -128,7 +128,6 @@
                 <tr>
                     <th scope="col">name</th>
                     <th>relic boost</th>
-                    <th>bonus</th>
                     <th>house</th>
                     <th>enchants</th>
                     <th>village boost</th>
@@ -144,23 +143,43 @@
             </thead>
             <tbody>
                 @foreach (var partner in PlayerInfo.PartnerInfo.PartnerInfos.Values) {
-                    <tr>
-                        <th>@(partner.BaseInfo.name) (@partner.Display)</th>
-                        <th><BSBasicInput @bind-Value="partner.Boost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" tabindex="3" /></th>
-                        <th>@((partner.Boost * .025).ToString("0.###"))</th>
-                        <th><BSBasicInput @bind-Value="partner.HouseBoost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" /></th>
-                        <td>@partner.EnchantBoost</td>
-                        <th><BSBasicInput @bind-Value="PlayerInfo.BaseInfo.village.boosts.mill" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" /></th>
-                        <th><BSBasicInput @bind-Value="PlayerInfo.Vip" @onchange="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Checkbox" /></th>
-                        <th>@partner.Level</th>
-                        <th>@PlayerInfo.PartnerInfo.KingdomBonus</th>
-                        <th><BSBasicInput @bind-Value="PlayerInfo.PartnerInfo.Tax" @oninput="@(e => TaxUpdate(e))" InputType="InputType.Number" /></th>
-                        <th>@partner.Taxed</th>
-                        <th>@partner.Res.ToString("0.####") (@Math.Round(partner.Res))</th>
-                        <th>@partner.ResPostTax</th>
-                        <th>@partner.ResHour.ToString("N0")</th>
+                <tr>
+                    <th>@(partner.BaseInfo.name) (@partner.Display)</th>
+                    <th>
+                        <div class="input-group">
+                            <div class="col-sm-5">
+                                <BSBasicInput Class="form-control" @bind-Value="partner.Boost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" tabindex="3" />
+                            </div>
+                            <label class="control-label col-sm-2">@((partner.Boost * .025).ToString("0.###"))</label>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="input-group">
+                            <div class="col-sm-5">
+                                <BSBasicInput @bind-Value="partner.HouseBoost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" />
+                            </div>
+                            <label class="control-label col-sm-2">@(partner.BoostedHouseBoost)</label>
+                        </div>
+                    </th>
+                    <td>@partner.EnchantBoost</td>
+                    <th>
+                        <div class="input-group">
+                            <div class="col-sm-5">
+                                <BSBasicInput @bind-Value="PlayerInfo.BaseInfo.village.boosts.mill" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" />
+                            </div>
+                            <label class="control-label col-sm-2">@(partner.BoostedVillageBoost)</label>
+                        </div>
+                    </th>
+                    <th><BSBasicInput @bind-Value="PlayerInfo.Vip" @onchange="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Checkbox" /></th>
+                    <th>@partner.Level</th>
+                    <th>@PlayerInfo.PartnerInfo.KingdomBonus</th>
+                    <th><BSBasicInput @bind-Value="PlayerInfo.PartnerInfo.Tax" @oninput="@(e => TaxUpdate(e))" InputType="InputType.Number" /></th>
+                    <th>@partner.Taxed</th>
+                    <th>@partner.Res.ToString("0.####") (@Math.Round(partner.Res))</th>
+                    <th>@partner.ResPostTax</th>
+                    <th>@partner.ResHour.ToString("N0")</th>
 
-                    </tr>
+                </tr>
                 }
             </tbody>
         </BSTable>
