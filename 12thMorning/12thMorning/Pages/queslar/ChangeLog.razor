@@ -21,14 +21,25 @@
 @code {
     List<item> ListGroup = new List<item> {
         new item {
+            Header = "v1.1",
+            Updated = "11/10/2020",
+            Contents = new List<string> {
+                "updated village boost to increase scaling every 20 levels",
+                "updated house boost to increase scaling every 15 levels",
+                "added tax amount to local storage so it doesn't have to be re-entered",
+                "added which panels are minimised to local storage",
+                "renamed 'clan boost' to 'village boost'"
+            }
+        },
+        new item {
             Header = "v1.0",
             Updated = "23/9/2020",
             Contents = new List<string> {
-                "updated partner enchants to x ^ .425 / 2 scaling", 
+                "updated partner enchants to x ^ .425 / 2 scaling",
                 "pet auto feed loaded from API",
                 "tax saved durrent current session"
             }
-        },
+        }
     };
 
     class item {

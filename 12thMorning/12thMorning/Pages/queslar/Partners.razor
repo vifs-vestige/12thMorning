@@ -9,7 +9,6 @@
 @name
 @if (PlayerInfo != null) {
     <BSButton OnClick="Refresh">Refresh</BSButton>
-    <BSButton OnClick="UpdateTax">Save Set Tax</BSButton>
     <span><small> you can support the creator of this tool at "VifsVestige" enchanting service</small></span>
 
     <br/>
@@ -132,7 +131,7 @@
                     <th>bonus</th>
                     <th>house</th>
                     <th>enchants</th>
-                    <th>clan boost</th>
+                    <th>village boost</th>
                     <th>vip</th>
                     <th>level</th>
                     <th>kingdom</th>
@@ -205,13 +204,10 @@
     bool BoostsIsOpen { get; set; } = true;
     bool FinalIsOpen { get; set; } = true;
 
-    protected async void UpdateTax(MouseEventArgs e) {
-        await localStorage.SetItemAsync("Tax", PlayerInfo.PartnerInfo.Tax);
-    }
-
-    protected void TaxUpdate(ChangeEventArgs e) {
+    protected async void TaxUpdate(ChangeEventArgs e) {
         PlayerInfo.PartnerInfo.UpdateBoosts();
         Queslar.UpdateTax(e.Value.ToString());
+        await localStorage.SetItemAsync("Tax", e.Value.ToString());
     }
 
     protected void OnClick(MouseEventArgs e, string resType, int partnerId) {
@@ -229,6 +225,8 @@
             await base.OnAfterRenderAsync(firstRender);
             if (Queslar.Values.ContainsKey(typeof(Full)) && Queslar.Values[typeof(Full)] != null) {
                 PlayerInfo = Queslar.GetFullWrapper();
+                checkTax();
+                checkToggles();
                 StateHasChanged();
             }
         }
@@ -261,27 +259,48 @@
         }
         PlayerInfo = new FullWrapper(playerPlayerInfo);
         Queslar.ApiKey = key;
+        checkTax();
 
         StateHasChanged();
     }
 
-    private void toggleCurrent(MouseEventArgs e) {
+    private async void checkTax() {
+        var tax = await localStorage.GetItemAsync<string>("Tax");
+        if (tax != null && tax != "" && tax != "0") {
+            PlayerInfo.PartnerInfo.Tax = Queslar.UpdateTax(tax);
+            PlayerInfo.PartnerInfo.UpdateBoosts();
+        }
+    }
+
+    private async void checkToggles() {
+        CurrentIsOpen = await localStorage.GetItemAsync<string>("CurrentIsOpen") == "false" ? false : true;
+        NewIsOpen = await localStorage.GetItemAsync<string>("NewIsOpen") == "false" ? false : true;
+        BoostsIsOpen = await localStorage.GetItemAsync<string>("BoostsIsOpen") == "false" ? false : true;
+        FinalIsOpen = await localStorage.GetItemAsync<string>("FinalIsOpen") == "false" ? false : true;
+        StateHasChanged();
+    }
+
+    private async void toggleCurrent(MouseEventArgs e) {
         CurrentIsOpen = !CurrentIsOpen;
+        await localStorage.SetItemAsync("CurrentIsOpen", CurrentIsOpen);
         StateHasChanged();
     }
 
-    private void toggleNew(MouseEventArgs e) {
+    private async void toggleNew(MouseEventArgs e) {
         NewIsOpen = !NewIsOpen;
+        await localStorage.SetItemAsync("NewIsOpen", NewIsOpen);
         StateHasChanged();
     }
 
-    private void toggleBoosts(MouseEventArgs e) {
+    private async void toggleBoosts(MouseEventArgs e) {
         BoostsIsOpen = !BoostsIsOpen;
+        await localStorage.SetItemAsync("BoostsIsOpen", BoostsIsOpen);
         StateHasChanged();
     }
 
-    private void toggleFinal(MouseEventArgs e) {
+    private async void toggleFinal(MouseEventArgs e) {
         FinalIsOpen = !FinalIsOpen;
+        await localStorage.SetItemAsync("FinalIsOpen", FinalIsOpen);
         StateHasChanged();
     }
 }

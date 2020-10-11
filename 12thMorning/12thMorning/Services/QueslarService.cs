@@ -75,8 +75,12 @@ namespace _12thMorning.Services {
             }
         }
 
-        public void UpdateTax(string tax) {
-            int.TryParse(tax, out Tax);
+        public int UpdateTax(string tax) {
+            if (int.TryParse(tax, out Tax)) {
+                return Tax;
+            } else {
+                return 0;
+            }
         }
     }
 
