@@ -155,7 +155,7 @@
                         <th><BSBasicInput @bind-Value="PlayerInfo.Vip" @onchange="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Checkbox" /></th>
                         <th>@partner.Level</th>
                         <th>@PlayerInfo.PartnerInfo.KingdomBonus</th>
-                        <th><BSBasicInput @bind-Value="PlayerInfo.PartnerInfo.Tax" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Number" /></th>
+                        <th><BSBasicInput @bind-Value="PlayerInfo.PartnerInfo.Tax" @oninput="@(e => TaxUpdate(e))" InputType="InputType.Number" /></th>
                         <th>@partner.Taxed</th>
                         <th>@partner.Res.ToString("0.####") (@Math.Round(partner.Res))</th>
                         <th>@partner.ResPostTax</th>
@@ -207,6 +207,11 @@
 
     protected async void UpdateTax(MouseEventArgs e) {
         await localStorage.SetItemAsync("Tax", PlayerInfo.PartnerInfo.Tax);
+    }
+
+    protected void TaxUpdate(ChangeEventArgs e) {
+        PlayerInfo.PartnerInfo.UpdateBoosts();
+        Queslar.UpdateTax(e.Value.ToString());
     }
 
     protected void OnClick(MouseEventArgs e, string resType, int partnerId) {

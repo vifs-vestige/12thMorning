@@ -26,6 +26,7 @@ namespace _12thMorning.Models.Queslar.Player {
         public Village village { get; set; }
         public Kingdom kingdom { get; set; }
         public Overview overview { get; set; }
+        public List<Pet> pets { get; set; }
     }
 
     public class Player {
