@@ -224,9 +224,10 @@
     bool FinalIsOpen { get; set; } = true;
 
     protected async void TaxUpdate(ChangeEventArgs e) {
+        var tax = Queslar.UpdateTax(e.Value.ToString());
+        PlayerInfo.PartnerInfo.Tax = tax;
         PlayerInfo.PartnerInfo.UpdateBoosts();
-        Queslar.UpdateTax(e.Value.ToString());
-        await localStorage.SetItemAsync("Tax", e.Value.ToString());
+        await localStorage.SetItemAsync("Tax", tax);
     }
 
     protected void OnClick(MouseEventArgs e, string resType, int partnerId) {

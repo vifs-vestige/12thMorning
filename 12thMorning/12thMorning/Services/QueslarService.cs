@@ -335,7 +335,11 @@ namespace _12thMorning.Services {
             EnchantBoost = 0;
             foreach(var x in info.BaseInfo.equipmentEquipped) {
                 if(x.enchant_type == ResType.ToString().ToLower()) {
-                    EnchantBoost += (double)(Math.Pow((double)x.enchant_value, 0.425) / 2);
+                    var toAdd = (double)(Math.Pow((double)x.enchant_value, 0.425) / 2);
+                    if(x.player_id == x.item_ownership) {
+                        toAdd *= 1.25;
+                    }
+                    EnchantBoost += toAdd;
                 }
             }
         }
@@ -348,6 +352,8 @@ namespace _12thMorning.Services {
             Res = ((1 + ((Boost * .025)+ EnchantBoost + BoostedHouseBoost + BoostedVillageBoost + (Level / 100.0)) / 100.0) * (vipBonus) * (1+RootInfo.PartnerInfo.KingdomBonus/100.0)) * New.ResPre;
             if (RootInfo.PartnerInfo.Tax != 0) {
                 Taxed = (int)Math.Floor(Res * (RootInfo.PartnerInfo.Tax / 100.0));
+            } else {
+                Taxed = 0;
             }
             ResPostTax = (int) Math.Round(Res) - Taxed;
             ResHour = (int) Math.Floor((3600.0 / New.Seconds) * ResPostTax);
@@ -435,10 +441,11 @@ namespace _12thMorning.Services {
         public int TotalSpent;
         
         public void update() {
-            Seconds = Math.Truncate((6.0 / (0.1 + Speed / (Speed + 2500.0)))*100)/100;
+            Seconds = Math.Round((6.0 / (0.1 + Speed / (Speed + 2500.0)) * 3) * 100) / 100;
             IntPercent = 20.0 + Intelligence / (Intelligence + 250.0) * 100.0;
             TotalStats = (int)Math.Round(IntPercent / 100.0 * PlayerStat) + PartnerStat;
             ResPre = ((int)Math.Floor(TotalStats / 100.0)) + 1;
+            ResPre *= 3;
             ResPerHourPre = (int)Math.Floor((3600.0 / Seconds) * ResPre);
             TotalSpent = (((Intelligence * (Intelligence + 1)) / 2) + ((Speed * (Speed + 1)) / 2)) * 10000;
         }

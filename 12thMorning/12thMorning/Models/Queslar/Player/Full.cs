@@ -51,6 +51,7 @@ namespace _12thMorning.Models.Queslar.Player {
         public string action_type { get; set; }
         public string item_type { get; set; }
         public string item_rarity { get; set; }
+        public int item_ownership { get; set; }
         public int stat_slots { get; set; }
         public int level_requirement { get; set; }
         public int damage { get; set; }
