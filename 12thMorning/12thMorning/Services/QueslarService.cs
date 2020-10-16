@@ -165,9 +165,9 @@ namespace _12thMorning.Services {
             }
             foreach(var fighter in Fighters) {
                 if(fighter.classType == "healer") {
-                    mobDamage -= (int) Math.Floor(fighter.Damage * .75);
+                    mobDamage -= (long) Math.Floor(fighter.Damage * .75);
                 } else if(fighter.classType == "knight") {
-                    mobDamage = (int)Math.Floor(mobDamage * .6);
+                    mobDamage = (long)Math.Floor(mobDamage * .6);
                     fighterHp += fighter.Hp;
                 } else if(fighter.classType == "cavalry") {
                     double toHit = (fighter.Hit * 2.0) / ((fighter.Hit * 2) + Mobs.First().Dodge);
@@ -229,10 +229,10 @@ namespace _12thMorning.Services {
 
     public class Partners {
         public Dictionary<int, PartnerInfo> PartnerInfos = new Dictionary<int, PartnerInfo>();
-        public int CurrentPrice;
-        public int CurrentResHour;
-        public int NewPrice;
-        public int NewResHour;
+        public long CurrentPrice;
+        public long CurrentResHour;
+        public long NewPrice;
+        public long NewResHour;
         public int Tax = 0;
         private FullWrapper RootInfo;
         public int KingdomBonus;
@@ -310,19 +310,19 @@ namespace _12thMorning.Services {
         public ResTypes ResType;
         public Partner BaseInfo;
         public int Level;
-        public int Stats;
-        public int PlayerStat;
-        public int TotalStat;
+        public long Stats;
+        public long PlayerStat;
+        public long TotalStat;
         public double Res;
-        public int Taxed;
-        public int ResPostTax;
+        public long Taxed;
+        public long ResPostTax;
         public double Boost;
         public int HouseBoost;
         public int BoostedHouseBoost;
         public int BoostedVillageBoost;
         public double EnchantBoost;
-        public int ResHour;
-        public int TaxedHour;
+        public long ResHour;
+        public long TaxedHour;
         public string Display = "res";
         public PartnerTotal Current = new PartnerTotal();
         public PartnerTotal New = new PartnerTotal();
@@ -342,6 +342,7 @@ namespace _12thMorning.Services {
                     EnchantBoost += toAdd;
                 }
             }
+            EnchantBoost = Math.Round(EnchantBoost, 2);
         }
 
         public void UpdateBoosts() {
@@ -433,12 +434,12 @@ namespace _12thMorning.Services {
         public double Seconds;
         public int Intelligence;
         public double IntPercent;
-        public int TotalStats;
-        public int ResPre;
-        public int ResPerHourPre;
-        public int PlayerStat;
-        public int PartnerStat;
-        public int TotalSpent;
+        public long TotalStats;
+        public long ResPre;
+        public long ResPerHourPre;
+        public long PlayerStat;
+        public long PartnerStat;
+        public long TotalSpent;
         
         public void update() {
             Seconds = Math.Round((6.0 / (0.1 + Speed / (Speed + 2500.0)) * 3) * 100) / 100;
@@ -460,13 +461,13 @@ namespace _12thMorning.Services {
     }
 
     public class PartnerFinal {
-        public int PetFood = 0;
-        public int TaxedPerHour;
-        public int PetFoodPerHour = 0;
-        private int PrePetPerHour;
-        public int FinalPerHour;
+        public long PetFood = 0;
+        public long TaxedPerHour;
+        public long PetFoodPerHour = 0;
+        private long PrePetPerHour;
+        public long FinalPerHour;
 
-        public PartnerFinal(int petFood) {
+        public PartnerFinal(long petFood) {
             PetFood = petFood;
             updatePetPerHour();
         }
