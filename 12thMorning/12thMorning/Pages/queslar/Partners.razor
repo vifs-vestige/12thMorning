@@ -5,6 +5,8 @@
 @inject HttpClient Http
 @inject IJSRuntime JSRuntime
 @using _12thMorning.Models.Queslar.Player
+@using _12thMorning.Models.Queslar.Wrappers
+@using _12thMorning.Models.Queslar 
 
 @name
 @if (PlayerInfo != null) {
@@ -12,8 +14,8 @@
     <span><small> you can support the creator of this tool at "VifsVestige" enchanting service</small></span>
 
     <br/>
-    <BSButton Color="Color.Primary" OnClick="toggleCurrent">current partners</BSButton>
-    <BSCollapse IsOpen="@CurrentIsOpen">
+    <BSButton Color="Color.Primary" OnClick="@(e => toggleDropDowns(e, "current"))">current partners</BSButton>
+    <BSCollapse IsOpen="@Toggles["current"]">
         <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
             <thead>
                 <tr>
@@ -70,8 +72,8 @@
         </BSTable>
     </BSCollapse>
     <br/>
-    <BSButton Color="Color.Primary" OnClick="toggleNew">new partners</BSButton>
-    <BSCollapse IsOpen="@NewIsOpen">
+    <BSButton Color="Color.Primary" OnClick="@(e => toggleDropDowns(e, "new"))">new partners</BSButton>
+    <BSCollapse IsOpen="@Toggles["new"]">
         <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
             <thead>
                 <tr>
@@ -121,8 +123,8 @@
         </span>
     </BSCollapse>
     <br/>
-    <BSButton Color="Color.Primary" OnClick="toggleBoosts">boosts</BSButton>
-    <BSCollapse IsOpen="@BoostsIsOpen">
+    <BSButton Color="Color.Primary" OnClick="@(e => toggleDropDowns(e, "boost"))">boosts</BSButton>
+    <BSCollapse IsOpen="@Toggles["boost"]">
         <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
             <thead>
                 <tr>
@@ -186,8 +188,8 @@
 
     </BSCollapse>
     <br/>
-    <BSButton Color="Color.Primary" OnClick="toggleFinal">final</BSButton>
-    <BSCollapse IsOpen="@FinalIsOpen">
+    <BSButton Color="Color.Primary" OnClick="@(e => toggleDropDowns(e, "final"))">final</BSButton>
+    <BSCollapse IsOpen="@Toggles["final"]">
         <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
             <thead>
                 <tr>
@@ -218,10 +220,12 @@
 @code {
     public string name;
     public FullWrapper PlayerInfo;
-    bool CurrentIsOpen { get; set; } = true;
-    bool NewIsOpen { get; set; } = true;
-    bool BoostsIsOpen { get; set; } = true;
-    bool FinalIsOpen { get; set; } = true;
+    Dictionary<string, bool> Toggles = new Dictionary<string, bool> {
+                { "current", true },
+                { "new", true },
+                { "boost", true },
+                { "final", true },
+            };
 
     protected async void TaxUpdate(ChangeEventArgs e) {
         var tax = Queslar.UpdateTax(e.Value.ToString());
@@ -246,42 +250,13 @@
             if (Queslar.Values.ContainsKey(typeof(Full)) && Queslar.Values[typeof(Full)] != null) {
                 PlayerInfo = Queslar.GetFullWrapper();
                 checkTax();
-                checkToggles();
+                var temp = await localStorage.GetItemAsync<Dictionary<string, bool>>("Toggles");
+                if (temp != null) {
+                    Toggles = temp;
+                }
                 StateHasChanged();
             }
         }
-    }
-
-    private async void getPlayerInfo(bool refresh = false) {
-        var key = await localStorage.GetItemAsync<string>("apiKey");
-        Full playerPlayerInfo = null;
-        if (key == null || key == "") {
-            key = await JSRuntime.InvokeAsync<string>("prompt", "Enter API key");
-            try {
-                playerPlayerInfo = await Queslar.Test<Full>(key);
-            }
-            catch (Exception e) {
-                name = e.Message;
-                StateHasChanged();
-                return;
-            }
-            await localStorage.SetItemAsync("apiKey", key);
-        }
-        if (PlayerInfo == null || refresh) {
-            try {
-                playerPlayerInfo = await Queslar.Test<Full>(key);
-            }
-            catch (Exception e) {
-                name = "try again, maybe check API key";
-                StateHasChanged();
-                return;
-            }
-        }
-        PlayerInfo = new FullWrapper(playerPlayerInfo);
-        Queslar.ApiKey = key;
-        checkTax();
-
-        StateHasChanged();
     }
 
     private async void checkTax() {
@@ -292,35 +267,8 @@
         }
     }
 
-    private async void checkToggles() {
-        CurrentIsOpen = await localStorage.GetItemAsync<string>("CurrentIsOpen") == "false" ? false : true;
-        NewIsOpen = await localStorage.GetItemAsync<string>("NewIsOpen") == "false" ? false : true;
-        BoostsIsOpen = await localStorage.GetItemAsync<string>("BoostsIsOpen") == "false" ? false : true;
-        FinalIsOpen = await localStorage.GetItemAsync<string>("FinalIsOpen") == "false" ? false : true;
-        StateHasChanged();
-    }
-
-    private async void toggleCurrent(MouseEventArgs e) {
-        CurrentIsOpen = !CurrentIsOpen;
-        await localStorage.SetItemAsync("CurrentIsOpen", CurrentIsOpen);
-        StateHasChanged();
-    }
-
-    private async void toggleNew(MouseEventArgs e) {
-        NewIsOpen = !NewIsOpen;
-        await localStorage.SetItemAsync("NewIsOpen", NewIsOpen);
-        StateHasChanged();
-    }
-
-    private async void toggleBoosts(MouseEventArgs e) {
-        BoostsIsOpen = !BoostsIsOpen;
-        await localStorage.SetItemAsync("BoostsIsOpen", BoostsIsOpen);
-        StateHasChanged();
-    }
-
-    private async void toggleFinal(MouseEventArgs e) {
-        FinalIsOpen = !FinalIsOpen;
-        await localStorage.SetItemAsync("FinalIsOpen", FinalIsOpen);
-        StateHasChanged();
+    private async void toggleDropDowns(MouseEventArgs e, string type) {
+        Toggles[type] = !Toggles[type];
+        await localStorage.SetItemAsync("Toggles", Toggles);
     }
 }

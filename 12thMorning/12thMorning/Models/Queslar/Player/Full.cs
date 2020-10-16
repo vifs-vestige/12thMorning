@@ -9,7 +9,6 @@ namespace _12thMorning.Models.Queslar.Player {
     public class Full : BaseQueslar {
         public override string ApiPath { get { return "player/full/"; } }
         //public override string LocalKey { get { return "Queslar.Players.Full"; } }
-        public new const string LocalKey = "Queslar.Players.Full";
         public Player player { get; set; }
         public Currency currency { get; set; }
         public House house { get; set; }

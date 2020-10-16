@@ -28,22 +28,18 @@
     private bool Valid = false;
     public string dump;
 
-    protected override void OnInitialized() {
-        GetInfo();
-    }
-
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         if(firstRender) {
             await CheckInfo();
+            GetInfo();
         }
     }
 
     private async void Submit() {
-        var info = await Queslar.Test<Full>(ApiKey);
+        var info = await Queslar.Update<Full>(ApiKey);
         if (info != null) {
-            SaveLocal(Queslar.LocalApiKey, ApiKey);
+            await localStorage.SetItemAsync<string>(Queslar.LocalApiKey, ApiKey);
             dump = System.Text.Json.JsonSerializer.Serialize(info);
-            SaveLocal(Full.LocalKey, dump);
             GetInfo();
         }
         else {
