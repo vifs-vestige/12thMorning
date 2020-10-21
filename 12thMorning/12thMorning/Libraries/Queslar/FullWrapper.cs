@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using _12thMorning.Libraries.Queslar.Fighters;
+using _12thMorning.Libraries.Queslar.Partners;
 using _12thMorning.Models.Queslar.Player;
-using _12thMorning.Models.Queslar.Wrappers.Fighters;
 
-namespace _12thMorning.Models.Queslar.Wrappers {
+namespace _12thMorning.Libraries.Queslar {
     public class FullWrapper {
         public Full BaseInfo;
         public PartnerWrapper PartnerInfo;
         public FighterWrapper FighterInfo;
         public bool Vip;
 
-        public FullWrapper(Full root, int tax = 0) {
+        public FullWrapper(Full root) {
             BaseInfo = root;
             Vip = false;
             if (root.player.vip_time != "0000-00-00 00:00:00") {
@@ -21,6 +19,9 @@ namespace _12thMorning.Models.Queslar.Wrappers {
                     Vip = true;
                 }
             }
+        }
+
+        public void AddPartnerWrapper(int tax = 0) {
             PartnerInfo = new PartnerWrapper(this, tax);
             foreach (var partner in PartnerInfo.PartnerInfos.Values) {
                 partner.UpdateBoosts();

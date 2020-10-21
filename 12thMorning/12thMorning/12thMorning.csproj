@@ -40,4 +40,9 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Libraries\Queslar\Enchanting\" />
+    <Folder Include="Models\Queslar\Wrappers\" />
+  </ItemGroup>
+
 </Project>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using _12thMorning.Models.Queslar.Player;
 
-namespace _12thMorning.Models.Queslar.Wrappers.Fighters {
+namespace _12thMorning.Libraries.Queslar.Fighters {
     public class FighterInfo {
         public string classType;
         public int Hp;

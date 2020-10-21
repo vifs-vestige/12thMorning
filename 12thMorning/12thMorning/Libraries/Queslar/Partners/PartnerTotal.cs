@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace _12thMorning.Models.Queslar.Wrappers.Partners {
+namespace _12thMorning.Libraries.Queslar.Partners {
     public class PartnerTotal {
         public int Speed;
         public double Seconds;

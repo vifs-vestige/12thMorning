@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace _12thMorning.Models.Queslar.Wrappers.Partners {
+namespace _12thMorning.Libraries.Queslar.Partners {
     public class PartnerFinal {
         public long PetFood = 0;
         public long TaxedPerHour;

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text.Json;
 using System.Threading.Tasks;
+using _12thMorning.Libraries.Queslar;
 using _12thMorning.Models.Queslar;
+using _12thMorning.Models.Queslar.Enchanting;
 using _12thMorning.Models.Queslar.Player;
-using _12thMorning.Models.Queslar.Wrappers;
 
 namespace _12thMorning.Services {
     public class QueslarService {
@@ -32,6 +31,7 @@ namespace _12thMorning.Services {
             }
             if(Values[typeof(Full)] != null) {
                 FullWrapper = new FullWrapper((Full)Values[typeof(Full)]);
+                FullWrapper.AddPartnerWrapper();
                 return FullWrapper;
             } else {
             }
@@ -51,7 +51,8 @@ namespace _12thMorning.Services {
                 info = await client.GetFromJsonAsync<T>("https://queslar.com/api/" + info.ApiPath + apiKey);
                 Values[typeof(T)] = info;
                 if(info.GetType() == typeof(Full)) {
-                    FullWrapper = new FullWrapper((Full)info, Tax);
+                    FullWrapper = new FullWrapper((Full)info);
+                    FullWrapper.AddPartnerWrapper(Tax);
                 }
             }
             catch (Exception e) { 
@@ -68,6 +69,14 @@ namespace _12thMorning.Services {
             } else {
                 return 0;
             }
+        }
+
+        public EnchantServiceInfo CalcEnchantingInfo(string avg, string level, string cost) {
+            if(cost == null || cost.Trim() == "") {
+                cost = "0";
+            }
+            return new EnchantServiceInfo(double.Parse(avg),int.Parse(level), int.Parse(cost));
+
         }
     }
 

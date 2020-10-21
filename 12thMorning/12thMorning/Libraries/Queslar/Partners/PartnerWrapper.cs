@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using _12thMorning.Models.Queslar.Player;
-using _12thMorning.Models.Queslar.Wrappers.Partners;
-using _12thMorning.Services;
+using _12thMorning.Models.Queslar;
 
-namespace _12thMorning.Models.Queslar.Wrappers {
+namespace _12thMorning.Libraries.Queslar.Partners {
     public class PartnerWrapper {
         public Dictionary<int, PartnerInfo> PartnerInfos = new Dictionary<int, PartnerInfo>();
         public long CurrentPrice;

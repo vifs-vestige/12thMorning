@@ -1,0 +1,76 @@
+﻿@page "/queslar/enchanting"
+@layout QueslarLayout
+@inject QueslarService Queslar
+@inject IJSRuntime JSRuntime
+@using System.ComponentModel.DataAnnotations
+@using _12thMorning.Models.Queslar.Enchanting
+
+
+<BSContainer IsFluid="true">
+    <BSForm Model="@EnchantForm" OnValidSubmit="@Submit">
+        <DataAnnotationsValidator />
+        <BSRow>
+            <BSCol SM="3">
+                <BSFormGroup>
+                    <BSLabel>enchanting avg</BSLabel>
+                    <BSInput @bind-Value="EnchantForm.Avg" InputType="InputType.Text" ValidateOnChange="true" />
+                    <BSFormFeedback For="@(() => EnchantForm.Avg)" />
+                </BSFormGroup>
+            </BSCol>
+            <BSCol SM="3">
+                <BSFormGroup>
+                    <BSLabel>enchant level</BSLabel>
+                    <BSInput @bind-Value="EnchantForm.Level" InputType="InputType.Text" />
+                    <BSFormFeedback For="@(() => EnchantForm.Level)" />
+                </BSFormGroup>
+            </BSCol>
+            <BSCol SM="3">
+                <BSFormGroup>
+                    <BSLabel>cost</BSLabel>
+                    <BSInput @bind-Value="EnchantForm.Cost" InputType="InputType.Text" />
+                    <BSFormFeedback For="@(() => EnchantForm.Cost)" />
+                </BSFormGroup>
+            </BSCol>
+        </BSRow>
+        <BSRow>
+            <BSCol>
+                <BSButton ButtonType="ButtonType.Submit">calculate</BSButton>
+            </BSCol>
+        </BSRow>
+    </BSForm>
+    @if(EnchantInfo != null) {
+        <BSRow>
+            <br/>
+            average enchant for level @EnchantInfo.Level<br />
+            (@(EnchantInfo.OwnershipValue)%) @(EnchantInfo.Value)%<br/>
+            (@(EnchantInfo.OwnershipActionValue)) @(EnchantInfo.ActionValue) for actions<br/>
+            (@(EnchantInfo.OwnershipSpeedValue)%) @(EnchantInfo.SpeedValue)% for speed<br/><br/>
+            @if(EnchantInfo.RelicCost != 0) {
+                <text>relic cost: @EnchantInfo.RelicCost </text><br/>
+            }
+            res cost: @EnchantInfo.ResCost <br />
+            action count: @EnchantInfo.ActionCount
+        </BSRow>
+    }
+</BSContainer>
+
+@code {
+    private EnchantServiceInfo EnchantInfo;
+    private FormsModel EnchantForm = new FormsModel();
+
+    private void Submit() {
+        EnchantInfo = Queslar.CalcEnchantingInfo(EnchantForm.Avg, EnchantForm.Level, EnchantForm.Cost);
+        StateHasChanged();
+    }
+
+    public class FormsModel {
+        [Range(0.0, Double.MaxValue, ErrorMessage = "enter a number")]
+        [Required(ErrorMessage = "required")]
+        public string Avg { get; set; }
+        [Range(0, int.MaxValue, ErrorMessage = "enter a number")]
+        [Required(ErrorMessage = "required")]
+        public string Level { get; set; }
+        [Range(0, int.MaxValue, ErrorMessage = "enter a number")]
+        public string Cost { get; set; }
+    }
+}

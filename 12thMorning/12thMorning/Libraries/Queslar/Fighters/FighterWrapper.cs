@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace _12thMorning.Models.Queslar.Wrappers.Fighters {
+namespace _12thMorning.Libraries.Queslar.Fighters {
     public class FighterWrapper {
         public List<Mob> Mobs;
         public List<FighterInfo> Fighters;

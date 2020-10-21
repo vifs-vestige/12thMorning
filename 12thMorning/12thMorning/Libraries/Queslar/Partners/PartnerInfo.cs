@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using _12thMorning.Models.Queslar;
 using _12thMorning.Models.Queslar.Player;
-using _12thMorning.Services;
 
-namespace _12thMorning.Models.Queslar.Wrappers.Partners {
+namespace _12thMorning.Libraries.Queslar.Partners {
     public class PartnerInfo {
         public ResTypes ResType;
         public Partner BaseInfo;
