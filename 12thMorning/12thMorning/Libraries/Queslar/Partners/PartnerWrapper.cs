@@ -14,6 +14,7 @@ namespace _12thMorning.Libraries.Queslar.Partners {
         private FullWrapper RootInfo;
         public int KingdomBonus;
         public Dictionary<ResTypes, PartnerFinal> FinalPartners;
+        public Dictionary<string, long> FinalTotals;
 
         public PartnerWrapper(FullWrapper info, int tax) {
             RootInfo = info;
@@ -79,6 +80,21 @@ namespace _12thMorning.Libraries.Queslar.Partners {
 
             foreach (var x in FinalPartners.Values) {
                 x.finalize();
+            }
+            UpdateFinals();
+        }
+
+        public void UpdateFinals() {
+            FinalTotals = new Dictionary<string, long>() {
+                {"petFood", 0},
+                {"taxed", 0 },
+                {"final", 0 }};
+
+            foreach (var x in FinalPartners.Values) {
+                x.updatePetPerHour();
+                FinalTotals["petFood"] += x.PetFoodPerHour;
+                FinalTotals["taxed"] += x.TaxedPerHour;
+                FinalTotals["final"] += x.FinalPerHour;
             }
         }
     }

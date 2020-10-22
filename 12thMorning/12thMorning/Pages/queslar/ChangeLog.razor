@@ -4,15 +4,15 @@
 <h2>change log</h2>
 
 
-<BSListGroup Items="ListGroup" ListGroupType="ListGroupType.List" Context="groupItem" >
+<BSListGroup Items="ListGroup" Context="groupItem">
     @foreach (var groupItem in ListGroup) {
     <BSListGroupItem ListGroupType="ListGroupType.List">
             <BSListGroupItemHeading>
-                <h5 class="mb-1">@groupItem.Header</h5>
+                <h5 class="mb-4">@groupItem.Header</h5>
                 <small>@groupItem.Updated</small>
             </BSListGroupItemHeading>
             @foreach (var content in groupItem.Contents) {
-            <p class="mb-1">@content</p>
+            <BSListGroupItem >@((MarkupString)content)</BSListGroupItem>
             }
     </BSListGroupItem>
     }
@@ -20,6 +20,15 @@
 
 @code {
     List<item> ListGroup = new List<item> {
+        new item {
+            Header = "v1.1.1",
+            Updated = "22/10/2020",
+            Contents = new List<string> {
+                "updated visuals for partner page tables",
+                "added lowest level and next level for enchanting service calc",
+                "added optional url parameters for enchanting <br/>&emsp; /enchanting/{avg}/ or /enchanting/{avg}/{cost}",
+            }
+        },
         new item {
             Header = "v1.1.0",
             Updated = "20/10/2020",

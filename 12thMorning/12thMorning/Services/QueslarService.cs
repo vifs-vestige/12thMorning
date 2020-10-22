@@ -71,12 +71,11 @@ namespace _12thMorning.Services {
             }
         }
 
-        public EnchantServiceInfo CalcEnchantingInfo(string avg, string level, string cost) {
+        public List<EnchantServiceInfo> CalcEnchantingInfo(string avg, string level, string cost) {
             if(cost == null || cost.Trim() == "") {
                 cost = "0";
             }
-            return new EnchantServiceInfo(double.Parse(avg),int.Parse(level), int.Parse(cost));
-
+            return EnchantServiceInfo.Build(double.Parse(avg), int.Parse(level), int.Parse(cost));
         }
     }
 

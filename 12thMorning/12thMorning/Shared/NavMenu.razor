@@ -1,48 +1,49 @@
 ﻿@implements IDisposable
 
-<BSNavbar IsExpand="true" IsDark="true" Color="Color.Dark" Class="fixed-top" Style="z-index: 15;">
+<BSNavbar IsExpand="true" IsDark="true" Color="Color.Dark">
     <BSNavbarBrand Href="/">12th Morning</BSNavbarBrand>
-    <BSNav IsPills="true" Class="m-2" IsNavbar="true">
-        <BSDropdown Class="mx-2">
-            <BSButtonGroup>
-                <BSNavLink Class="btn btn-outline-info blog-menu" href="/blogs">
-                    Blog @State.BlogType
-                </BSNavLink>
-                <BSDropdownToggle IsSplit="true" @onclick="OnClick" Color="Color.Info"></BSDropdownToggle>
-                <BSDropdownMenu @bind-IsOpen="@IsOpen">
-                    <BSDropdownItem @onclick="OnClick" Href="/blogs">all</BSDropdownItem>
-                    <BSDropdownItem IsDivider="true" />
-                    <BSDropdownItem @onclick="OnClick" Href="/blogs/dev">dev</BSDropdownItem>
-                    <BSDropdownItem IsDivider="true" />
-                    <BSDropdownItem @onclick="OnClick" Href="/blogs/personal">personal</BSDropdownItem>
-                </BSDropdownMenu>
-            </BSButtonGroup>
-        </BSDropdown>
-        <BSNavItem Class="mx-2">
-            <BSNavLink Class="btn btn-outline-info" href="/streamschedule">
-                Stream Schedule
-            </BSNavLink>
-        </BSNavItem>
-
-        @if (Startup.IsDev) {
-            <BSNavItem Class="mx-2">
-                <BSNavLink Class="btn btn-outline-info" href="/blogupdate">
-                    Blog Update
+    <BSNavbarToggler @onclick="OnClick2" />
+    <BSCollapse IsOpen="@IsOpen2" IsNavbar="true" IsOpenChanged="OpenChanged">
+        <BSNav Class="mr-auto" IsList="true" IsPills="true" IsNavbar="true" >
+                <BSButtonGroup Class="mx-2">
+                    <BSNavLink Class="btn btn-outline-info col-lg-9" href="/blogs">
+                        Blog @State.BlogType
+                    </BSNavLink>
+                    <BSDropdownToggle Class="" IsSplit="true" @onclick="OnClick" Color="Color.Info"></BSDropdownToggle>
+                    <BSDropdownMenu @bind-IsOpen="@IsOpen">
+                        <BSDropdownItem @onclick="OnClick" Href="/blogs">all</BSDropdownItem>
+                        <BSDropdownItem IsDivider="true" />
+                        <BSDropdownItem @onclick="OnClick" Href="/blogs/dev">dev</BSDropdownItem>
+                        <BSDropdownItem IsDivider="true" />
+                        <BSDropdownItem @onclick="OnClick" Href="/blogs/personal">personal</BSDropdownItem>
+                    </BSDropdownMenu>
+                </BSButtonGroup>
+            <BSNavItem>
+                <BSNavLink Class="btn btn-outline-info mx-2" href="/streamschedule">
+                    Stream Schedule
                 </BSNavLink>
             </BSNavItem>
-        }
-    </BSNav>
-    <BSNav IsPills="true" Class="m-2 ml-auto" IsNavbar="true">
-        <BSNavItem Class="mx-2">
-            <BSButton IsOutline="true" Class="@State.MonthButtonClass" Color="Color.Info" @onclick="OnMonthClick">
-                Months
-            </BSButton>
-        </BSNavItem>
-    </BSNav>
+            @if (Startup.IsDev) {
+                <BSNavItem>
+                    <BSNavLink Class="btn btn-outline-info mx-2" href="/blogupdate">
+                        Blog Update
+                    </BSNavLink>
+                </BSNavItem>
+            }
+        </BSNav>
+        <BSNav IsPills="true" IsNavbar="true">
+            <BSNavItem>
+                <BSButton IsOutline="true" Class="@State.MonthButtonClass" Color="Color.Info" @onclick="OnMonthClick">
+                    Months
+                </BSButton>
+            </BSNavItem>
+        </BSNav>
+    </BSCollapse>
 </BSNavbar>
 
 @code {
     protected bool IsOpen { get; set; } = false;
+    private bool IsOpen2 { get; set; } = false;
 
     protected void OnClick(MouseEventArgs e) {
         IsOpen = !IsOpen;
@@ -59,6 +60,16 @@
 
     public void Dispose() {
         State.Change -= StateHasChanged;
+    }
+
+    void OpenChanged(bool e) {
+        IsOpen2 = e;
+        StateHasChanged();
+    }
+
+    private void OnClick2(MouseEventArgs e) {
+        IsOpen2 = !IsOpen2;
+        StateHasChanged();
     }
 
 }
