@@ -1,7 +1,10 @@
 ﻿@inherits LayoutComponentBase
 
-    <BSNavbar IsExpand="@true" IsDark="@true" Color="Color.Dark">
-        <BSNav IsPills="@true" IsNavbar="@true">
+<BSNavbar IsExpand="true" IsDark="true" Color="Color.Dark">
+    <BSNavbarBrand Href="javascript:void(0);">Navbar</BSNavbarBrand>
+    <BSNavbarToggler @onclick="onclick" />
+    <BSCollapse IsOpen="@IsOpen" IsNavbar="true" IsOpenChanged="OpenChanged">
+        <BSNav IsList="true" Class="mr-auto" IsPills="true" IsNavbar="true">
             <BSNavItem>
                 <BSNavLink Class="btn btn-outline-info mx-2" href="/queslar/api">
                     API
@@ -23,8 +26,22 @@
                 </BSNavLink>
             </BSNavItem>
         </BSNav>
-    </BSNavbar>
+    </BSCollapse>
+</BSNavbar>
 
-<div class="m-5">
+
+<BSContainer IsFluid="true" Class="p-3" >
     @Body
-</div>
+</BSContainer>
+
+@code {
+    bool IsOpen { get; set; } = true;
+    void onclick(MouseEventArgs e) {
+        IsOpen = !IsOpen;
+        StateHasChanged();
+    }
+    void OpenChanged(bool e) {
+        IsOpen = e;
+        StateHasChanged();
+    }
+}

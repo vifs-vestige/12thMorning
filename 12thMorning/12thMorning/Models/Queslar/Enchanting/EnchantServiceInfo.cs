@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace _12thMorning.Models.Queslar.Enchanting {
     public class EnchantServiceInfo {
@@ -15,7 +16,7 @@ namespace _12thMorning.Models.Queslar.Enchanting {
         public double SpeedValue;
         public double OwnershipSpeedValue;
 
-        public EnchantServiceInfo(double avg, int level, int cost) {
+        private EnchantServiceInfo(double avg, int level, int cost) {
             Avg = avg;
             Level = level;
             Cost = cost;
@@ -32,6 +33,18 @@ namespace _12thMorning.Models.Queslar.Enchanting {
             SpeedValue = Math.Pow(rawValue, .8) / 100;
             OwnershipSpeedValue = Math.Round(SpeedValue * 1.25, 3);
             SpeedValue = Math.Round(SpeedValue, 3);
+        }
+
+        public static List<EnchantServiceInfo> Build(double avg, int level, int cost) {
+            var temp = (int) Math.Round(Math.Sqrt(level) * 4 * 3);
+            var lowerLevel = (int)Math.Round(Math.Pow((temp - .5) / 3 / 4, 2));
+            var upperLevel = (int)Math.Round(Math.Pow((temp + .5) / 3 / 4, 2)) + 1;
+            var returnList = new List<EnchantServiceInfo>();
+            returnList.Add(new EnchantServiceInfo(avg, level, cost));
+            returnList.Add(new EnchantServiceInfo(avg, lowerLevel, cost));
+            returnList.Add(new EnchantServiceInfo(avg, upperLevel, cost));
+
+            return returnList;
         }
     }
 }

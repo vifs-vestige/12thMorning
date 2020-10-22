@@ -1,8 +1,7 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
-.main {
-    top: 150px;
-    position: relative;
+.page-item > a {
+    color: #17a2b8 !important;
 }
 
 a.nav-item, .page-item > a {
@@ -13,10 +12,6 @@ a.nav-item, .page-item > a {
         color: white !important;
     }
 
-.page-item > a {
-    color: #17a2b8 !important;
-}
-
 .page-item.active > a, .nav-item button:hover, .nav-item button.toggled {
     background-color: #17a2b8 !important;
     color: white !important;
@@ -25,31 +20,6 @@ a.nav-item, .page-item > a {
 .page-item.disabled > a {
     background-color: #dee2e6 !important;
     color: white !important;
-}
-
-.fixed-right .nav-item {
-    padding: 0;
-    line-height: 1;
-}
-
-.navbar.fixed-right {
-    left: auto;
-    position: fixed;
-    top: 75px;
-    right: 0;
-    width: 200px;
-}
-
-
-.paging {
-    top: 100px;
-    z-index: 10;
-}
-
-.temp {
-    background-color: white;
-    z-index: 5;
-    height: 150px;
 }
 
 .paging li a {
@@ -67,4 +37,9 @@ a.nav-item, .page-item > a {
 
 .comments {
     margin-left: 0 !important;
+}
+
+.queslar-table > div > div {
+    border-style: solid;
+    border-width: 1px;
 }
