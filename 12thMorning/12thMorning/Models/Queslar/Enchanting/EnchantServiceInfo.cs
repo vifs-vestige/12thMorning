@@ -37,7 +37,10 @@ namespace _12thMorning.Models.Queslar.Enchanting {
 
         public static List<EnchantServiceInfo> Build(double avg, int level, int cost) {
             var temp = (int) Math.Round(Math.Sqrt(level) * 4 * 3);
-            var lowerLevel = (int)Math.Round(Math.Pow((temp - .5) / 3 / 4.0, 2)) + 1;
+            var lowerLevel = (int)Math.Round(Math.Pow((temp - .5) / 3 / 4.0, 2));
+            if(lowerLevel != temp) {
+                lowerLevel++;
+            }
             var upperLevel = (int)Math.Round(Math.Pow((temp + .5) / 3 / 4.0, 2)) + 1;
             var returnList = new List<EnchantServiceInfo>();
             returnList.Add(new EnchantServiceInfo(avg, level, cost));
