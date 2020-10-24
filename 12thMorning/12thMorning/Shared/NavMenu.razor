@@ -4,25 +4,20 @@
     <BSNavbarBrand Href="/">12th Morning</BSNavbarBrand>
     <BSNavbarToggler @onclick="OnClick2" />
     <BSCollapse IsOpen="@IsOpen2" IsNavbar="true" IsOpenChanged="OpenChanged">
-        <BSNav Class="mr-auto" IsList="true" IsPills="true" IsNavbar="true" >
-                <BSButtonGroup Class="mx-2">
-                    <BSNavLink Class="btn btn-outline-info col-lg-9" href="/blogs">
-                        Blog @State.BlogType
-                    </BSNavLink>
-                    <BSDropdownToggle Class="" IsSplit="true" @onclick="OnClick" Color="Color.Info"></BSDropdownToggle>
-                    <BSDropdownMenu @bind-IsOpen="@IsOpen">
-                        <BSDropdownItem @onclick="OnClick" Href="/blogs">all</BSDropdownItem>
-                        <BSDropdownItem IsDivider="true" />
-                        <BSDropdownItem @onclick="OnClick" Href="/blogs/dev">dev</BSDropdownItem>
-                        <BSDropdownItem IsDivider="true" />
-                        <BSDropdownItem @onclick="OnClick" Href="/blogs/personal">personal</BSDropdownItem>
-                    </BSDropdownMenu>
-                </BSButtonGroup>
-            <BSNavItem>
-                <BSNavLink Class="btn btn-outline-info mx-2" href="/streamschedule">
-                    Stream Schedule
+        <BSNav Class="mr-auto" IsList="true" IsPills="true" IsNavbar="true">
+            <BSButtonGroup Class="mx-2">
+                <BSNavLink Class="btn btn-outline-info col-lg-9" href="/blogs">
+                    Blog @State.BlogType
                 </BSNavLink>
-            </BSNavItem>
+                <BSDropdownToggle Class="" IsSplit="true" @onclick="OnClick" Color="Color.Info"></BSDropdownToggle>
+                <BSDropdownMenu @bind-IsOpen="@IsOpen">
+                    <BSDropdownItem @onclick="OnClick" Href="/blogs">all</BSDropdownItem>
+                    <BSDropdownItem IsDivider="true" />
+                    <BSDropdownItem @onclick="OnClick" Href="/blogs/dev">dev</BSDropdownItem>
+                    <BSDropdownItem IsDivider="true" />
+                    <BSDropdownItem @onclick="OnClick" Href="/blogs/personal">personal</BSDropdownItem>
+                </BSDropdownMenu>
+            </BSButtonGroup>
             @if (Startup.IsDev) {
                 <BSNavItem>
                     <BSNavLink Class="btn btn-outline-info mx-2" href="/blogupdate">
@@ -30,13 +25,6 @@
                     </BSNavLink>
                 </BSNavItem>
             }
-        </BSNav>
-        <BSNav IsPills="true" IsNavbar="true">
-            <BSNavItem>
-                <BSButton IsOutline="true" Class="@State.MonthButtonClass" Color="Color.Info" @onclick="OnMonthClick">
-                    Months
-                </BSButton>
-            </BSNavItem>
         </BSNav>
     </BSCollapse>
 </BSNavbar>

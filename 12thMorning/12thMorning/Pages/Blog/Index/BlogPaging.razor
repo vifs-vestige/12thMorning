@@ -1,16 +1,41 @@
-﻿<BSPagination Class="paging fixed-top mx-5">
+﻿<BSPagination>
     <BSPaginationItem IsDisabled="@(Page == 0 ? true : false)">
-        <BSPaginationLink PaginationLinkType="PaginationLinkType.PreviousText" Href="@GetUrl((Page-1))" />
+        <BSPaginationLink PaginationLinkType="PaginationLinkType.PreviousIcon" Href="@GetUrl((Page-1))" />
     </BSPaginationItem>
-    @foreach (var index in Enumerable.Range(0, Count)) {
-        <BSPaginationItem IsActive=@(index == Page ? true : false)>
-            <BSPaginationLink PaginationLinkType="PaginationLinkType.Custom" Href="@GetUrl((index))">
-                @index
-            </BSPaginationLink>
-        </BSPaginationItem>
+    @if (DisplayAll) {
+        @foreach (var index in Enumerable.Range(0, Count)) {
+            <BSPaginationItem IsActive=@(index == Page ? true : false)>
+                <BSPaginationLink PaginationLinkType="PaginationLinkType.Custom" Href="@GetUrl((index))">
+                    @index
+                </BSPaginationLink>
+            </BSPaginationItem>
+        }
+    }
+    else {
+        @if (DisplayFirst) {
+            <BSPaginationItem IsActive="false" Class="mr-1">
+                <BSPaginationLink PaginationLinkType="PaginationLinkType.Custom" Href="@GetUrl((0))">
+                    0
+                </BSPaginationLink>
+            </BSPaginationItem>
+        }
+        @foreach (var index in Enumerable.Range(PaginationStart, PaginationCount)) {
+            <BSPaginationItem IsActive=@(index == Page ? true : false)>
+                <BSPaginationLink PaginationLinkType="PaginationLinkType.Custom" Href="@GetUrl((index))">
+                    @index
+                </BSPaginationLink>
+            </BSPaginationItem>
+        }
+        @if (DisplayLast) {
+            <BSPaginationItem IsActive="false" Class="ml-1">
+                <BSPaginationLink PaginationLinkType="PaginationLinkType.Custom" Href="@GetUrl((Count-1))">
+                    @(Count-1)
+                </BSPaginationLink>
+            </BSPaginationItem>
+        }
     }
     <BSPaginationItem IsDisabled="@(Page == Count-1 ? true : false)">
-        <BSPaginationLink PaginationLinkType="PaginationLinkType.NextText" Href="@GetUrl((Page+1))" />
+        <BSPaginationLink PaginationLinkType="PaginationLinkType.NextIcon" Href="@GetUrl((Page+1))" />
     </BSPaginationItem>
 </BSPagination>
 
@@ -23,6 +48,36 @@
     public int Count { get; set; }
     [Parameter]
     public DateTime Month { get; set; }
+    private int PaginationStart = 0;
+    private int PaginationCount = 5;
+    private bool DisplayFirst = false;
+    private bool DisplayAll = false;
+    private bool DisplayLast = false;
+
+    protected override void OnParametersSet() {
+        DisplayAll = false;
+        if (Count <= 6) {
+            PaginationStart = 0;
+            PaginationCount = Count;
+            DisplayAll = true;
+        }
+        else {
+
+            DisplayFirst = DisplayLast = true;
+            if (Page <= 2) {
+                PaginationStart = 0;
+                DisplayFirst = false;
+            }
+            else if (Page >= Count - 3) {
+                PaginationStart = Count - 5;
+                DisplayLast = false;
+            }
+            else {
+                PaginationStart = Page - 2;
+            }
+        }
+        StateHasChanged();
+    }
 
     private string GetUrl(int index) {
         var type = "";
@@ -31,7 +86,7 @@
         var page = "/" + index;
         var month = "";
         if (Month.Ticks != 0)
-            month = "/"+ Month.ToString("MM-dd-yyyy");
+            month = "/" + Month.ToString("MM-dd-yyyy");
 
         return "/blogs/" + type + page + month;
     }

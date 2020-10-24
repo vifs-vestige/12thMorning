@@ -6,7 +6,7 @@
 @inject BlogService BlogDataService
 @using _12thMorning.Pages.Blog.Post.Comments
 
-<BSPagination Class="paging fixed-top mx-5">
+<BSPagination>
     <BSPaginationItem IsDisabled="@(Previous == null ? true : false)">
         <BSPaginationLink PaginationLinkType="PaginationLinkType.PreviousText" Href="@GetUrl("Previous")" />
     </BSPaginationItem>
@@ -14,9 +14,11 @@
         <BSPaginationLink PaginationLinkType="PaginationLinkType.NextText" Href="@GetUrl("Next")" />
     </BSPaginationItem>
 </BSPagination>
-<h3 class="ml-5">@Blog.Title</h3>
-<small class="ml-5">@Blog.DateAdded.ToString("dd MMMM yyyy")</small>
-<div class="m-5">
+<BSRow Class="mx-auto">
+<h3>@Blog.Title</h3>
+</BSRow>
+<small class="ml-2">@Blog.DateAdded.ToString("dd MMMM yyyy")</small>
+<div class="mx-auto">
     @((MarkupString)Blog.Post)
 </div>
 

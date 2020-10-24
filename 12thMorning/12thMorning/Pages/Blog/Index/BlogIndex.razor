@@ -12,21 +12,31 @@
 
 <h3>The Blogs</h3>
 
-<BlogMonths Type="@Type" />
-
 <BlogPaging Page="@Page" Type="@Type" Count="@count" Month="@Month" />
 
 <div class="@State.MovePostInClass">
 
     @foreach (var blog in blogs) {
-        <h1><a href="blog/@blog.Id/@Type">@blog.Title</a></h1>
-        <small><small>@blog.DateAdded.ToString("dd MMMM yyyy")</small></small>
-        <div>
+        <BSRow Class="mx-auto mt-3">
+            <h1>
+                <a href="blog/@blog.Id/@Type">
+                    @blog.Title
+                </a>
+            </h1>
+        </BSRow>
+        <BSRow Class="mx-3 d-inline">
             @((MarkupString)blog.Post)
-        </div>
-        <br />
+        </BSRow>
+        <small class="d-flex justify-content-end align-bottom">
+            <small>
+                @blog.DateAdded.ToString("dd MMMM yyyy")
+            </small>
+        </small>
+        <hr />
     }
 </div>
+
+<BlogPaging Page="@Page" Type="@Type" Count="@count" Month="@Month" />
 
 @code {
     [Parameter]
@@ -60,7 +70,11 @@
         State.BlogType = Type;
         State.OffBlog();
         State.Change -= StateHasChanged;
-        StateHasChanged();
-    }
+        //yeah don't worry about it
+        try {
+            StateHasChanged();
+        }
+        catch (Exception) { }
 
+    }
 }

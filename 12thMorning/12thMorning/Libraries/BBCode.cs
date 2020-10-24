@@ -17,7 +17,7 @@ namespace _12thMorning.Libraries {
         }
 
         public static string RenderImg(BBCodeNode Node, bool ThrowOnError, object LookupTable) {
-            return "<img src='" + Node.Children.ToHtml(ThrowOnError, LookupTable) + "'/>";
+            return "<img class='img-fluid' src='" + Node.Children.ToHtml(ThrowOnError, LookupTable) + "'/>";
         }
 
         public static string ParsePost(string post) {

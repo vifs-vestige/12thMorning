@@ -31,15 +31,6 @@ a.nav-item, .page-item > a {
     display: none;
 }
 
-.move {
-    margin-right: 250px;
-}
-
-.comments {
-    margin-left: 0 !important;
-}
-
-.queslar-table > div > div {
-    border-style: solid;
-    border-width: 1px;
+input[type="button"] {
+    outline:none;
 }

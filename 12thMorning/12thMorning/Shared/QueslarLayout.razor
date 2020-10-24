@@ -1,41 +1,42 @@
 ﻿@inherits LayoutComponentBase
 
-<BSNavbar IsExpand="true" IsDark="true" Color="Color.Dark">
-    <BSNavbarBrand Href="javascript:void(0);">Queslar</BSNavbarBrand>
-    <BSNavbarToggler @onclick="onclick" />
-    <BSCollapse IsOpen="@IsOpen" IsNavbar="true" IsOpenChanged="OpenChanged">
-        <BSNav IsList="true" Class="mr-auto" IsPills="true" IsNavbar="true">
-            <BSNavItem>
-                <BSNavLink Class="btn btn-outline-info mx-2" href="/queslar/api">
-                    API
-                </BSNavLink>
-            </BSNavItem>
-            <BSNavItem>
-                <BSNavLink Class="btn btn-outline-info mx-2" href="/queslar/partners">
-                    Partners
-                </BSNavLink>
-            </BSNavItem>
-            <BSNavItem>
-                <BSNavLink Class="btn btn-outline-info mx-2" Href="/queslar/enchanting">
-                    Enchanting
-                </BSNavLink>
-            </BSNavItem>
-            <BSNavItem>
-                <BSNavLink Class="btn btn-outline-info mx-2" href="/queslar/changelog">
-                    Change Log
-                </BSNavLink>
-            </BSNavItem>
-        </BSNav>
-    </BSCollapse>
-</BSNavbar>
+<header>
+    <BSNavbar IsExpand="true" IsDark="true" Color="Color.Dark">
+        <BSNavbarBrand Href="javascript:void(0);">Queslar</BSNavbarBrand>
+        <BSNavbarToggler @onclick="onclick" />
+        <BSCollapse IsOpen="@IsOpen" IsNavbar="true" IsOpenChanged="OpenChanged">
+            <BSNav IsList="true" Class="mr-auto" IsPills="true" IsNavbar="true">
+                <BSNavItem>
+                    <BSNavLink Class="btn btn-outline-info mx-2" href="/queslar/api">
+                        API
+                    </BSNavLink>
+                </BSNavItem>
+                <BSNavItem>
+                    <BSNavLink Class="btn btn-outline-info mx-2" href="/queslar/partners">
+                        Partners
+                    </BSNavLink>
+                </BSNavItem>
+                <BSNavItem>
+                    <BSNavLink Class="btn btn-outline-info mx-2" Href="/queslar/enchanting">
+                        Enchanting
+                    </BSNavLink>
+                </BSNavItem>
+                <BSNavItem>
+                    <BSNavLink Class="btn btn-outline-info mx-2" href="/queslar/changelog">
+                        Change Log
+                    </BSNavLink>
+                </BSNavItem>
+            </BSNav>
+        </BSCollapse>
+    </BSNavbar>
+</header>
 
-
-<BSContainer IsFluid="true" Class="p-3" >
+<BSContainer IsFluid="true" Class="p-3">
     @Body
 </BSContainer>
 
 @code {
-    bool IsOpen { get; set; } = true;
+    bool IsOpen { get; set; } = false;
     void onclick(MouseEventArgs e) {
         IsOpen = !IsOpen;
         StateHasChanged();
