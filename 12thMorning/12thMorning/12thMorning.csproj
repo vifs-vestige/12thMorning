@@ -6,6 +6,10 @@
     <Configurations>Debug;Release;localdev</Configurations>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>LIVESHARP_DISABLE</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Images\**" />
     <Content Remove="Images\**" />
