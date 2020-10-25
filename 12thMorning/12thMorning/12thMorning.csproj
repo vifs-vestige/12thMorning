@@ -10,6 +10,14 @@
     <DefineConstants>LIVESHARP_DISABLE</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>LIVESHARP_DISABLE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='localdev|AnyCPU'">
+    <DefineConstants>LIVESHARP_DISABLE</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Images\**" />
     <Content Remove="Images\**" />
