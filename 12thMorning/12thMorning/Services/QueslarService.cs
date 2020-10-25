@@ -80,7 +80,7 @@ namespace _12thMorning.Services {
                 var dbObject = dbObjects.First();
                 if(dbObject.DateUpdated < DateTime.Now.AddHours(-1)) {
                     var client = new HttpClient();
-                    info = await client.GetFromJsonAsync<Full>("https://queslar.com/api/full/" + dbObject.ApiKey);
+                    info = await client.GetFromJsonAsync<Full>("https://queslar.com/api/player/full/" + dbObject.ApiKey);
                     dbObject.Data = System.Text.Json.JsonSerializer.Serialize(info);
                     dbObject.DateUpdated = DateTime.Now;
                     db.QueslarKeys.Update(dbObject);
