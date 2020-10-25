@@ -11,6 +11,7 @@ namespace _12thMorning.Data {
     public class _12thMorningContext : DbContext {
         public DbSet<Blog> Blog { get; set; }
         public DbSet<Comment> Comment { get; set; }
+        public DbSet<QueslarKeys> QueslarKeys { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             optionsBuilder.UseMySql(
@@ -54,6 +55,18 @@ namespace _12thMorning.Data {
 
         [ForeignKey("ReplyTo")]
         public Comment ParentComment { get; set; }
+    }
+
+    public class QueslarKeys {
+        public int Id { get; set; }
+        [Required]
+        public string Username { get; set; }
+        [Required]
+        public string ApiKey { get; set; }
+        [Required]
+        public DateTime DateUpdated { get; set; }
+        [Required]
+        public string Data { get; set; }
 
     }
 }

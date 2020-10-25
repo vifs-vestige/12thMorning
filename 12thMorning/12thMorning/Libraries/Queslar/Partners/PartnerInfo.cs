@@ -44,8 +44,8 @@ namespace _12thMorning.Libraries.Queslar.Partners {
 
         public void UpdateBoosts() {
             var vipBonus = RootInfo.Vip ? 1.10 : 1;
-            BoostedHouseBoost = GetBoostedBoost(HouseBoost, 15);
-            BoostedVillageBoost = GetBoostedBoost(RootInfo.BaseInfo.village.boosts.mill, 20);
+            BoostedHouseBoost = QueslarHelper.GetBoostedBoost(HouseBoost, 15);
+            BoostedVillageBoost = QueslarHelper.GetBoostedBoost(RootInfo.BaseInfo.village.boosts.mill, 20);
 
             Res = ((1 + ((Boost * .025) + EnchantBoost + BoostedHouseBoost + BoostedVillageBoost + (Level / 100.0)) / 100.0) * (vipBonus) * (1 + RootInfo.PartnerInfo.KingdomBonus / 100.0)) * New.ResPre;
             if (RootInfo.PartnerInfo.Tax != 0) {
@@ -57,11 +57,6 @@ namespace _12thMorning.Libraries.Queslar.Partners {
             ResPostTax = (int)Math.Round(Res) - Taxed;
             ResHour = (int)Math.Floor((3600.0 / New.Seconds) * ResPostTax);
             TaxedHour = (int)Math.Floor((3600.0 / New.Seconds) * Taxed);
-        }
-
-        private int GetBoostedBoost(int level, int perLevel) {
-            var levelMod = (int)Math.Floor(level / perLevel + 0.0);
-            return levelMod * (levelMod + 1) / 2 * perLevel + ((level % perLevel) * (levelMod + 1));
         }
 
         public void UpdateStats() {

@@ -22,19 +22,7 @@ namespace _12thMorning.Libraries.Queslar.Partners {
             foreach (var partner in info.BaseInfo.partners) {
                 PartnerInfos[partner.id] = new PartnerInfo(partner, info);
             }
-            if (RootInfo.BaseInfo.kingdom.tiles != null) {
-                foreach (var kingdomTiles in RootInfo.BaseInfo.kingdom.tiles) {
-                    if (kingdomTiles.resource_one_type == "resource") {
-                        KingdomBonus += (int)kingdomTiles.resource_one_value;
-                    }
-                    if (kingdomTiles.resource_two_type == "resource") {
-                        KingdomBonus += (int)kingdomTiles.resource_two_value;
-                    }
-                    if (kingdomTiles.resource_three_type == "resource") {
-                        KingdomBonus += (int)kingdomTiles.resource_three_value;
-                    }
-                }
-            }
+            KingdomBonus = RootInfo.BaseInfo.kingdom.GetBoost("resource");
             FinalPartners = new Dictionary<ResTypes, PartnerFinal>();
             foreach (ResTypes resType in Enum.GetValues(typeof(ResTypes))) {
                 FinalPartners.Add(resType, new PartnerFinal(info.BaseInfo.pets.Where(x => x.active_food == resType.ToString().ToLower()).Sum(x => x.efficiency_tier + 1)));

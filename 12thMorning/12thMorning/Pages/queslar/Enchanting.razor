@@ -1,6 +1,7 @@
 ﻿@page "/queslar/enchanting"
-@page "/queslar/enchanting/{avg:decimal}"
-@page "/queslar/enchanting/{avg:decimal}/{cost:int}"
+@page "/queslar/enchanting/{player}/{cost:int}"
+@page "/queslar/enchanting/{avg:double}/{cost:int}"
+@page "/queslar/enchanting/{avg:double}"
 @layout QueslarLayout
 @inject QueslarService Queslar
 @inject IJSRuntime JSRuntime
@@ -12,16 +13,16 @@
     <BSRow>
         <BSCol SM="3">
             <BSFormGroup>
-                <BSLabel>enchanting avg</BSLabel>
-                <BSInput @bind-Value="EnchantForm.Avg" InputType="InputType.Text" ValidateOnChange="true" />
-                <BSFormFeedback For="@(() => EnchantForm.Avg)" />
+                <BSLabel>enchant level</BSLabel>
+                <BSInput @bind-Value="EnchantForm.Level" InputType="InputType.Number" />
+                <BSFormFeedback For="@(() => EnchantForm.Level)" />
             </BSFormGroup>
         </BSCol>
         <BSCol SM="3">
             <BSFormGroup>
-                <BSLabel>enchant level</BSLabel>
-                <BSInput @bind-Value="EnchantForm.Level" InputType="InputType.Number" />
-                <BSFormFeedback For="@(() => EnchantForm.Level)" />
+                <BSLabel>enchanting avg</BSLabel>
+                <BSInput @bind-Value="EnchantForm.Avg" InputType="InputType.Text" ValidateOnChange="true" />
+                <BSFormFeedback For="@(() => EnchantForm.Avg)" />
             </BSFormGroup>
         </BSCol>
         <BSCol SM="3">
@@ -38,41 +39,51 @@
         </BSCol>
     </BSRow>
 </BSForm>
-    @if (EnchantInfo != null) {
-<BSRow>
-    @foreach (var x in EnchantInfo) {
-    <BSCol>
-        @if (EnchantInfo.IndexOf(x) == 1) {
-            <b>lowest level for action count</b><br />
-        } else if (EnchantInfo.IndexOf(x) == 2) {
-        <b>next level for action count</b><br />
-        } else {
-            <b>entered level</b><br/>
+@if (EnchantInfo != null) {
+    <BSRow>
+        @foreach (var x in EnchantInfo) {
+            <BSCol>
+                @if (EnchantInfo.IndexOf(x) == 1) {
+                    <b>lowest level for action count</b><br />
+                }
+                else if (EnchantInfo.IndexOf(x) == 2) {
+                    <b>next level for action count</b><br />
+                }
+                else {
+                    <b>entered level</b><br />
+                }
+                <br />
+                average enchant for level <b>@x.Level</b><br />
+                (@(x.OwnershipValue)%) @(x.Value)%<br />
+                (@(x.OwnershipActionValue)) @(x.ActionValue) for actions<br />
+                (@(x.OwnershipSpeedValue)%) @(x.SpeedValue)% for speed<br /><br />
+                @if (x.RelicCost != 0) {
+                    <text>relic cost: <b>@x.RelicCost</b> </text><br />
+                }
+                res cost: <b>@x.ResCost</b> <br />
+                action count: <b>@x.ActionCount</b>
+            </BSCol>
         }
-        <br />
-        average enchant for level <b>@x.Level</b><br />
-        (@(x.OwnershipValue)%) @(x.Value)%<br />
-        (@(x.OwnershipActionValue)) @(x.ActionValue) for actions<br />
-        (@(x.OwnershipSpeedValue)%) @(x.SpeedValue)% for speed<br /><br />
-        @if (x.RelicCost != 0) {
-            <text>relic cost: <b>@x.RelicCost</b> </text><br />
-        }
-        res cost: <b>@x.ResCost</b> <br />
-        action count: <b>@x.ActionCount</b>
-    </BSCol>
-    }
-</BSRow>
-    }
+    </BSRow>
+}
+@thingy
 
 @code {
-        [Parameter]
-        public decimal Avg { get; set; }
-        [Parameter]
-        public int Cost { get; set; }
+    [Parameter]
+    public double Avg { get; set; }
+    [Parameter]
+    public int Cost { get; set; }
+    [Parameter]
+    public string Player { get; set; }
     private List<EnchantServiceInfo> EnchantInfo;
     private FormsModel EnchantForm = new FormsModel();
+    private string thingy;
 
-    protected override void OnInitialized() {
+    protected override async void OnInitialized() {
+        if (Player != null) {
+            Avg = await Queslar.GetPlayerForEnchantingService(Player);
+        }
+
         if (Avg != 0) {
             EnchantForm.Avg = Avg + "";
         }

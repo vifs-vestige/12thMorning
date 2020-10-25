@@ -21,18 +21,41 @@
 <BSButton ButtonType="ButtonType.Submit" OnClick="@Unload">
     Unload
 </BSButton>
+<br />
+<BSButton ButtonType="ButtonType.Submit" OnClick="@AddServer" IsDisabled="@CantAdd">
+    Add To Server
+</BSButton>
+<BSButton ButtonType="ButtonType.Submit" OnClick="@RemoveServer" IsDisabled="@CantRemove">
+    Remove From Server
+</BSButton>
 <p>@dump</p>
 
 @code {
     private string ApiKey = "";
     private bool Valid = false;
     public string dump;
+    private bool CantAdd = true;
+    private bool CantRemove = true;
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
-        if(firstRender) {
+        if (firstRender) {
             await CheckInfo();
             GetInfo();
         }
+    }
+
+    private void AddServer() {
+        Queslar.AddToServer();
+        CantAdd = true;
+        CantRemove = false;
+        StateHasChanged();
+    }
+
+    private void RemoveServer() {
+        Queslar.RemoveFromServer();
+        CantAdd = false;
+        CantRemove = true;
+        StateHasChanged();
     }
 
     private async void Submit() {
@@ -41,11 +64,17 @@
             await localStorage.SetItemAsync<string>(Queslar.LocalApiKey, ApiKey);
             dump = System.Text.Json.JsonSerializer.Serialize(info);
             GetInfo();
+            var onServer = Queslar.CheckIfInServer();
+            CantRemove = !onServer;
+            CantAdd = onServer;
         }
         else {
+            CantRemove = true;
+            CantAdd = true;
             ApiKey = "";
             Valid = false;
         }
+        StateHasChanged();
     }
 
     private void GetInfo() {
@@ -57,7 +86,7 @@
     private async void Unload() {
         await localStorage.ClearAsync();
         Queslar.ApiKey = "";
-        
+
         GetInfo();
     }
 
