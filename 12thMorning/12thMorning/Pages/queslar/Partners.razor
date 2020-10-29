@@ -146,7 +146,7 @@
                     <th scope="row">@(partner.BaseInfo.name) (@partner.Display)</th>
                     <td>
                         <div class="input-group">
-                            <input type="number" class="form-control" @bind-value="partner.Boost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" tabindex="3" />
+                            <input type="number" class="form-control" @bind-value="partner.Boost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" tabindex="1" />
                             <div class="input-group-append">
                                 <div class="input-group-text">@((partner.Boost * .025).ToString("0.###"))</div>
                             </div>
@@ -154,7 +154,7 @@
                     </td>
                     <td>
                         <div class="input-group">
-                            <input type="number" class="form-control" @bind-value="partner.HouseBoost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" tabindex="3" />
+                            <input type="number" class="form-control" @bind-value="partner.HouseBoost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" tabindex="2" />
                             <div class="input-group-append">
                                 <div class="input-group-text">@(partner.BoostedHouseBoost)</div>
                             </div>
@@ -174,14 +174,14 @@
                     <td>@PlayerInfo.PartnerInfo.KingdomBonus</td>
                     <td>
                         <div class="input-group">
-                            <input type="number" class="form-control" @bind-value="PlayerInfo.PartnerInfo.Tax" @oninput="@(e => TaxUpdate(e))"  tabindex="3" />
+                            <input type="number" class="form-control" @bind-value="PlayerInfo.PartnerInfo.Tax" @oninput="@(e => TaxUpdate(e))"  tabindex="4" />
                             <div class="input-group-append">
                                 <div class="input-group-text">@partner.Taxed</div>
                             </div>
                         </div>
                     </td>
                     <td>@partner.Res.ToString("0.####") (@Math.Round(partner.Res))</td>
-                    <td>@partner.ResPostTax</td>
+                    <td>@partner.ResPostTax.ToString("N0")</td>
                     <td>@partner.ResHour.ToString("N0")</td>
                 </tr>
                 }
