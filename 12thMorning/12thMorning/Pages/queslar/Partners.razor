@@ -14,7 +14,7 @@
     <span><small> you can support the creator of this tool at "VifsVestige" enchanting service</small></span>
 
     <br/>
-    <BSButton Color="Color.Primary" OnClick="@(e => toggleDropDowns(e, "current"))">current partners</BSButton>
+    <BSButton Color="Color.Primary" OnClick="@(e => toggleDropDowns(e, "current"))" Class="dropdown">current partners <i class="oi oi-chevron-@(Toggles["current"]? "bottom" : "left")"/></BSButton>
     <BSCollapse IsOpen="@Toggles["current"]">
         <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
             <BSTableHead TableHeadType="TableHeadType.Dark">
@@ -45,10 +45,10 @@
                                 </BSDropdownMenu>
                             </BSDropdown>
                         </td>
-                        <td>@partner.Stats</td>
+                        <td>@partner.Stats.ToString("N0")</td>
                         <td><BSBasicInput @bind-Value="partner.PlayerStat" @onkeyup="partner.UpdateStats" InputType="InputType.Number" /></td>
-                        <td>@partner.Current.Speed/@partner.Current.Seconds</td>
-                        <td>@partner.Current.Intelligence/@partner.Current.IntPercent.ToString("0.####")</td>
+                        <td>@partner.Current.Speed / @partner.Current.Seconds</td>
+                        <td>@partner.Current.Intelligence / @partner.Current.IntPercent.ToString("P2")</td>
                         <td>@partner.Current.TotalStats.ToString("N0")</td>
                         <td>@partner.Current.ResPre</td>
                         <td>@partner.Current.ResPerHourPre.ToString("N0")</td>
@@ -66,7 +66,7 @@
         </BSTable>
     </BSCollapse>
     <br/>
-    <BSButton Color="Color.Primary" OnClick="@(e => toggleDropDowns(e, "new"))">new partners</BSButton>
+    <BSButton Color="Color.Primary" OnClick="@(e => toggleDropDowns(e, "new"))">new partners <i class="oi oi-chevron-@(Toggles["new"]? "bottom" : "left")" /></BSButton>
     <BSCollapse IsOpen="@Toggles["new"]">
         <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
             <BSTableHead TableHeadType="TableHeadType.Dark">
@@ -86,22 +86,22 @@
                     <th scope="row">@(partner.BaseInfo.name) (@partner.Display)</th>
                     <td>
                         <div class="input-group">
-                            <input type="number" class="form-control" @bind-value="partner.New.Speed" @onkeyup="PlayerInfo.PartnerInfo.updateNew" tabindex="3" />
+                            <input type="number" class="form-control" @bind-value="partner.New.Speed" @onkeyup="PlayerInfo.PartnerInfo.updateNew" tabindex="1" />
                             <div class="input-group-append">
-                                <div class="input-group-text">@partner.New.Seconds</div>
+                                <div class="input-group-text">@partner.New.Seconds.ToString("N2")</div>
                             </div>
                         </div>
                     </td>
                     <td>
                         <div class="input-group">
-                            <input type="number" class="form-control" @bind-value="partner.New.Intelligence" @onkeyup="PlayerInfo.PartnerInfo.updateNew" tabindex="3" />
+                            <input type="number" class="form-control" @bind-value="partner.New.Intelligence" @onkeyup="PlayerInfo.PartnerInfo.updateNew" tabindex="2" />
                             <div class="input-group-append">
-                                <div class="input-group-text">@partner.New.IntPercent.ToString("0.####")</div>
+                                <div class="input-group-text">@partner.New.IntPercent.ToString("N2")%</div>
                             </div>
                         </div>
                     </td>
                     <td>@partner.New.TotalStats.ToString("N0")</td>
-                    <td>@partner.New.ResPre</td>
+                    <td>@partner.New.ResPre.ToString("N0")</td>
                     <td>@partner.New.ResPerHourPre.ToString("N0")</td>
                     <td>@partner.New.TotalSpent.ToString("N0")</td>
                 </tr>
@@ -121,7 +121,7 @@
         </span>
     </BSCollapse>
     <br/>
-    <BSButton Color="Color.Primary" OnClick="@(e => toggleDropDowns(e, "boost"))">boosts</BSButton>
+    <BSButton Color="Color.Primary" OnClick="@(e => toggleDropDowns(e, "boost"))">boosts <i class="oi oi-chevron-@(Toggles["boost"]? "bottom" : "left")" /></BSButton>
     <BSCollapse IsOpen="@Toggles["boost"]">
         <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
             <BSTableHead TableHeadType="TableHeadType.Dark">
@@ -146,26 +146,26 @@
                     <th scope="row">@(partner.BaseInfo.name) (@partner.Display)</th>
                     <td>
                         <div class="input-group">
-                            <input type="number" class="form-control" @bind-value="partner.Boost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" tabindex="1" />
+                            <input type="number" class="form-control" @bind-value="partner.Boost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" tabindex="3" />
                             <div class="input-group-append">
-                                <div class="input-group-text">@((partner.Boost * .025).ToString("0.###"))</div>
+                                <div class="input-group-text">@((partner.Boost * .025).ToString("N2"))%</div>
                             </div>
                         </div>
                     </td>
                     <td>
                         <div class="input-group">
-                            <input type="number" class="form-control" @bind-value="partner.HouseBoost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" tabindex="2" />
+                            <input type="number" class="form-control" @bind-value="partner.HouseBoost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" tabindex="4" />
                             <div class="input-group-append">
-                                <div class="input-group-text">@(partner.BoostedHouseBoost)</div>
+                                <div class="input-group-text">@(partner.BoostedHouseBoost.ToString("N0"))%</div>
                             </div>
                         </div>
                     </td>
                     <td>@partner.EnchantBoost</td>
                     <td>
                         <div class="input-group">
-                            <input type="number" class="form-control" @bind-value="PlayerInfo.BaseInfo.village.boosts.mill" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" tabindex="3" />
+                            <input type="number" class="form-control" @bind-value="PlayerInfo.BaseInfo.village.boosts.mill" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" tabindex="5" />
                             <div class="input-group-append">
-                                <div class="input-group-text">@(partner.BoostedVillageBoost)</div>
+                                <div class="input-group-text">@(partner.BoostedVillageBoost.ToString("N0"))%</div>
                             </div>
                         </div>
                     </td>
@@ -174,13 +174,13 @@
                     <td>@PlayerInfo.PartnerInfo.KingdomBonus</td>
                     <td>
                         <div class="input-group">
-                            <input type="number" class="form-control" @bind-value="PlayerInfo.PartnerInfo.Tax" @oninput="@(e => TaxUpdate(e))"  tabindex="4" />
+                            <input type="number" class="form-control" @bind-value="PlayerInfo.PartnerInfo.Tax" @oninput="@(e => TaxUpdate(e))"  tabindex="6" />
                             <div class="input-group-append">
                                 <div class="input-group-text">@partner.Taxed</div>
                             </div>
                         </div>
                     </td>
-                    <td>@partner.Res.ToString("0.####") (@Math.Round(partner.Res))</td>
+                    <td>@partner.Res.ToString("N2") (@Math.Round(partner.Res).ToString("N0"))</td>
                     <td>@partner.ResPostTax.ToString("N0")</td>
                     <td>@partner.ResHour.ToString("N0")</td>
                 </tr>
@@ -189,7 +189,7 @@
         </BSTable>
     </BSCollapse>
     <br/>
-    <BSButton Color="Color.Primary" OnClick="@(e => toggleDropDowns(e, "final"))">final</BSButton>
+    <BSButton Color="Color.Primary" OnClick="@(e => toggleDropDowns(e, "final"))">final <i class="oi oi-chevron-@(Toggles["final"]? "bottom" : "left")" /></BSButton>
     <BSCollapse IsOpen="@Toggles["final"]">
         <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
             <BSTableHead TableHeadType="TableHeadType.Dark">

@@ -72,6 +72,17 @@ namespace _12thMorning.Services {
             }
         }
 
+        public void UpdateOnServer() {
+            if(CheckIfInServer() == true) {
+                var temp = DB.QueslarKeys.Where(x => x.ApiKey == ApiKey || x.Username == FullWrapper.BaseInfo.player.username).First();
+                temp.DateUpdated = DateTime.Now;
+                temp.Data = System.Text.Json.JsonSerializer.Serialize(FullWrapper.BaseInfo);
+                var db = DB;
+                db.QueslarKeys.Update(temp);
+                db.SaveChanges();
+            }
+        }
+
         public async Task<Double> GetPlayerForEnchantingService(string player) {
             var db = DB;
             var dbObjects = db.QueslarKeys.Where(x => x.Username == player);

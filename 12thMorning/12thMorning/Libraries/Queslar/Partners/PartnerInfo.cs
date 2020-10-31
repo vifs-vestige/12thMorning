@@ -6,7 +6,7 @@ namespace _12thMorning.Libraries.Queslar.Partners {
     public class PartnerInfo {
         public ResTypes ResType;
         public Partner BaseInfo;
-        public int Level;
+        public long Level;
         public long Stats;
         public long PlayerStat;
         public long TotalStat;
@@ -14,9 +14,9 @@ namespace _12thMorning.Libraries.Queslar.Partners {
         public long Taxed;
         public long ResPostTax;
         public double Boost;
-        public int HouseBoost;
-        public int BoostedHouseBoost;
-        public int BoostedVillageBoost;
+        public long HouseBoost;
+        public long BoostedHouseBoost;
+        public long BoostedVillageBoost;
         public double EnchantBoost;
         public long ResHour;
         public long TaxedHour;
@@ -51,14 +51,14 @@ namespace _12thMorning.Libraries.Queslar.Partners {
             Res = ((1 + ((Boost * .025) + EnchantBoost + BoostedHouseBoost + BoostedVillageBoost + (Level / 100.0)) / 100.0) *  (vipBonus) * (1 + kingdomVillageBoost + RootInfo.PartnerInfo.KingdomBonus / 100.0)) * New.ResPre;
 
             if (RootInfo.PartnerInfo.Tax != 0) {
-                Taxed = (int)Math.Floor(Res * (RootInfo.PartnerInfo.Tax / 100.0));
+                Taxed = (long)Math.Floor(Res * (RootInfo.PartnerInfo.Tax / 100.0));
             }
             else {
                 Taxed = 0;
             }
-            ResPostTax = (int)Math.Round(Res) - Taxed;
-            ResHour = (int)Math.Floor((3600.0 / New.Seconds) * ResPostTax);
-            TaxedHour = (int)Math.Floor((3600.0 / New.Seconds) * Taxed);
+            ResPostTax = (long)Math.Round(Res) - Taxed;
+            ResHour = (long)Math.Floor((3600.0 / New.Seconds) * ResPostTax);
+            TaxedHour = (long)Math.Floor((3600.0 / New.Seconds) * Taxed);
         }
 
         public void UpdateStats() {

@@ -5,18 +5,18 @@ using _12thMorning.Models.Queslar;
 
 namespace _12thMorning.Libraries.Queslar.Partners {
     public class PartnerWrapper {
-        public Dictionary<int, PartnerInfo> PartnerInfos = new Dictionary<int, PartnerInfo>();
+        public Dictionary<long, PartnerInfo> PartnerInfos = new Dictionary<long, PartnerInfo>();
         public long CurrentPrice;
         public long CurrentResHour;
         public long NewPrice;
         public long NewResHour;
-        public int Tax = 0;
+        public long Tax = 0;
         private FullWrapper RootInfo;
-        public int KingdomBonus;
+        public long KingdomBonus;
         public Dictionary<ResTypes, PartnerFinal> FinalPartners;
         public Dictionary<string, long> FinalTotals;
 
-        public PartnerWrapper(FullWrapper info, int tax) {
+        public PartnerWrapper(FullWrapper info, long tax) {
             RootInfo = info;
             Tax = tax;
             foreach (var partner in info.BaseInfo.partners) {
@@ -30,7 +30,7 @@ namespace _12thMorning.Libraries.Queslar.Partners {
             UpdateTotals();
         }
 
-        public void SetRes(int id, ResTypes res) {
+        public void SetRes(long id, ResTypes res) {
             PartnerInfos[id].setType(res);
             UpdateTotals();
         }

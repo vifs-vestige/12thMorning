@@ -40,28 +40,29 @@
     </BSRow>
 </BSForm>
 @if (EnchantInfo != null) {
+    <br/>
     <BSRow>
         @foreach (var x in EnchantInfo) {
-            <BSCol>
+            <BSCol SM="3" Class="border-top border-bottom">
                 @if (EnchantInfo.IndexOf(x) == 1) {
-                    <b>lowest level for action count</b><br />
+                    <h4>lowest level</h4>
                 }
                 else if (EnchantInfo.IndexOf(x) == 2) {
-                    <b>next level for action count</b><br />
+                    <h4>next level</h4>
                 }
                 else {
-                    <b>entered level</b><br />
+                    <h4>current level</h4>
                 }
-                <br />
-                average enchant for level <b>@x.Level</b><br />
-                (@(x.OwnershipValue)%) @(x.Value)%<br />
-                (@(x.OwnershipActionValue)) @(x.ActionValue) for actions<br />
-                (@(x.OwnershipSpeedValue)%) @(x.SpeedValue)% for speed<br /><br />
+                average enchant for level <b>@x.Level.ToString("N0")</b><br />
+                standard: <b>(@(x.OwnershipValue.ToString("N3"))%)</b> @(x.Value.ToString("N3"))%<br />
+                actions: <b>(@(x.OwnershipActionValue.ToString("N0")))</b> @(x.ActionValue.ToString("N0"))<br />
+                speed: <b>(@(x.OwnershipSpeedValue.ToString("N3"))%)</b> @(x.SpeedValue.ToString("N3"))%<br /><br />
                 @if (x.RelicCost != 0) {
-                    <text>relic cost: <b>@x.RelicCost</b> </text><br />
+                    <text>relic cost: <b>@x.RelicCost.ToString("N0")</b> </text><br />
                 }
-                res cost: <b>@x.ResCost</b> <br />
-                action count: <b>@x.ActionCount</b>
+                res cost: <b>@x.ResCost.ToString("N0")</b> <br />
+                action count: <b>@x.ActionCount.ToString("N0")</b>
+                <br/>
             </BSCol>
         }
     </BSRow>

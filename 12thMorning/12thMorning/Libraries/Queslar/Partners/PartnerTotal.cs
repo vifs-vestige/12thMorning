@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace _12thMorning.Libraries.Queslar.Partners {
     public class PartnerTotal {
-        public int Speed;
+        public long Speed;
         public double Seconds;
-        public int Intelligence;
+        public long Intelligence;
         public double IntPercent;
         public long TotalStats;
         public long ResPre;
@@ -19,14 +19,14 @@ namespace _12thMorning.Libraries.Queslar.Partners {
         public void update() {
             Seconds = Math.Round((6.0 / (0.1 + Speed / (Speed + 2500.0)) * 3) * 100) / 100;
             IntPercent = 20.0 + Intelligence / (Intelligence + 250.0) * 100.0;
-            TotalStats = (int)Math.Round(IntPercent / 100.0 * PlayerStat) + PartnerStat;
-            ResPre = ((int)Math.Floor(TotalStats / 100.0)) + 1;
+            TotalStats = (long)Math.Round(IntPercent / 100.0 * PlayerStat) + PartnerStat;
+            ResPre = ((long)Math.Floor(TotalStats / 100.0)) + 1;
             ResPre *= 3;
-            ResPerHourPre = (int)Math.Floor((3600.0 / Seconds) * ResPre);
+            ResPerHourPre = (long)Math.Floor((3600.0 / Seconds) * ResPre);
             TotalSpent = (((Intelligence * (Intelligence + 1)) / 2) + ((Speed * (Speed + 1)) / 2)) * 10000;
         }
 
-        public void update(PartnerInfo partnerInfo, int speed, int intelligence) {
+        public void update(PartnerInfo partnerInfo, long speed, long intelligence) {
             PlayerStat = partnerInfo.PlayerStat;
             PartnerStat = partnerInfo.Stats;
             Speed = speed;

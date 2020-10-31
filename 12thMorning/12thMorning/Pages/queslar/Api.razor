@@ -28,6 +28,9 @@
 <BSButton ButtonType="ButtonType.Submit" OnClick="@RemoveServer" IsDisabled="@CantRemove">
     Remove From Server
 </BSButton>
+<BSButton ButtonType="ButtonType.Submit" OnClick="@UpdateServer" IsDisabled="@CantUpdate">
+    Update On Server
+</BSButton>
 <p>@dump</p>
 
 @code {
@@ -36,6 +39,7 @@
     public string dump;
     private bool CantAdd = true;
     private bool CantRemove = true;
+    private bool CantUpdate = true;
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         if (firstRender) {
@@ -58,6 +62,12 @@
         StateHasChanged();
     }
 
+    private void UpdateServer() {
+        Queslar.UpdateOnServer();
+        CantUpdate = true;
+        StateHasChanged();
+    }
+
     private async void Submit() {
         var info = await Queslar.Update<Full>(ApiKey);
         if (info != null) {
@@ -67,10 +77,12 @@
             var onServer = Queslar.CheckIfInServer();
             CantRemove = !onServer;
             CantAdd = onServer;
+            CantUpdate = !onServer;
         }
         else {
             CantRemove = true;
             CantAdd = true;
+            CantUpdate = true;
             ApiKey = "";
             Valid = false;
         }
