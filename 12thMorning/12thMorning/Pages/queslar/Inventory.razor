@@ -1,0 +1,81 @@
+﻿@page "/queslar/inventory"
+@inherits ApiCheck
+@layout QueslarLayout
+@inject QueslarService Queslar
+@inject IJSRuntime JSRuntim
+@using _12thMorning.Models.Queslar.Player
+
+@if (PlayerInfo != null) {
+
+    <BSButton OnClick="Refresh">Refresh</BSButton><span><small> Total Enchants assume ownership</small></span>
+    <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
+        <BSTableHead TableHeadType="TableHeadType.Dark">
+            <tr>
+                <th scope="col">name</th>
+                <th scope="col">level</th>
+                <th scope="col">total stats</th>
+                <th scope="col">damage</th>
+                <th scope="col">defense</th>
+                <th scope="col">strength</th>
+                <th scope="col">health</th>
+                <th scope="col">agility</th>
+                <th scope="col">dexterity</th>
+                <th scope="col">enchant</th>
+            </tr>
+        </BSTableHead>
+        <tbody>
+            @foreach (var gear in PlayerInfo.InventoryInfo.Stats) {
+                <tr>
+                    <th scope="row">@gear.RootInfo.item_type</th>
+                    <th>@gear.RootInfo.level_requirement.ToString("N0")</th>
+                    <th>@gear.TotalStats.ToString("N0")</th>
+                    <th>@gear.Damage.ToString("N0")</th>
+                    <th>@gear.Defense.ToString("N0")</th>
+                    <th>@gear.Strength.ToString("N0")</th>
+                    <th>@gear.Health.ToString("N0")</th>
+                    <th>@gear.Agility.ToString("N0")</th>
+                    <th>@gear.Dex.ToString("N0")</th>
+                    <th>lvl @gear.RootInfo.enchant_level @gear.EnchantType: 
+                        @gear.EnchantOwnershipValue.ToString(gear.EnchantType == "actions"? "N0" : "P3") 
+                        (@gear.EnchantValue.ToString(gear.EnchantType == "actions" ? "N0" : "P3"))</th>
+                </tr>
+            }
+            <tr>
+                <th scope="row">total</th>
+                <th>-</th>
+                <th>@PlayerInfo.InventoryInfo.TotalTotalStats.ToString("N0")</th>
+                <th>@PlayerInfo.InventoryInfo.TotalDamage.ToString("N0")</th>
+                <th>@PlayerInfo.InventoryInfo.TotalDefense.ToString("N0")</th>
+                <th>@PlayerInfo.InventoryInfo.TotalStrength.ToString("N0")</th>
+                <th>@PlayerInfo.InventoryInfo.TotalHealth.ToString("N0")</th>
+                <th>@PlayerInfo.InventoryInfo.TotalAgility.ToString("N0")</th>
+                <th>@PlayerInfo.InventoryInfo.TotalDex.ToString("N0")</th>
+                <th>
+                    @foreach (var x in PlayerInfo.InventoryInfo.TotalEnchant) {
+                        <p>@x.Key @x.Value.ToString(x.Key == "actions" ? "N0" : "P3")</p>
+                    }
+                </th>
+            </tr>
+        </tbody>
+    </BSTable>
+}
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if (firstRender) {
+            await base.OnAfterRenderAsync(firstRender);
+            if (PlayerInfo != null) {
+                PlayerInfo.AddInventoryWrapper();
+            }
+            StateHasChanged();
+        }
+    }
+
+    protected async void Refresh(MouseEventArgs e) {
+        await Queslar.Update<Full>();
+        PlayerInfo = Queslar.GetFullWrapper();
+        PlayerInfo.AddInventoryWrapper();
+        StateHasChanged();
+    }
+
+}

@@ -8,6 +8,7 @@ namespace _12thMorning.Libraries.Queslar {
         public Full BaseInfo;
         public PartnerWrapper PartnerInfo;
         public FighterWrapper FighterInfo;
+        public InventoryWrapper InventoryInfo;
         public bool Vip;
 
         public FullWrapper(Full root) {
@@ -27,6 +28,10 @@ namespace _12thMorning.Libraries.Queslar {
                 partner.UpdateBoosts();
             }
             PartnerInfo.UpdateBoosts();
+        }
+
+        public void AddInventoryWrapper() {
+            InventoryInfo = new InventoryWrapper(BaseInfo.equipmentEquipped, BaseInfo.equipmentSlots);
         }
     }
 }

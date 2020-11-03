@@ -2,13 +2,15 @@
 @inject QueslarService Queslar
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 @using _12thMorning.Models.Queslar.Player
+@using _12thMorning.Libraries.Queslar
 
 @code {
+    protected FullWrapper PlayerInfo;
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         if (firstRender) {
             var hasInfo = await CheckInfo();
-            if(!hasInfo) {
+            if (!hasInfo) {
                 NavManager.NavigateTo("/queslar/api", true);
                 StateHasChanged();
             }
@@ -21,12 +23,16 @@
             var key = await localStorage.GetItemAsStringAsync(Queslar.LocalApiKey);
             if (key == null || key == "") {
                 returnValue = false;
-            } else {
+            }
+            else {
                 await Queslar.Update<Full>(key);
+                PlayerInfo = Queslar.GetFullWrapper();
                 returnValue = Queslar.Valid;
             }
-        } else {
+        }
+        else {
             await Queslar.Update<Full>();
+            PlayerInfo = Queslar.GetFullWrapper();
         }
         return returnValue;
     }

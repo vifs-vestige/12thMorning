@@ -5,7 +5,6 @@
 @inject HttpClient Http
 @inject IJSRuntime JSRuntime
 @using _12thMorning.Models.Queslar.Player
-@using _12thMorning.Libraries.Queslar
 @using _12thMorning.Models.Queslar 
 
 @name
@@ -235,7 +234,6 @@
 
 @code {
     public string name;
-    public FullWrapper PlayerInfo;
     Dictionary<string, bool> Toggles = new Dictionary<string, bool> {
                 { "current", true },
                 { "new", true },
@@ -264,7 +262,6 @@
         if (firstRender) {
             await base.OnAfterRenderAsync(firstRender);
             if (Queslar.Values.ContainsKey(typeof(Full)) && Queslar.Values[typeof(Full)] != null) {
-                PlayerInfo = Queslar.GetFullWrapper();
                 checkTax();
                 var temp = await localStorage.GetItemAsync<Dictionary<string, bool>>("Toggles");
                 if (temp != null) {
