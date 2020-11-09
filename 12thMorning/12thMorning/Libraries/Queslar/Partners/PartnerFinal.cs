@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 namespace _12thMorning.Libraries.Queslar.Partners {
     public class PartnerFinal {
         public long PetFood = 0;
+        public long RealPetFood = 0;
         public long TaxedPerHour;
         public long PetFoodPerHour = 0;
         private long PrePetPerHour;
@@ -28,7 +29,8 @@ namespace _12thMorning.Libraries.Queslar.Partners {
         }
 
         public void updatePetPerHour() {
-            PetFoodPerHour = PetFood * 600;
+            RealPetFood = QueslarHelper.GetBoostedBoost(PetFood, 11);
+            PetFoodPerHour = RealPetFood * 600;
             FinalPerHour = PrePetPerHour - PetFoodPerHour;
         }
 

@@ -209,7 +209,7 @@
                             <div class="input-group">
                                 <input type="number" class="form-control" @bind-value="partner.Value.PetFood" @onkeyup="PlayerInfo.PartnerInfo.UpdateFinals" />
                                 <div class="input-group-append">
-                                    <div class="input-group-text">@partner.Value.PetFoodPerHour.ToString("N0")</div>
+                                    <div class="input-group-text">@partner.Value.RealPetFood - @partner.Value.PetFoodPerHour.ToString("N0")</div>
                                 </div>
                             </div>
                         </td>
