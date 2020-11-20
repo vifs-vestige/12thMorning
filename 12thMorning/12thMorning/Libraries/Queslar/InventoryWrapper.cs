@@ -32,9 +32,9 @@ namespace _12thMorning.Libraries.Queslar {
                 TotalAgility += temp.Agility;
                 TotalDex += temp.Dex;
                 if(TotalEnchant.ContainsKey(temp.EnchantType)) {
-                    TotalEnchant[temp.EnchantType] += temp.EnchantOwnershipValue;
+                    TotalEnchant[temp.EnchantType] += temp.EnchantValue;
                 } else if (temp.EnchantType != "") {
-                    TotalEnchant[temp.EnchantType] = temp.EnchantOwnershipValue;
+                    TotalEnchant[temp.EnchantType] = temp.EnchantValue;
                 }
             }
         }
@@ -53,7 +53,6 @@ namespace _12thMorning.Libraries.Queslar {
         public int Upgrade;
         public string EnchantType = "";
         public double EnchantValue = 0;
-        public double EnchantOwnershipValue = 0;
 
         public InventoryStats(EquipmentEquipped info, EquipmentSlots upgrades) {
             RootInfo = info;
@@ -71,8 +70,13 @@ namespace _12thMorning.Libraries.Queslar {
                 else {
                     EnchantValue = Math.Pow((double)info.enchant_value, 0.425) / 2 / 100;
                 }
-                EnchantOwnershipValue = Math.Round(EnchantValue * 1.25, 5);
-                EnchantValue = Math.Round(EnchantValue, 5);
+
+                if (info.enchant_ownership == info.player_id) {
+                    EnchantValue = Math.Round(EnchantValue * 1.25, 5);
+                }
+                else {
+                    EnchantValue = Math.Round(EnchantValue, 5);
+                }
                 EnchantType = info.enchant_type;
             }
             TotalStats = (int) Math.Round(info.total_stats / 1.04);

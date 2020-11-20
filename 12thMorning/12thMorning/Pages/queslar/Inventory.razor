@@ -7,7 +7,7 @@
 
 @if (PlayerInfo != null) {
 
-    <BSButton OnClick="Refresh">Refresh</BSButton><span><small> Total Enchants assume ownership</small></span>
+    <BSButton OnClick="Refresh">Refresh</BSButton><span></span>
     <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
         <BSTableHead TableHeadType="TableHeadType.Dark">
             <tr>
@@ -35,9 +35,7 @@
                     <th>@gear.Health.ToString("N0")</th>
                     <th>@gear.Agility.ToString("N0")</th>
                     <th>@gear.Dex.ToString("N0")</th>
-                    <th>lvl @gear.RootInfo.enchant_level @gear.EnchantType: 
-                        @gear.EnchantOwnershipValue.ToString(gear.EnchantType == "actions"? "N0" : "P3") 
-                        (@gear.EnchantValue.ToString(gear.EnchantType == "actions" ? "N0" : "P3"))</th>
+                    <th>lvl @gear.RootInfo.enchant_level @gear.EnchantType: @gear.EnchantValue.ToString(gear.EnchantType == "actions" ? "N0" : "P3")</th>
                 </tr>
             }
             <tr>

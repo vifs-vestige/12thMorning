@@ -74,6 +74,7 @@ namespace _12thMorning.Models.Queslar.Player {
         public string enchant_type { get; set; }
         public int total_stats { get; set; }
         public int? enchant_rarity { get; set; }
+        public int? enchant_ownership { get; set; }
         public int? enchant_value { get; set; }
         public int type { get; set; }
         public int? enchant_level { get; set; }
