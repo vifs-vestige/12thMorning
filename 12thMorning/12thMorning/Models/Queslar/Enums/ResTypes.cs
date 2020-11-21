@@ -5,6 +5,6 @@ using System.Threading.Tasks;
 
 namespace _12thMorning.Models.Queslar {
     public enum ResTypes {
-        Meat = 1, Iron = 2, Wood = 3, Stone = 4
+        meat = 1, iron = 2, wood = 3, stone = 4
     }
 }

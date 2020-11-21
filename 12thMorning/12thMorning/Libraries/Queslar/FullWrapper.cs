@@ -24,10 +24,6 @@ namespace _12thMorning.Libraries.Queslar {
 
         public void AddPartnerWrapper(int tax = 0) {
             PartnerInfo = new PartnerWrapper(this, tax);
-            foreach (var partner in PartnerInfo.PartnerInfos.Values) {
-                partner.UpdateBoosts();
-            }
-            PartnerInfo.UpdateBoosts();
         }
 
         public void AddInventoryWrapper() {

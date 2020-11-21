@@ -5,16 +5,16 @@
 @inject HttpClient Http
 @inject IJSRuntime JSRuntime
 @using _12thMorning.Models.Queslar.Player
-@using _12thMorning.Models.Queslar 
+@using _12thMorning.Models.Queslar
 
 @name
 @if (PlayerInfo != null) {
     <BSButton OnClick="Refresh">Refresh</BSButton>
     <span><small> you can support the creator of this tool at "VifsVestige" enchanting service</small></span>
 
-    <br/>
-    <BSButton Color="Color.Primary" OnClick="@(e => toggleDropDowns(e, "current"))" Class="dropdown">current partners <i class="oi oi-chevron-@(Toggles["current"]? "bottom" : "left")"/></BSButton>
-    <BSCollapse IsOpen="@Toggles["current"]">
+    <br />
+    <BSButton Color="Color.Primary" OnClick="@(e => toggleDropDowns(e, "partners"))" Class="dropdown">partners <i class="oi oi-chevron-@(Toggles["partners"] ? "bottom" : "left")" /></BSButton>
+    <BSCollapse IsOpen="@Toggles["partners"]">
         <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
             <BSTableHead TableHeadType="TableHeadType.Dark">
                 <tr>
@@ -31,202 +31,169 @@
                 </tr>
             </BSTableHead>
             <tbody>
-                @foreach (var partner in PlayerInfo.PartnerInfo.PartnerInfos.Values) {
+                @foreach (var partner in PlayerInfo.PartnerInfo.PartnersInfo.Values) {
                     <tr>
-                        <th scope="row">@partner.BaseInfo.name</th>
+                        <th scope="row">@partner.Name</th>
                         <td>
                             <BSDropdown>
-                                <BSDropdownToggle>@partner.Display</BSDropdownToggle>
+                                <BSDropdownToggle>@partner.ResType.ToString()</BSDropdownToggle>
                                 <BSDropdownMenu>
-                                    @foreach (string resType in Enum.GetNames(typeof(ResTypes))) {
-                                        <BSDropdownItem @onclick="@(e => OnClick(e, resType, partner.BaseInfo.id))" Href="javascript:void(0);">@resType</BSDropdownItem>
+                                    @foreach (ResTypes resType in Enum.GetValues(typeof(ResTypes))) {
+                                        <BSDropdownItem @onclick="@(e => partner.SetResType(resType))" Href="javascript:void(0);">@resType.ToString()</BSDropdownItem>
                                     }
                                 </BSDropdownMenu>
                             </BSDropdown>
                         </td>
-                        <td>@partner.Stats.ToString("N0")</td>
-                        <td><BSBasicInput @bind-Value="partner.PlayerStat" @onkeyup="partner.UpdateStats" InputType="InputType.Number" /></td>
-                        <td>@partner.Current.Speed / @partner.Current.Seconds</td>
-                        <td>@partner.Current.Intelligence / @partner.Current.IntPercent.ToString("P2")</td>
-                        <td>@partner.Current.TotalStats.ToString("N0")</td>
-                        <td>@partner.Current.ResPre</td>
-                        <td>@partner.Current.ResPerHourPre.ToString("N0")</td>
-                        <td>@partner.New.TotalSpent.ToString("N0")</td>
+                        <td>@partner.PartnerStat.ToString("N0")</td>
+                        <td>@partner.PlayerStat.ToString("N0")</td>
+                        <td>
+                            <div class="input-group">
+                                <input type="number" class="form-control" @bind-value="partner.Speed" @onkeyup="PlayerInfo.PartnerInfo.Update" tabindex="1" />
+                                <div class="input-group-append">
+                                    <div class="input-group-text">@partner.Seconds.ToString("N2")</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <input type="number" class="form-control" @bind-value="partner.Intelligence" @onkeyup="PlayerInfo.PartnerInfo.Update" tabindex="2" />
+                                <div class="input-group-append">
+                                    <div class="input-group-text">@partner.IntPercent.ToString("N2")%</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>@partner.TotalStats.ToString("N0")</td>
+                        <td>@partner.Res</td>
+                        <td>@partner.ResPerHour.ToString("N0")</td>
+                        <td>@partner.Spent.ToString("N0")</td>
                     </tr>
                 }
                 <tr>
                     <th scope="row">Total</th>
                     <th colspan="7"></th>
-                    <th>@PlayerInfo.PartnerInfo.CurrentResHour.ToString("N0")</th>
-                    <th>@PlayerInfo.PartnerInfo.CurrentPrice.ToString("N0")</th>
+                    @*<th>@PlayerInfo.PartnerInfo.CurrentResHour.ToString("N0")</th>
+                        <th>@PlayerInfo.PartnerInfo.CurrentPrice.ToString("N0")</th>*@
                 </tr>
 
             </tbody>
         </BSTable>
     </BSCollapse>
-    <br/>
-    <BSButton Color="Color.Primary" OnClick="@(e => toggleDropDowns(e, "new"))">new partners <i class="oi oi-chevron-@(Toggles["new"]? "bottom" : "left")" /></BSButton>
-    <BSCollapse IsOpen="@Toggles["new"]">
-        <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
-            <BSTableHead TableHeadType="TableHeadType.Dark">
-                <tr>
-                    <th scope="col">name</th>
-                    <th scope="col">speed</th>
-                    <th scope="col">int</th>
-                    <th scope="col">total stats</th>
-                    <th scope="col">res</th>
-                    <th scope="col">res/hour</th>
-                    <th scope="col">Total Spent</th>
-                </tr>
-            </BSTableHead>
-            <tbody>
-                @foreach (var partner in PlayerInfo.PartnerInfo.PartnerInfos.Values) {
-                <tr>
-                    <th scope="row">@(partner.BaseInfo.name) (@partner.Display)</th>
-                    <td>
-                        <div class="input-group">
-                            <input type="number" class="form-control" @bind-value="partner.New.Speed" @onkeyup="PlayerInfo.PartnerInfo.updateNew" tabindex="1" />
-                            <div class="input-group-append">
-                                <div class="input-group-text">@partner.New.Seconds.ToString("N2")</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="input-group">
-                            <input type="number" class="form-control" @bind-value="partner.New.Intelligence" @onkeyup="PlayerInfo.PartnerInfo.updateNew" tabindex="2" />
-                            <div class="input-group-append">
-                                <div class="input-group-text">@partner.New.IntPercent.ToString("N2")%</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td>@partner.New.TotalStats.ToString("N0")</td>
-                    <td>@partner.New.ResPre.ToString("N0")</td>
-                    <td>@partner.New.ResPerHourPre.ToString("N0")</td>
-                    <td>@partner.New.TotalSpent.ToString("N0")</td>
-                </tr>
-                }
-            <tr>
-                <th scope="col">Total</th>
-                <th colspan="4"></th>
-                <th>@PlayerInfo.PartnerInfo.NewResHour.ToString("N0")</th>
-                <th>@PlayerInfo.PartnerInfo.NewPrice.ToString("N0")</th>
-            </tr>
+    <br />
+    <BSButton Color="Color.Primary" OnClick="@(e => toggleDropDowns(e, "boosts"))">boosts <i class="oi oi-chevron-@(Toggles["boosts"] ? "bottom" : "left")" /></BSButton>
+    <BSCollapse IsOpen="@Toggles["boosts"]">
 
-            </tbody>
-        </BSTable>
-        <span>
-            Current Total (@PlayerInfo.PartnerInfo.CurrentPrice.ToString("N0")) - New Total(@PlayerInfo.PartnerInfo.NewPrice.ToString("N0")) - Bound Gold (@PlayerInfo.BaseInfo.currency.shattered_partner_gold.ToString("N0")) =
-            Needed <b>@((PlayerInfo.PartnerInfo.NewPrice - PlayerInfo.PartnerInfo.CurrentPrice - PlayerInfo.BaseInfo.currency.shattered_partner_gold).ToString("N0"))</b>
-        </span>
-    </BSCollapse>
-    <br/>
-    <BSButton Color="Color.Primary" OnClick="@(e => toggleDropDowns(e, "boost"))">boosts <i class="oi oi-chevron-@(Toggles["boost"]? "bottom" : "left")" /></BSButton>
-    <BSCollapse IsOpen="@Toggles["boost"]">
+        <BSRow>
+            <BSCol SM="3">
+                <BSBasicInput @bind-Value="PlayerInfo.PartnerInfo.GlobalInfo.Vip" @onchange="PlayerInfo.PartnerInfo.Update" InputType="InputType.Checkbox" />
+            </BSCol>
+            <BSCol SM="3">
+                <BSBasicInput @bind-Value="PlayerInfo.PartnerInfo.GlobalInfo.Tax" @oninput="@(e => TaxUpdate(e))" InputType="InputType.Number" />
+            </BSCol>
+            <BSCol SM="3">
+                <div class="input-group">
+                    <input type="number" class="form-control" @bind-value="PlayerInfo.PartnerInfo.GlobalInfo.VillageLevel" @onkeyup="PlayerInfo.PartnerInfo.Update" />
+                    <div class="input-group-append">
+                        <div class="input-group-text">@(PlayerInfo.PartnerInfo.GlobalInfo.VillageBoost.ToString("N0"))%</div>
+                    </div>
+                </div>
+            </BSCol>
+        </BSRow>
+        <br />
         <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
             <BSTableHead TableHeadType="TableHeadType.Dark">
                 <tr>
-                    <th scope="col">name</th>
+                    <th scope="col">Res Type</th>
                     <th scope="col">relic boost</th>
                     <th scope="col">house</th>
                     <th scope="col">enchants</th>
-                    <th scope="col">village boost</th>
-                    <th scope="col">vip</th>
-                    <th scope="col">level</th>
-                    <th scope="col">kingdom</th>
-                    <th scope="col">tax</th>
-                    <th scope="col">res</th>
-                    <th scope="col">after tax</th>
-                    <th scope="col">res/hour</th>
                 </tr>
             </BSTableHead>
             <tbody>
-                @foreach (var partner in PlayerInfo.PartnerInfo.PartnerInfos.Values) {
+                @foreach (var boost in PlayerInfo.PartnerInfo.BoostsInfo.Values) {
+                    <tr>
+                        <th scope="row">@boost.ResType.ToString()</th>
+                        <td>
+                            <div class="input-group">
+                                <input type="number" class="form-control" @bind-value="boost.RelicLevel" @onkeyup="PlayerInfo.PartnerInfo.Update" tabindex="3" />
+                                <div class="input-group-append">
+                                    <div class="input-group-text">@(boost.RelicBoost.ToString("N2"))%</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <input type="number" class="form-control" @bind-value="boost.HouseLevel" @onkeyup="PlayerInfo.PartnerInfo.Update" tabindex="4" />
+                                <div class="input-group-append">
+                                    <div class="input-group-text">@(boost.HouseBoost.ToString("N0"))%</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>@boost.EnchantBoost</td>
+                    </tr>
+                }
+            </tbody>
+        </BSTable>
+    </BSCollapse>
+    <br />
+    <BSButton Color="Color.Primary" OnClick="@(e => toggleDropDowns(e, "pets"))">pets <i class="oi oi-chevron-@(Toggles["pets"] ? "bottom" : "left")" /></BSButton>
+    <BSCollapse IsOpen="@Toggles["pets"]">
+        <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
+            <BSTableHead TableHeadType="TableHeadType.Dark">
                 <tr>
-                    <th scope="row">@(partner.BaseInfo.name) (@partner.Display)</th>
-                    <td>
-                        <div class="input-group">
-                            <input type="number" class="form-control" @bind-value="partner.Boost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" tabindex="3" />
-                            <div class="input-group-append">
-                                <div class="input-group-text">@((partner.Boost * .025).ToString("N2"))%</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="input-group">
-                            <input type="number" class="form-control" @bind-value="partner.HouseBoost" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" tabindex="4" />
-                            <div class="input-group-append">
-                                <div class="input-group-text">@(partner.BoostedHouseBoost.ToString("N0"))%</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td>@partner.EnchantBoost</td>
-                    <td>
-                        <div class="input-group">
-                            <input type="number" class="form-control" @bind-value="PlayerInfo.BaseInfo.village.boosts.mill" @onkeyup="PlayerInfo.PartnerInfo.UpdateBoosts" tabindex="5" />
-                            <div class="input-group-append">
-                                <div class="input-group-text">@(partner.BoostedVillageBoost.ToString("N0"))%</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td><BSBasicInput Class="ml-auto" @bind-Value="PlayerInfo.Vip" @onchange="PlayerInfo.PartnerInfo.UpdateBoosts" InputType="InputType.Checkbox" /></td>
-                    <td>@partner.Level</td>
-                    <td>@PlayerInfo.PartnerInfo.KingdomBonus</td>
-                    <td>
-                        <div class="input-group">
-                            <input type="number" class="form-control" @bind-value="PlayerInfo.PartnerInfo.Tax" @oninput="@(e => TaxUpdate(e))"  tabindex="6" />
-                            <div class="input-group-append">
-                                <div class="input-group-text">@partner.Taxed</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td>@partner.Res.ToString("N2") (@Math.Round(partner.Res).ToString("N0"))</td>
-                    <td>@partner.ResPostTax.ToString("N0")</td>
-                    <td>@partner.ResHour.ToString("N0")</td>
+                    <th scope="col">name</th>
+                    <th>res</th>
+                    <th>level</th>
+                    <th>food/hour</th>
                 </tr>
+            </BSTableHead>
+            <tbody>
+                @foreach (var pet in PlayerInfo.PartnerInfo.PetsInfo.Values) {
+                    <tr>
+                        <th scope="auto">@pet.Name</th>
+                        <td>@pet.ResType.ToString()</td>
+                        <td>
+                            <div class="input-group">
+                                <input type="number" class="form-control" @bind-value="pet.Tier" @onkeyup="PlayerInfo.PartnerInfo.Update" />
+                                <div class="input-group-append">
+                                    <div class="input-group-text">@pet.PetFood.ToString("N0")</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>@pet.PetFoodPerHour</td>
+                    </tr>
                 }
             </tbody>
         </BSTable>
     </BSCollapse>
     <br/>
-    <BSButton Color="Color.Primary" OnClick="@(e => toggleDropDowns(e, "final"))">final <i class="oi oi-chevron-@(Toggles["final"]? "bottom" : "left")" /></BSButton>
+    <BSButton Color="Color.Primary" OnClick="@(e => toggleDropDowns(e, "final"))">final <i class="oi oi-chevron-@(Toggles["final"] ? "bottom" : "left")" /></BSButton>
     <BSCollapse IsOpen="@Toggles["final"]">
         <BSTable IsStriped="true" IsSmall="true" IsBordered="true">
             <BSTableHead TableHeadType="TableHeadType.Dark">
                 <tr>
-                    <th scope="col">type</th>
-                    <th>pet food</th>
+                    <th scope="col">name</th>
+                    <th>type</th>
+                    <th>total/hour</th>
                     <th>taxed/hour</th>
-                    <th>final/hour</th>
+                    <th>res/hour</th>
+                    <th>total/day</th>
                     <th>taxed/day</th>
                     <th>final/day</th>
                 </tr>
             </BSTableHead>
             <tbody>
-                @foreach (var partner in PlayerInfo.PartnerInfo.FinalPartners) {
+                @foreach (var partner in PlayerInfo.PartnerInfo.PartnersIncomeInfo.Values) {
                     <tr>
-                        <th scope="auto">@partner.Key</th>
-                        <td>
-                            <div class="input-group">
-                                <input type="number" class="form-control" @bind-value="partner.Value.PetFood" @onkeyup="PlayerInfo.PartnerInfo.UpdateFinals" />
-                                <div class="input-group-append">
-                                    <div class="input-group-text">@partner.Value.RealPetFood - @partner.Value.PetFoodPerHour.ToString("N0")</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>@partner.Value.TaxedPerHour.ToString("N0")</td>
-                        <td>@partner.Value.FinalPerHour.ToString("N0")</td>
-                        <td>@((partner.Value.TaxedPerHour * 24).ToString("N0"))</td>
-                        <td>@((partner.Value.FinalPerHour * 24).ToString("N0"))</td>
+                        <th scope="auto">@partner.PartnerInfo.Name</th>
+                        <td>@partner.PartnerInfo.ResType.ToString()</td>
+                        <th>@partner.Res.ToString("N0")</th>
+                        <td>@partner.Taxed.ToString("N0")</td>
+                        <td>@partner.ResPostTax.ToString("N0")</td>
+                        <th>@((24 * partner.Res).ToString("N0"))</th>
+                        <td>@((24 * partner.Taxed).ToString("N0"))</td>
+                        <td>@((24 * partner.ResPostTax).ToString("N0"))</td>
                     </tr>
                 }
-                <tr>
-                    <th scope="col">Total</th>
-                    <th>@PlayerInfo.PartnerInfo.FinalTotals["petFood"].ToString("N0")</th>
-                    <th>@PlayerInfo.PartnerInfo.FinalTotals["taxed"].ToString("N0")</th>
-                    <th>@PlayerInfo.PartnerInfo.FinalTotals["final"].ToString("N0")</th>
-                    <th>@((PlayerInfo.PartnerInfo.FinalTotals["taxed"] * 24).ToString("N0"))</th>
-                    <th>@((PlayerInfo.PartnerInfo.FinalTotals["final"] * 24).ToString("N0"))</th>
-                </tr>
             </tbody>
         </BSTable>
     </BSCollapse>
@@ -235,21 +202,17 @@
 @code {
     public string name;
     Dictionary<string, bool> Toggles = new Dictionary<string, bool> {
-                { "current", true },
-                { "new", true },
-                { "boost", true },
+                { "partners", true },
+                { "boosts", true },
+        { "pets", true },
                 { "final", true },
             };
 
     protected async void TaxUpdate(ChangeEventArgs e) {
         var tax = Queslar.UpdateTax(e.Value.ToString());
-        PlayerInfo.PartnerInfo.Tax = tax;
-        PlayerInfo.PartnerInfo.UpdateBoosts();
+        PlayerInfo.PartnerInfo.GlobalInfo.Tax = tax;
+        PlayerInfo.PartnerInfo.Update();
         await localStorage.SetItemAsync("Tax", tax);
-    }
-
-    protected void OnClick(MouseEventArgs e, string resType, int partnerId) {
-        PlayerInfo.PartnerInfo.SetRes(partnerId, (ResTypes)Enum.Parse(typeof(ResTypes), resType));
     }
 
     protected async void Refresh(MouseEventArgs e) {
@@ -275,8 +238,8 @@
     private async void checkTax() {
         var tax = await localStorage.GetItemAsync<string>("Tax");
         if (tax != null && tax != "" && tax != "0") {
-            PlayerInfo.PartnerInfo.Tax = Queslar.UpdateTax(tax);
-            PlayerInfo.PartnerInfo.UpdateBoosts();
+            PlayerInfo.PartnerInfo.GlobalInfo.Tax = Queslar.UpdateTax(tax);
+            PlayerInfo.PartnerInfo.Update();
         }
     }
 
