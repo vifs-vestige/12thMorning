@@ -14,13 +14,12 @@ namespace _12thMorning.Libraries.Queslar.Partners {
 
         public PartnerInfo PartnerInfo;
         private PartnerBoostInfo BoostInfo;
-        private List<PetInfo> PetsInfo;
         private PartnerGlobalInfo GlobalInfo;
 
-        public PartnerIncomeInfo(PartnerInfo partnerInfo, PartnerBoostInfo boostInfo, List<PetInfo> petsInfo, PartnerGlobalInfo globalInfo) {
+        public PartnerIncomeInfo(PartnerInfo partnerInfo, PartnerBoostInfo boostInfo, PartnerGlobalInfo globalInfo) {
             PartnerInfo = partnerInfo;
+            ResType = partnerInfo.ResType;
             BoostInfo = boostInfo;
-            PetsInfo = petsInfo;
             GlobalInfo = globalInfo;
             Update();
         }

@@ -12,6 +12,7 @@ namespace _12thMorning.Libraries.Queslar.Partners {
         public PartnerGlobalInfo GlobalInfo;
 
         public Dictionary<int, PartnerIncomeInfo> PartnersIncomeInfo = new Dictionary<int, PartnerIncomeInfo>();
+        public Dictionary<ResTypes, PartnerTotalInfo> Totals = new Dictionary<ResTypes, PartnerTotalInfo>();
 
         public long TotalSpent;
         public int VillageLevel;
@@ -28,16 +29,22 @@ namespace _12thMorning.Libraries.Queslar.Partners {
                 var temp = new PartnerInfo(partner, info.BaseInfo.stats);
                 PartnersInfo[partner.id] = temp;
             }
-
-            UpdatePartnerIncome();
+            foreach (var partner in PartnersInfo) {
+                var resType = partner.Value.ResType;
+                PartnersIncomeInfo[partner.Key] = new PartnerIncomeInfo(partner.Value, BoostsInfo[resType], GlobalInfo);
+            }
+            foreach (ResTypes res in Enum.GetValues(typeof(ResTypes))) {
+                Totals[res] = new PartnerTotalInfo(res, PartnersIncomeInfo.Values.ToList(), PetsInfo.Values.ToList());
+            }
             Update();
         }
 
         public void Update() {
-            foreach(var partner in PartnersInfo.Values) {
+            TotalSpent = 0;
+            foreach (var partner in PartnersInfo.Values) {
                 partner.Update();
+                TotalSpent = partner.Spent;
             }
-            UpdateTotalSpent();
             foreach (var pet in PetsInfo.Values) {
                 pet.Update();
             }
@@ -48,27 +55,8 @@ namespace _12thMorning.Libraries.Queslar.Partners {
             foreach(var partner in PartnersIncomeInfo.Values) {
                 partner.Update();
             }
-        }
-
-        public void UpdatePartnerIncome() {
-            PartnersIncomeInfo = new Dictionary<int, PartnerIncomeInfo>();
-            var petsInfo = new Dictionary<ResTypes, List<PetInfo>>();
-            foreach(var pet in PetsInfo) {
-                if(!petsInfo.ContainsKey(pet.Value.ResType)) {
-                    petsInfo[pet.Value.ResType] = new List<PetInfo>();
-                }
-                petsInfo[pet.Value.ResType].Add(pet.Value);
-            }
-            foreach(var partner in PartnersInfo) {
-                var resType = partner.Value.ResType;
-                PartnersIncomeInfo[partner.Key] = new PartnerIncomeInfo(partner.Value, BoostsInfo[resType], petsInfo[resType], GlobalInfo);
-            }
-        }
-
-        private void UpdateTotalSpent() {
-            TotalSpent = 0;
-            foreach (var partner in PartnersInfo.Values) {
-                TotalSpent = partner.Spent;
+            foreach(var total in Totals.Values) {
+                total.update();
             }
         }
 
