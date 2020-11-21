@@ -8,9 +8,9 @@ using _12thMorning.Models.Queslar;
 namespace _12thMorning.Libraries.Queslar.Partners {
     public class PartnerTotalInfo {
         public ResTypes ResType;
-        public double Res;
-        public long Taxed;
-        public long Pets;
+        public double Res { get { return PartnersIncome.Where(x => x.ResType == ResType).Sum(x => x.Res); } }
+        public long Taxed { get { return PartnersIncome.Where(x => x.ResType == ResType).Sum(x => x.Taxed); } }
+        public long Pets { get { return PetsInfo.Where(x => x.ResType == ResType).Sum(x => x.PetFoodPerHour); } }
 
 
         private List<PartnerIncomeInfo> PartnersIncome;
@@ -18,33 +18,9 @@ namespace _12thMorning.Libraries.Queslar.Partners {
 
 
         public PartnerTotalInfo(ResTypes res, List<PartnerIncomeInfo> partners, List<PetInfo> pets) {
-            PartnersIncome = new List<PartnerIncomeInfo>();
-            PetsInfo = new List<PetInfo>();
+            PartnersIncome = partners;
+            PetsInfo = pets;
             ResType = res;
-
-            foreach(var partner in partners) {
-                if(partner.ResType == res) {
-                    PartnersIncome.Add(partner);
-                }
-            }
-            foreach(var pet in pets) {
-                if(pet.ResType == res) {
-                    PetsInfo.Add(pet);
-                }
-            }
-        }
-
-        public void update() {
-            Res = 0;
-            Taxed = 0;
-            Pets = 0;
-            foreach(var partner in PartnersIncome) {
-                Res += partner.Res;
-                Taxed += partner.Taxed;
-            }
-            foreach(var pet in PetsInfo) {
-                Pets += pet.PetFoodPerHour;
-            }
         }
 
 

@@ -70,9 +70,10 @@
                 }
                 <tr>
                     <th scope="row">Total</th>
-                    <th colspan="7"></th>
-                    @*<th>@PlayerInfo.PartnerInfo.CurrentResHour.ToString("N0")</th>
-                        <th>@PlayerInfo.PartnerInfo.CurrentPrice.ToString("N0")</th>*@
+                    <th colspan="6"></th>
+                    <th>@PlayerInfo.PartnerInfo.PartnersInfo.Sum(x => x.Value.Res).ToString("N0")</th>
+                    <th>@PlayerInfo.PartnerInfo.PartnersInfo.Sum(x => x.Value.ResPerHour).ToString("N0")</th>
+                    <th>@PlayerInfo.PartnerInfo.PartnersInfo.Sum(x => x.Value.Spent).ToString("N0")</th>
                 </tr>
 
             </tbody>
@@ -167,7 +168,7 @@
                                 </div>
                             </div>
                         </td>
-                        <td>@pet.PetFoodPerHour</td>
+                        <td>@pet.PetFoodPerHour.ToString("N0")</td>
                     </tr>
                 }
             </tbody>
@@ -202,6 +203,16 @@
                         <td>@((24 * partner.ResPostTax).ToString("N0"))</td>
                     </tr>
                 }
+                <tr>
+                    <th scope="auto">totals</th>
+                    <th></th>
+                    <th>@PlayerInfo.PartnerInfo.PartnersIncomeInfo.Values.Sum(x => x.Res).ToString("N0")</th>
+                    <th>@PlayerInfo.PartnerInfo.PartnersIncomeInfo.Values.Sum(x => x.Taxed).ToString("N0")</th>
+                    <th>@PlayerInfo.PartnerInfo.PartnersIncomeInfo.Values.Sum(x => x.ResPostTax).ToString("N0")</th>
+                    <th>@((PlayerInfo.PartnerInfo.PartnersIncomeInfo.Values.Sum(x => x.Res) * 24).ToString("N0"))</th>
+                    <th>@((PlayerInfo.PartnerInfo.PartnersIncomeInfo.Values.Sum(x => x.Taxed) * 24).ToString("N0"))</th>
+                    <th>@((PlayerInfo.PartnerInfo.PartnersIncomeInfo.Values.Sum(x => x.ResPostTax) * 24).ToString("N0"))</th>
+                </tr>
             </tbody>
         </BSTable>
     </BSCollapse>
@@ -236,6 +247,17 @@
                         <td>@(((total.Res - total.Taxed - total.Pets) * 24).ToString("N0"))</td>
                     </tr>
                 }
+            <tr>
+                <th scope="auto">totals</th>
+                <th>@PlayerInfo.PartnerInfo.Totals.Values.Sum(x => x.Res).ToString("N0")</th>
+                <th>@PlayerInfo.PartnerInfo.Totals.Values.Sum(x => x.Taxed).ToString("N0")</th>
+                <th>@PlayerInfo.PartnerInfo.Totals.Values.Sum(x => x.Pets).ToString("N0")</th>
+                <th>@PlayerInfo.PartnerInfo.Totals.Values.Sum(x => x.Res - x.Taxed - x.Pets).ToString("N0")</th>
+                <th>@((PlayerInfo.PartnerInfo.Totals.Values.Sum(x => x.Res) * 24).ToString("N0"))</th>
+                <th>@((PlayerInfo.PartnerInfo.Totals.Values.Sum(x => x.Taxed) * 24).ToString("N0"))</th>
+                <th>@((PlayerInfo.PartnerInfo.Totals.Values.Sum(x => x.Pets) * 24).ToString("N0"))</th>
+                <th>@((PlayerInfo.PartnerInfo.Totals.Values.Sum(x => x.Res - x.Taxed - x.Pets) * 24).ToString("N0"))</th>
+            </tr>
             </tbody>
         </BSTable>
     </BSCollapse>

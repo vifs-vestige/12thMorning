@@ -9,33 +9,25 @@ namespace _12thMorning.Libraries.Queslar.Partners {
     public class PetInfo {
         public ResTypes ResType;
         public int Tier;
-        public long PetFood;
-        public long PetFoodPerHour;
-        public string Name;
+        public long PetFood { get { return QueslarHelper.GetBoostedBoost(Tier, 10) + 1; } }
+        public long PetFoodPerHour {  get { return PetFood * 600; } }
+        public string Name { get { return _Pet.name; } }
 
         private Pet _Pet;
 
         public PetInfo(Pet pet) {
             UpdateSource(pet);
-            Update();
         }
 
         public void UpdateSource(Pet pet) {
             _Pet = pet;
             Tier = pet.efficiency_tier;
-            Name = pet.name;
             ResType = (ResTypes)Enum.Parse(typeof(ResTypes), pet.active_food);
         }
 
         public void SetResType(ResTypes res) {
             ResType = res;
         }
-
-        public void Update() {
-            PetFood = QueslarHelper.GetBoostedBoost(Tier, 10) + 1;
-            PetFoodPerHour = PetFood * 600;
-        }
-
 
     }
 }

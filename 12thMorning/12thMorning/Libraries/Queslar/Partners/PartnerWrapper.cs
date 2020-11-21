@@ -14,9 +14,6 @@ namespace _12thMorning.Libraries.Queslar.Partners {
         public Dictionary<int, PartnerIncomeInfo> PartnersIncomeInfo = new Dictionary<int, PartnerIncomeInfo>();
         public Dictionary<ResTypes, PartnerTotalInfo> Totals = new Dictionary<ResTypes, PartnerTotalInfo>();
 
-        public long TotalSpent;
-        public int VillageLevel;
-
         public PartnerWrapper(FullWrapper info, int tax) {
             foreach(ResTypes res in Enum.GetValues(typeof(ResTypes))) {
                 BoostsInfo[res] = new PartnerBoostInfo(info.BaseInfo.house, info.BaseInfo.equipmentEquipped, info.BaseInfo.boosts, res);
@@ -26,38 +23,17 @@ namespace _12thMorning.Libraries.Queslar.Partners {
             }
             GlobalInfo = new PartnerGlobalInfo(info.BaseInfo.kingdom, info.BaseInfo.village, tax, info.Vip);
             foreach (var partner in info.BaseInfo.partners) {
-                var temp = new PartnerInfo(partner, info.BaseInfo.stats);
-                PartnersInfo[partner.id] = temp;
+                PartnersInfo[partner.id] = new PartnerInfo(partner, info.BaseInfo.stats);
             }
             foreach (var partner in PartnersInfo) {
-                var resType = partner.Value.ResType;
-                PartnersIncomeInfo[partner.Key] = new PartnerIncomeInfo(partner.Value, BoostsInfo[resType], GlobalInfo);
+                PartnersIncomeInfo[partner.Key] = new PartnerIncomeInfo(partner.Value, BoostsInfo[partner.Value.ResType], GlobalInfo);
             }
             foreach (ResTypes res in Enum.GetValues(typeof(ResTypes))) {
                 Totals[res] = new PartnerTotalInfo(res, PartnersIncomeInfo.Values.ToList(), PetsInfo.Values.ToList());
             }
-            Update();
         }
 
         public void Update() {
-            TotalSpent = 0;
-            foreach (var partner in PartnersInfo.Values) {
-                partner.Update();
-                TotalSpent = partner.Spent;
-            }
-            foreach (var pet in PetsInfo.Values) {
-                pet.Update();
-            }
-            foreach(var boost in BoostsInfo.Values) {
-                boost.Update();
-            }
-            GlobalInfo.Update();
-            foreach(var partner in PartnersIncomeInfo.Values) {
-                partner.Update();
-            }
-            foreach(var total in Totals.Values) {
-                total.update();
-            }
         }
 
     }

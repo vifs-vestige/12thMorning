@@ -10,10 +10,10 @@ namespace _12thMorning.Libraries.Queslar.Partners {
         public ResTypes ResType;
         public int HouseLevel;
         public int RelicLevel;
-        public double RelicBoost;
+        public double RelicBoost { get { return RelicLevel * .025; } }
 
-        public double EnchantBoost;
-        public long HouseBoost;
+        public double EnchantBoost { get { return GetEnchantBoost(); } }
+        public long HouseBoost { get { return QueslarHelper.GetBoostedBoost(HouseLevel, 15); } }
 
         private House _House;
         private List<EquipmentEquipped> _Equipment;
@@ -27,30 +27,24 @@ namespace _12thMorning.Libraries.Queslar.Partners {
             _House = house;
             _Equipment = equipment;
             _Boosts = boosts;
-            SetResType(resType);
+            ResType = resType;
+            RelicLevel = ResType.GetPartner(_Boosts); 
+            HouseLevel = ResType.GetPartner(_House);
         }
 
-        public void SetResType(ResTypes res) {
-            ResType = res;
-            RelicLevel = res.GetPartner(_Boosts);
-            HouseLevel = res.GetPartner(_House);
-            EnchantBoost = 0;
+        private double GetEnchantBoost() {
+            double enchantBoost = 0;
             foreach (var x in _Equipment) {
                 if (x.enchant_type == ResType.ToString().ToLower()) {
                     var toAdd = (double)(Math.Pow((double)x.enchant_value, 0.425) / 2);
                     if (x.player_id == x.enchant_ownership) {
                         toAdd *= 1.25;
                     }
-                    EnchantBoost += toAdd;
+                    enchantBoost += toAdd;
                 }
             }
-            EnchantBoost = Math.Round(EnchantBoost, 2);
-            Update();
+            return enchantBoost;
         }
 
-        public void Update() {
-            HouseBoost = QueslarHelper.GetBoostedBoost(HouseLevel, 15);
-            RelicBoost = RelicLevel * .025;
-        }
     }
 }
