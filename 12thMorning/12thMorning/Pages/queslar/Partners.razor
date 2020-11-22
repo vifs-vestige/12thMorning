@@ -293,9 +293,11 @@
             if (Queslar.Values.ContainsKey(typeof(Full)) && Queslar.Values[typeof(Full)] != null) {
                 checkTax();
                 var toggles = await localStorage.GetItemAsync<Dictionary<string, bool>>("Toggles");
-                foreach (var toggle in toggles) {
-                    if (Toggles.ContainsKey(toggle.Key)) {
-                        Toggles[toggle.Key] = toggle.Value;
+                if (toggles != null) {
+                    foreach (var toggle in toggles) {
+                        if (Toggles.ContainsKey(toggle.Key)) {
+                            Toggles[toggle.Key] = toggle.Value;
+                        }
                     }
                 }
                 StateHasChanged();
