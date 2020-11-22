@@ -182,6 +182,7 @@
                 <tr>
                     <th scope="col">name</th>
                     <th>type</th>
+                    <th>res</th>
                     <th>total/hour</th>
                     <th>taxed/hour</th>
                     <th>res/hour</th>
@@ -196,11 +197,12 @@
                         <th scope="auto">@partner.PartnerInfo.Name</th>
                         <td>@partner.PartnerInfo.ResType.ToString()</td>
                         <td>@partner.Res.ToString("N0")</td>
-                        <td>@partner.Taxed.ToString("N0")</td>
-                        <td>@partner.ResPostTax.ToString("N0")</td>
+                        <td>@partner.ResPerHour.ToString("N0")</td>
+                        <td>@partner.TaxedPerHour.ToString("N0")</td>
+                        <td>@partner.ResPostTaxPerHour.ToString("N0")</td>
                         <td>@((24 * partner.Res).ToString("N0"))</td>
                         <td>@((24 * partner.Taxed).ToString("N0"))</td>
-                        <td>@((24 * partner.ResPostTax).ToString("N0"))</td>
+                        <td>@((24 * partner.ResPostTaxPerHour).ToString("N0"))</td>
                     </tr>
                 }
                 <tr>
@@ -208,10 +210,10 @@
                     <th></th>
                     <th>@PlayerInfo.PartnerInfo.PartnersIncomeInfo.Values.Sum(x => x.Res).ToString("N0")</th>
                     <th>@PlayerInfo.PartnerInfo.PartnersIncomeInfo.Values.Sum(x => x.Taxed).ToString("N0")</th>
-                    <th>@PlayerInfo.PartnerInfo.PartnersIncomeInfo.Values.Sum(x => x.ResPostTax).ToString("N0")</th>
+                    <th>@PlayerInfo.PartnerInfo.PartnersIncomeInfo.Values.Sum(x => x.ResPostTaxPerHour).ToString("N0")</th>
                     <th>@((PlayerInfo.PartnerInfo.PartnersIncomeInfo.Values.Sum(x => x.Res) * 24).ToString("N0"))</th>
                     <th>@((PlayerInfo.PartnerInfo.PartnersIncomeInfo.Values.Sum(x => x.Taxed) * 24).ToString("N0"))</th>
-                    <th>@((PlayerInfo.PartnerInfo.PartnersIncomeInfo.Values.Sum(x => x.ResPostTax) * 24).ToString("N0"))</th>
+                    <th>@((PlayerInfo.PartnerInfo.PartnersIncomeInfo.Values.Sum(x => x.ResPostTaxPerHour) * 24).ToString("N0"))</th>
                 </tr>
             </tbody>
         </BSTable>

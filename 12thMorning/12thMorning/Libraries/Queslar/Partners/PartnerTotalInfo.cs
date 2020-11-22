@@ -8,8 +8,8 @@ using _12thMorning.Models.Queslar;
 namespace _12thMorning.Libraries.Queslar.Partners {
     public class PartnerTotalInfo {
         public ResTypes ResType;
-        public double Res { get { return PartnersIncome.Where(x => x.ResType == ResType).Sum(x => x.Res); } }
-        public long Taxed { get { return PartnersIncome.Where(x => x.ResType == ResType).Sum(x => x.Taxed); } }
+        public double Res { get { return PartnersIncome.Where(x => x.ResType == ResType).Sum(x => x.ResPerHour); } }
+        public long Taxed { get { return PartnersIncome.Where(x => x.ResType == ResType).Sum(x => x.TaxedPerHour); } }
         public long Pets { get { return PetsInfo.Where(x => x.ResType == ResType).Sum(x => x.PetFoodPerHour); } }
 
 

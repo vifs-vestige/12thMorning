@@ -10,7 +10,7 @@ namespace _12thMorning.Libraries.Queslar.Partners {
         public bool Vip;
         public long KingdomResourceBoost;
         public int KingdomVillageBoost;
-        public int VIllageKingdomBoost { get { return (int)Math.Round((VillageBoost * KingdomVillageBoost) / 10000.0, 2); } }
+        public double VIllageKingdomBoost { get { return Math.Round((VillageBoost * KingdomVillageBoost) / 10000.0, 2); } }
         public int VillageLevel;
         public long VillageBoost { get { return QueslarHelper.GetBoostedBoost(VillageLevel, 20); } }
 
