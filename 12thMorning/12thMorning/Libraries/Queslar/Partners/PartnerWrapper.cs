@@ -14,6 +14,8 @@ namespace _12thMorning.Libraries.Queslar.Partners {
         public Dictionary<int, PartnerIncomeInfo> PartnersIncomeInfo = new Dictionary<int, PartnerIncomeInfo>();
         public Dictionary<ResTypes, PartnerTotalInfo> Totals = new Dictionary<ResTypes, PartnerTotalInfo>();
 
+        public PartnerDifference Difference;
+
         public PartnerWrapper(FullWrapper info, int tax) {
             foreach(ResTypes res in Enum.GetValues(typeof(ResTypes))) {
                 BoostsInfo[res] = new PartnerBoostInfo(info.BaseInfo.house, info.BaseInfo.equipmentEquipped, info.BaseInfo.boosts, res);
@@ -31,6 +33,8 @@ namespace _12thMorning.Libraries.Queslar.Partners {
             foreach (ResTypes res in Enum.GetValues(typeof(ResTypes))) {
                 Totals[res] = new PartnerTotalInfo(res, PartnersIncomeInfo.Values.ToList(), PetsInfo.Values.ToList());
             }
+
+            Difference = new PartnerDifference(PartnersInfo.Values.ToList(), Totals);
         }
 
         public void Update() {

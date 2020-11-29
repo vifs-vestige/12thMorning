@@ -11,6 +11,7 @@ namespace _12thMorning.Libraries.Queslar.Partners {
         public double Res { get { return PartnersIncome.Where(x => x.ResType == ResType).Sum(x => x.ResPerHour); } }
         public long Taxed { get { return PartnersIncome.Where(x => x.ResType == ResType).Sum(x => x.TaxedPerHour); } }
         public long Pets { get { return PetsInfo.Where(x => x.ResType == ResType).Sum(x => x.PetFoodPerHour); } }
+        public double Outcome { get { return Res - Taxed - Pets; } }
 
 
         private List<PartnerIncomeInfo> PartnersIncome;

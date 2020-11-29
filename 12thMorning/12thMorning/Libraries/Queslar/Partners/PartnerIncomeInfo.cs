@@ -11,7 +11,7 @@ namespace _12thMorning.Libraries.Queslar.Partners {
         public double ResPostTaxPerHour { get { return ResPerHour - TaxedPerHour; } }
         public double ResPerHour { get { return (long)Math.Floor((3600.0 / PartnerInfo.Seconds) * Res); } }
         public long TaxedPerHour { get { return (long)Math.Floor((3600.0 / PartnerInfo.Seconds) * Taxed); } }
-        public ResTypes ResType;
+        public ResTypes ResType { get { return PartnerInfo.ResType; } }
 
 
         public PartnerInfo PartnerInfo;
@@ -21,7 +21,6 @@ namespace _12thMorning.Libraries.Queslar.Partners {
 
         public PartnerIncomeInfo(PartnerInfo partnerInfo, PartnerBoostInfo boostInfo, PartnerGlobalInfo globalInfo) {
             PartnerInfo = partnerInfo;
-            ResType = partnerInfo.ResType;
             BoostInfo = boostInfo;
             GlobalInfo = globalInfo;
         }
