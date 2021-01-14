@@ -7,7 +7,7 @@ namespace _12thMorning.Models.Queslar.Player {
     public class Currency {
         public int id { get; set; }
         public int player_id { get; set; }
-        public int gold { get; set; }
+        public double gold { get; set; }
         public int credits { get; set; }
         public int relics { get; set; }
         public int meat { get; set; }

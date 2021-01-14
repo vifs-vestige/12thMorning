@@ -21,11 +21,18 @@
 @code {
     List<item> ListGroup = new List<item> {
         new item {
+            Header = "v.1.3.3",
+            Updated = "14/01/2021",
+            Contents = new List<string> {
+                "small bug fix with api key not loading"
+            }
+        },
+        new item {
             Header = "v1.3.2",
             Updated = "29/11/2020",
             Contents = new List<string> {
                 "made partner and player stat updatable",
-                "fixed bug with switching res types", 
+                "fixed bug with switching res types",
                 "added buttons to add speed/int to all partners",
                 "added difference table to show differences on upgrade cost and res",
                 "moved dropdown buttons to top"
@@ -157,6 +164,6 @@
     class item {
         public string Updated { get; set; }
         public string Header { get; set; }
-        public List<String> Contents { get; set; }
+        public List<string> Contents { get; set; }
     }
 }
