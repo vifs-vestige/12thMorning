@@ -17,7 +17,6 @@
 @code {
     [Parameter]
     public string Type { get; set; }
-    private string hidden = "fixed-right hidden";
 
     public List<DateTime> GetMonths() {
         return BlogDataService.GetBlogMonths(Type);

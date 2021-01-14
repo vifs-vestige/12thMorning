@@ -67,7 +67,6 @@
         }
     </BSRow>
 }
-@thingy
 
 @code {
     [Parameter]
@@ -78,7 +77,6 @@
     public string Player { get; set; }
     private List<EnchantServiceInfo> EnchantInfo;
     private FormsModel EnchantForm = new FormsModel();
-    private string thingy;
 
     protected override async void OnInitialized() {
         if (Player != null) {

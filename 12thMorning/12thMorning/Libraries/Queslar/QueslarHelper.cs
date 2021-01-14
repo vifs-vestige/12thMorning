@@ -17,25 +17,24 @@ namespace _12thMorning.Libraries.Queslar {
         }
 
         public static int GetStat<T>(this ResTypes resType, T thing)
-            where T : IStats => resType switch
-            {
+            where T : IStats => resType switch {
                 ResTypes.meat => thing.strength,
                 ResTypes.iron => thing.health,
                 ResTypes.wood => thing.agility,
-                ResTypes.stone => thing.dexterity
+                ResTypes.stone => thing.dexterity,
+                _ => throw new NotImplementedException()
             };
 
         public static int GetPartner<T>(this ResTypes resType, T thing)
-            where T : IPartners => resType switch
-        {
-            ResTypes.meat => thing.hunting,
-            ResTypes.iron => thing.mining,
-            ResTypes.wood => thing.woodcutting,
-            ResTypes.stone => thing.stonecarving
-        };
+            where T : IPartners => resType switch {
+                ResTypes.meat => thing.hunting,
+                ResTypes.iron => thing.mining,
+                ResTypes.wood => thing.woodcutting,
+                ResTypes.stone => thing.stonecarving,
+                _ => throw new NotImplementedException()
+            };
 
-        public static InventoryTypes FromInventory(string item_type) => item_type switch
-        {
+        public static InventoryTypes FromInventory(string item_type) => item_type switch {
             "weapon" => InventoryTypes.left_hand_level,
             "dagger" => InventoryTypes.right_hand_level,
             "shield" => InventoryTypes.right_hand_level,
@@ -44,6 +43,7 @@ namespace _12thMorning.Libraries.Queslar {
             "gloves" => InventoryTypes.right_hand_level,
             "leggings" => InventoryTypes.right_hand_level,
             "boots" => InventoryTypes.right_hand_level,
+            _ => throw new NotImplementedException(),
         };
     }
 }

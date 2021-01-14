@@ -125,7 +125,7 @@ namespace _12thMorning.Services {
                     FullWrapper = new FullWrapper((Full) info);
                     FullWrapper.AddPartnerWrapper(Tax);
                 }
-            } catch (Exception e) {
+            } catch (Exception) {
                 return null;
             }
 
