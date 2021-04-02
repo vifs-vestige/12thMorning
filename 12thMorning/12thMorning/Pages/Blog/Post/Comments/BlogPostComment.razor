@@ -25,10 +25,9 @@
     public int? ReplyTo { get; set; }
     [Parameter]
     public int BlogId { get; set; }
-    private Comment comment;
+    private Comment comment { get; set; } = new Comment();
 
     protected override void OnInitialized() {
-        comment = new Comment();
     }
 
 
