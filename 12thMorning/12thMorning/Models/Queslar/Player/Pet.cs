@@ -13,7 +13,7 @@ namespace _12thMorning.Models.Queslar.Player {
         public string name { get; set; }
         public string active_food { get; set; }
         public int efficiency_tier { get; set; }
-        public int efficiency_lock { get; set; }
+        public bool efficiency_lock { get; set; }
         public int auto_feed { get; set; }
         public int pet_id { get; set; }
         public int strength { get; set; }
