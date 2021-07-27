@@ -14,8 +14,9 @@ namespace _12thMorning.Data {
         public DbSet<QueslarKeys> QueslarKeys { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            optionsBuilder.UseMySql(
-                @"Server=localhost;Database=12thmorning;Uid=12thmorning;");
+            var temp = ServerVersion.AutoDetect("Server=localhost;Database=12thmorning;Uid=12thmorning;");
+
+            optionsBuilder.UseMySql(@"Server=localhost;Database=12thmorning;Uid=12thmorning;", temp);
         }
 
     }
