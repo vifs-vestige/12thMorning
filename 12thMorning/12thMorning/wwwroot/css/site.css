@@ -34,3 +34,8 @@ a.nav-item, .page-item > a {
 input[type="button"] {
     outline:none;
 }
+
+.svg_logo {
+    height: 1.5em;
+    margin-right: 10px;
+}

@@ -1,0 +1,111 @@
+﻿@page "/info"
+@using InfoType = _12thMorning.Models.Enums.InfoType
+
+
+<BSCard CardType="CardType.Card" Alignment="Alignment.Center" Class="border-0">
+    <BSCard CardType="CardType.Body">
+        <BSCard CardType="CardType.Header" Class="border" HeadingSize="HeadingSize.H3">@CurrentItem.Header</BSCard>
+        <BSCard CardType="CardType.Text">
+            @foreach (var item in CurrentItem.Contents) {
+                <p style="margin-top:1rem;">
+                    @((MarkupString)item)
+                </p>
+            }
+        </BSCard>
+        <BSCard CardType="CardType.Footer" Class="border">
+            <BSButtonGroup>
+                @foreach (var item in ListGroup) {
+                    <BSButton Class="@("btn-outline-info " + ((item.Value.Active)? "active" : ""))" Color="Color.None" @onclick="(() => Click(item.Key))">@item.Value.Header</BSButton>
+                }
+            </BSButtonGroup>
+        </BSCard>
+    </BSCard>
+</BSCard>
+
+
+
+@code {
+    protected Item CurrentItem;
+    protected Dictionary<InfoType, Item> ListGroup = new Dictionary<InfoType, Item>();
+
+    protected override void OnInitialized() {
+        var about = new Item() {
+            Header = "about",
+            Active = true,
+            Contents = new List<string> {
+                    "o/ iv here",
+                    "pronouns: {redacted}",
+                    "poly pan-demi nonbinary faekin system",
+                    "gay and neurodivergent af",
+                    "horribly addicted to body mods",
+                    "we do the beep boops and half finish projects"
+                }
+        };
+        ListGroup.Add(InfoType.about, about);
+
+        var links = new Item() {
+            Header = "links",
+            Active = false,
+            Contents = new List<string>()
+        };
+        ListGroup.Add(InfoType.links, links);
+        links.Contents.Add(formatLink("@vifs_vestige", "Twitter", "http://twitter.com/vifs_vestige"));
+        links.Contents.Add(formatLink("vifs_vestige", "Twitch", "http://twitch.com/vifs_vestige"));
+        links.Contents.Add(formatLink("vifs-vestige", "Github", "https://github.com/vifs-vestige"));
+        links.Contents.Add(formatLink("vifs_vestige", "Instagram", "https://instagram.com/vifs_vestige"));
+        links.Contents.Add(formatLink("vifs_vestige", "Patreon", "https://www.patreon.com/vifs_vestige"));
+
+        var faq = new Item() {
+            Header = "faq",
+            Active = false,
+            Contents = new List<string>()
+        };
+        ListGroup.Add(InfoType.faq, faq);
+        faq.Contents.Add(formatQuestion("why is this website so ugly and unfinished", "effort is hard"));
+        faq.Contents.Add(formatQuestion("why do you use we/us", "<a href=\"/blogs/107\">read</a>"));
+        faq.Contents.Add(formatQuestion("okay, but really, what are you pronouns", "{redacted}"));
+        faq.Contents.Add(formatQuestion("will you stop using all lowercase?", "<small><small>no</small></small>"));
+        faq.Contents.Add(formatQuestion("what is your favorite thing to do?", "stare at our monitors for hours, forgeting we have a body"));
+        faq.Contents.Add(formatQuestion("eat the rich?", "aye"));
+
+        var epithets = new Item() {
+            Header = "epithets",
+            Active = false,
+            Contents = new List<string>() {
+                "here's a list of fun things we have ended up calling ourself:<br/><br/>",
+                "dark cyberpunk fairy queen",
+                "entity of chaos",
+                "four racoons in a trenchcoat",
+                "that writhing mass of flesh and thoughts",
+                "irony elemental",
+                "the manifestation of the inherent contradiction that is life"
+            }
+        };
+        ListGroup.Add(InfoType.epithets, epithets);
+
+        CurrentItem = ListGroup[InfoType.about];
+        StateHasChanged();
+    }
+
+    protected void Click(InfoType type) {
+        CurrentItem.Active = false;
+        CurrentItem = ListGroup[type];
+        CurrentItem.Active = true;
+        StateHasChanged();
+    }
+
+    private string formatQuestion(string question, string answer) {
+        return $"<b>{question}:</b> {answer}";
+    }
+
+    private string formatLink(string text, string img, string link) {
+        img = "/Images/Logos/" + img + ".svg";
+        return $"<a href=\"{link}\"><img class=\"svg_logo my-2\" src=\"{img}\" />{text}</a>";
+    }
+
+    protected class Item {
+        public string Header { get; set; }
+        public List<string> Contents { get; set; }
+        public bool Active { get; set; }
+    }
+}
