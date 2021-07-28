@@ -1,13 +1,13 @@
 ﻿@implements IDisposable
 
 <BSNavbar IsExpand="true" IsDark="true" Color="Color.Dark">
-    <BSNavbarBrand Href="/">12th Morning</BSNavbarBrand>
+    <BSNavbarBrand Href="/">12th morning</BSNavbarBrand>
     <BSNavbarToggler @onclick="OnClick2" />
     <BSCollapse IsOpen="@IsOpen2" IsNavbar="true" IsOpenChanged="OpenChanged">
         <BSNav Class="mr-auto" IsList="true" IsPills="true" IsNavbar="true">
             <BSButtonGroup Class="mx-2">
                 <BSNavLink Class="btn btn-outline-info col-lg-9" href="/blogs">
-                    Blog @State.BlogType
+                    blog @State.BlogType
                 </BSNavLink>
                 <BSDropdownToggle Class="" IsSplit="true" @onclick="OnClick" Color="Color.Info"></BSDropdownToggle>
                 <BSDropdownMenu @bind-IsOpen="@IsOpen">
@@ -18,10 +18,15 @@
                     <BSDropdownItem @onclick="OnClick" Href="/blogs/personal">personal</BSDropdownItem>
                 </BSDropdownMenu>
             </BSButtonGroup>
+            <BSNavItem>
+                <BSNavLink Class="btn btn-outline-info mx-2" href="/info">
+                    about
+                </BSNavLink>
+            </BSNavItem>
             @if (Startup.IsDev) {
                 <BSNavItem>
                     <BSNavLink Class="btn btn-outline-info mx-2" href="/blogupdate">
-                        Blog Update
+                        blog update
                     </BSNavLink>
                 </BSNavItem>
             }
