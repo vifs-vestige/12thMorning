@@ -53,7 +53,7 @@
         links.Contents.Add(formatLink("vifs_vestige", "Twitch", "http://twitch.com/vifs_vestige"));
         links.Contents.Add(formatLink("vifs-vestige", "Github", "https://github.com/vifs-vestige"));
         links.Contents.Add(formatLink("vifs_vestige", "Instagram", "https://instagram.com/vifs_vestige"));
-        links.Contents.Add(formatLink("vifs_vestige", "Patreon", "https://www.patreon.com/vifs_vestige"));
+        links.Contents.Add(formatLink("vifs_vestige", "Kofi", "https://www.ko-fi.com/vifs_vestige"));
 
         var faq = new Item() {
             Header = "faq",
@@ -100,7 +100,7 @@
 
     private string formatLink(string text, string img, string link) {
         img = "/Images/Logos/" + img + ".svg";
-        return $"<a href=\"{link}\"><img class=\"svg_logo my-2\" src=\"{img}\" />{text}</a>";
+        return $"<a href=\"{link}\" target=\"_blank\"><img class=\"svg_logo my-2\" src=\"{img}\" />{text}</a>";
     }
 
     protected class Item {
