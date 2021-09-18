@@ -8,9 +8,8 @@
         Refresh();
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender) {
-        if (!firstRender)
-            Refresh();
+    protected override async Task OnParametersSetAsync() {
+        Refresh();
         await JSRuntime.InvokeAsync<string>("PR.prettyPrint");
     }
 }
