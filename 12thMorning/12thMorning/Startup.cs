@@ -34,7 +34,6 @@ namespace _12thMorning {
             services.AddServerSideBlazor();
             services.AddSingleton<BlogService>();
             services.AddSingleton<CommentService>();
-            services.AddScoped<QueslarService>();
             services.AddScoped<SessionStorage>();
             services.AddBootstrapCss();
             services.AddBlazorStyled();
