@@ -13,8 +13,8 @@ namespace _12thMorning.Services {
         }
 
         #region get blog(s)
-        public List<Blog> GetBlogPreviewList(int page, int size, string type, DateTime month) {
-            return GetQueryBlogs(type, month)
+        public List<Blog> GetBlogPreviewList(int page, int size, string type) {
+            return GetQueryBlogs(type)
                 .OrderByDescending(x => x.Id)
                 .Skip(page * size)
                 .Take(size)
@@ -41,8 +41,8 @@ namespace _12thMorning.Services {
         #endregion
 
         #region paging
-        public int GetPages(int size, string type, DateTime month) {
-            return (int)Math.Ceiling((double)GetQueryBlogs(type, month).Count() / size);
+        public int GetPages(int size, string type) {
+            return (int)Math.Ceiling((double)GetQueryBlogs(type).Count() / size);
         }
 
         public List<DateTime> GetBlogMonths(string type) {
@@ -93,7 +93,7 @@ namespace _12thMorning.Services {
         }
 
 
-        private IQueryable<Blog> GetQueryBlogs(string type, DateTime? month = null) {
+        private IQueryable<Blog> GetQueryBlogs(string type) {
             IQueryable<Blog> blog;
             if (type == "dev")
                 blog = DB.Blog.Where(x => x.MainTag == "Dev" || x.MainTag == "Mixed");
@@ -101,10 +101,6 @@ namespace _12thMorning.Services {
                 blog = DB.Blog.Where(x => x.MainTag == "Personal" || x.MainTag == "Mixed");
             else
                 blog = DB.Blog.AsQueryable();
-            if (month != null && ((DateTime)month).Ticks != 0 ) {
-                var MonthEnd = ((DateTime)month).AddMonths(1).AddTicks(-1);
-                blog = blog.Where(x => x.DateAdded >= month && x.DateAdded <= MonthEnd);
-            }
             return blog;
         }
         

@@ -1,9 +1,7 @@
 ﻿@page "/blogs"
 @page "/blogs/{type}"
 @page "/blogs/{type}/{page:int}"
-@page "/blogs/{type}/{page:int}/{month:datetime}"
 @page "/blogs/{page:int}"
-@page "/blogs/{page:int}/{month:datetime}"
 
 @inherits RefreshPage
 @implements IDisposable
@@ -12,7 +10,7 @@
 
 <h3>The Blogs</h3>
 
-<BlogPaging Page="@Page" Type="@Type" Count="@count" Month="@Month" />
+<BlogPaging Page="@Page" Type="@Type" Count="@count" />
 
 <div class="@State.MovePostInClass">
 
@@ -36,15 +34,13 @@
     }
 </div>
 
-<BlogPaging Page="@Page" Type="@Type" Count="@count" Month="@Month" />
+<BlogPaging Page="@Page" Type="@Type" Count="@count" />
 
 @code {
     [Parameter]
     public string Type { get; set; }
     [Parameter]
     public int Page { get; set; }
-    [Parameter]
-    public DateTime Month { get; set; }
     private int count;
     private List<Blog> blogs;
     private int size = 10;
@@ -54,8 +50,8 @@
         if (Type != null)
             TypeUrl = "/" + Type;
         State.BlogType = Type;
-        count = BlogDataService.GetPages(size, Type, Month);
-        blogs = BlogDataService.GetBlogPreviewList(Page, size, Type, Month);
+        count = BlogDataService.GetPages(size, Type);
+        blogs = BlogDataService.GetBlogPreviewList(Page, size, Type);
         base.Refresh();
     }
 
