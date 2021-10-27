@@ -14,6 +14,7 @@ namespace _12thMorning.Areas.Identity
     {
         public void Configure(IWebHostBuilder builder)
         {
+            
 
             var temp = ServerVersion.AutoDetect("Server=localhost;Database=12thmorning;Uid=12thmorning;");
             builder.ConfigureServices((context, services) => {
@@ -22,6 +23,7 @@ namespace _12thMorning.Areas.Identity
 
 
                 services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                    .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<_12thMorningContext>();
             });
 

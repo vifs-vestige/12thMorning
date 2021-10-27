@@ -6,9 +6,5 @@ namespace _12thMorning.Data
 {
     public class ApplicationUser : IdentityUser
     {
-        public void test()
-        {
-            
-        }
     }
 }

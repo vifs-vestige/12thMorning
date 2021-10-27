@@ -1,5 +1,7 @@
 ﻿@page "/"
 @namespace _12thMorning.Pages
+@using Microsoft.AspNetCore.Authentication
+@using _12thMorning.Services
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <!DOCTYPE html>
@@ -16,6 +18,14 @@
 </head>
 <body>
     <div id="components-reconnect-modal"></div>
+@*    @{
+        var tokens = new InitialApplicationState
+            {
+                AccessToken = await HttpContext.GetTokenAsync("access_token"),
+                RefreshToken = await HttpContext.GetTokenAsync("refresh_token")
+            };
+    }
+*@
     <app>
         @(await Html.RenderComponentAsync<App>(RenderMode.Server))
     </app>
@@ -28,8 +38,10 @@
     <!-- The below two files are needed by BlazorStrap -->
     <script src="_content/BlazorStrap/popper.min.js"></script>
     <script src="../_content/BlazorStrap/blazorStrap.js"></script>
+
     <script src="~/scripts/GoogleAnalyticsInterop.js"></script>
     <script data-ad-client="ca-pub-2221191256075850" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
 </body>
 </html>
+

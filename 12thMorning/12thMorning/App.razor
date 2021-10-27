@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Components.Routing
+@inject TokenProvider TokenProvider
 
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(Program).Assembly">
@@ -24,3 +25,15 @@
 
 <_12thMorning.Pages.Tools.GoogleAnalytics TrackingId="UA-90024121-1" />
 
+@code {
+    //[Parameter]
+    //public TokenProvider TokenState { get; set; }
+
+    //protected override Task OnInitializedAsync()
+    //{
+    //    TokenProvider.AccessToken = TokenState.AccessToken;
+    //    TokenProvider.RefreshToken = TokenState.RefreshToken;
+
+    //    return base.OnInitializedAsync();
+    //}
+}

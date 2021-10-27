@@ -33,6 +33,8 @@
     <PackageReference Include="Blazored.LocalStorage" Version="4.1.2" />
     <PackageReference Include="BlazorStrap" Version="1.5.1" />
     <PackageReference Include="BlazorStyled" Version="3.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="0.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.9" />

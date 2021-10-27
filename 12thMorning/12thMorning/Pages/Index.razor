@@ -1,8 +1,7 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Identity.EntityFrameworkCore
-@inject AuthenticationStateProvider AuthStateProvider
-@inject UserManager<ApplicationUser> userManager
+
 <h1>Ignore the mess~~~</h1>
 big booty butts
 <button @onclick="text">print test</button>
@@ -14,22 +13,6 @@ big booty butts
 
     public async void text() {
         await JSRuntime.InvokeAsync<string>("console.log", "test");
-        var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new _12thMorningContext()), null, null, null, null);
-            var results = await roleManager.RoleExistsAsync("admin");
-            if (!results)
-            {
-                IdentityRole test = new IdentityRole
-                {
-                    Name = "admin"
-                };
-                await roleManager.CreateAsync(test);
-            }
-
-            var temp = await AuthStateProvider.GetAuthenticationStateAsync();
-            //var role = await userManager.GetRolesAsync(temp);
-            var user = await userManager.GetUserAsync(temp.User);
-            //var role = await userManager.GetRolesAsync(user);
-            var stuff = "a";
 
     }
 

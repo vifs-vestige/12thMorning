@@ -1,4 +1,6 @@
-using _12thMorning.Data;
+using System;
+using System.Linq;
+using System.Net.Http;
 using _12thMorning.Services;
 using Blazored.LocalStorage;
 using BlazorStrap;
@@ -7,16 +9,19 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Linq;
-using System.Net.Http;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using _12thMorning.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
-namespace _12thMorning {
+namespace _12thMorning
+{
     public class Startup {
         private static bool isDev = false;
         public static bool IsDev { get { return isDev; } }
@@ -39,15 +44,48 @@ namespace _12thMorning {
             services.AddBootstrapCss();
             services.AddBlazorStyled();
             services.AddBlazoredLocalStorage();
+            services.AddHttpClient();
+            services.AddScoped<TokenProvider>();
 
-            services.AddAuthentication("Identity.Application").AddCookie();
+            //services.AddDefaultIdentity<ApplicationUser>()
+            //    .AddRoles<IdentityRole>();
+                //.AddEntityFrameworkStores<_12thMorningContext>();
 
-            services.AddServerSideBlazor().AddCircuitOptions(o => {
-                if (Env.IsDevelopment()) //only add details when debugging
-                {
-                    o.DetailedErrors = true;
-                }
-            });
+            //services.AddAuthentication(options =>
+            //{
+            //    options.DefaultScheme = "Identity.Application";
+                
+            //})
+            //    //.AddJwtBearer(options =>
+            //    //{
+            //    //    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+            //    //    {
+            //    //        ValidateIssuer = true,
+            //    //        ValidateAudience = true,
+            //    //        ValidateLifetime = true,
+            //    //        ValidateIssuerSigningKey = true,
+            //    //        ValidIssuer = Configuration["JwtIssuer"],
+            //    //        ValidAudience = Configuration["JwtAudience"],
+            //    //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"]))
+            //    //    };
+            //    //})
+            //    .AddCookie();
+
+            //var temp = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().RequireRole("admin").Build();
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("IsAdmin", temp);
+            //});
+
+            
+            services.AddServerSideBlazor();
+
+            //services.Configure<OpenIdConnectOptions>(options =>
+            //{
+            //    options.ResponseType = OpenIdConnectResponseType.Code;
+            //    options.SaveTokens = true;
+            //    options.ClientId = "";
+            //});
 
             services.Configure<ForwardedHeadersOptions>(options => {
                 options.ForwardedHeaders =
@@ -63,12 +101,7 @@ namespace _12thMorning {
                 });
             }
 
-            //services.AddDbContextPool<_12thMorningContext>( 
-            //    options => options.UseMySql("Server=localhost;Database=12thmorning;Uid=12thmorning;", 
-            //    mySqlOptions => {
-            //        mySqlOptions.ServerVersion(new Version(10, 1, 41), Pomelo.EntityFrameworkCore.MySql.Infrastructure.ServerType.MariaDb); // replace with your Server Version and Type
-            //    }
-            //));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -86,7 +119,6 @@ namespace _12thMorning {
                 //    app.UseHsts();
             }
 
-            //app.UseHttpsRedirection();
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseFileServer();

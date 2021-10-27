@@ -24,7 +24,7 @@ namespace _12thMorning.Data {
 
         }
 
-        protected override async void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             var temp = ServerVersion.AutoDetect("Server=localhost;Database=12thmorning;Uid=12thmorning;");
 
             optionsBuilder.UseMySql(@"Server=localhost;Database=12thmorning;Uid=12thmorning;", temp);
