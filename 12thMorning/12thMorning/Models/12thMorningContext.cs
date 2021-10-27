@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using _12thMorning.Models.Identity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,16 +11,25 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace _12thMorning.Data {
-    public class _12thMorningContext : IdentityDbContext {
+    public class _12thMorningContext : IdentityDbContext<ApplicationUser> {
         public DbSet<Blog> Blog { get; set; }
         public DbSet<Comment> Comment { get; set; }
         public DbSet<QueslarKeys> QueslarKeys { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+        public _12thMorningContext() : base(){
+
+        }
+
+        public _12thMorningContext(DbContextOptions<_12thMorningContext> options) : base(options) {
+
+        }
+
+        protected override async void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             var temp = ServerVersion.AutoDetect("Server=localhost;Database=12thmorning;Uid=12thmorning;");
 
             optionsBuilder.UseMySql(@"Server=localhost;Database=12thmorning;Uid=12thmorning;", temp);
         }
+
 
     }
 

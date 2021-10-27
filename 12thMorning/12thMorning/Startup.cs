@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,8 +40,9 @@ namespace _12thMorning {
             services.AddBlazorStyled();
             services.AddBlazoredLocalStorage();
 
-            services.AddServerSideBlazor().AddCircuitOptions(o =>
-            {
+            services.AddAuthentication("Identity.Application").AddCookie();
+
+            services.AddServerSideBlazor().AddCircuitOptions(o => {
                 if (Env.IsDevelopment()) //only add details when debugging
                 {
                     o.DetailedErrors = true;
@@ -53,9 +55,7 @@ namespace _12thMorning {
             });
 
             if (!services.Any(x => x.ServiceType == typeof(HttpClient))) {
-                // Setup HttpClient for server side in a client side compatible fashion
                 services.AddScoped<HttpClient>(s => {
-                    // Creating the URI helper needs to wait until the JS Runtime is initialized, so defer it.
                     NavigationManager navman = s.GetRequiredService<NavigationManager>();
                     return new HttpClient {
                         BaseAddress = new Uri(navman.BaseUri)
@@ -69,7 +69,6 @@ namespace _12thMorning {
             //        mySqlOptions.ServerVersion(new Version(10, 1, 41), Pomelo.EntityFrameworkCore.MySql.Infrastructure.ServerType.MariaDb); // replace with your Server Version and Type
             //    }
             //));
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -93,6 +92,8 @@ namespace _12thMorning {
             app.UseFileServer();
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints => {
                 endpoints.MapBlazorHub();

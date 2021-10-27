@@ -1,5 +1,6 @@
 ﻿@page "/blogUpdate"
 @page "/blogUpdate/{Id:int}"
+@attribute [Authorize(Roles = "admin")]
 
 @inject BlogService BlogDataService
 
