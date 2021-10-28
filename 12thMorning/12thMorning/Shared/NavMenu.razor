@@ -1,4 +1,5 @@
 ﻿@implements IDisposable
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <BSNavbar IsExpand="true" IsDark="true" Color="Color.Dark">
     <BSNavbarBrand Href="/">12th morning</BSNavbarBrand>
@@ -16,31 +17,34 @@
                 </BSNavLink>
             </BSNavItem>
             <AuthorizeView Roles="admin">
+                <Authorized>
+
                     <BSNavItem>
-                    <BSNavLink Class="btn btn-outline-info mx-2" href="/blogupdate">
-                        blog update
-                    </BSNavLink>
-                </BSNavItem>
+                        <BSNavLink Class="btn btn-outline-info mx-2" href="/blogupdate">
+                            blog update
+                        </BSNavLink>
+                    </BSNavItem>
+                </Authorized>
             </AuthorizeView>
             @*@if (Startup.IsDev)
-            {
+                {
                 <BSNavItem>
-                    <BSNavLink Class="btn btn-outline-info mx-2" href="/blogupdate">
-                        blog update
-                    </BSNavLink>
+                <BSNavLink Class="btn btn-outline-info mx-2" href="/blogupdate">
+                blog update
+                </BSNavLink>
                 </BSNavItem>
-            }*@
+                }*@
             <BSNavItem>
                 <AuthorizeView Roles="admin">
                     <Authorized>
-                <BSNavLink Class="btn btn-outline-info mx-2" href="/identity/account/logout">
-                    logout
-                </BSNavLink>
+                        <BSNavLink Class="btn btn-outline-info mx-2" href="/identity/account/logout">
+                            logout
+                        </BSNavLink>
                     </Authorized>
                     <NotAuthorized>
-                <BSNavLink Class="btn btn-outline-info mx-2" href="/identity/account/login">
-                    login
-                </BSNavLink>
+                        <BSNavLink Class="btn btn-outline-info mx-2" href="/identity/account/login">
+                            login
+                        </BSNavLink>
                     </NotAuthorized>
                 </AuthorizeView>
             </BSNavItem>
@@ -50,7 +54,7 @@
 
 @code {
     [CascadingParameter]
-    private Task<AuthenticationState> AuthStateTask{ get; set; }
+    private Task<AuthenticationState> AuthStateTask { get; set; }
     protected bool IsOpen { get; set; } = false;
     private bool IsOpen2 { get; set; } = false;
 
