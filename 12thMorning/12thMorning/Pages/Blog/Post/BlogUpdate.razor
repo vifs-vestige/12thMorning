@@ -1,8 +1,7 @@
 ﻿@page "/blogUpdate"
 @page "/blogUpdate/{Id:int}"
-@attribute [Authorize(Roles = "admin")]
-
 @inject BlogService BlogDataService
+@attribute [Authorize(Roles = "admin")]
 
 <h3>BlogUpdate: @Blog.Title</h3>
 
@@ -34,6 +33,8 @@
 </div>
 
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationState { get; set; }
     [Parameter]
     public int? Id { get; set; }
     private bool isVisible { get; set; } = true;
@@ -62,8 +63,7 @@
     private async void Preview()
     {
         Post = BlogDataService.GetFullPreview(Blog.Post);
-        await JSRuntime.InvokeAsync<string>
-    ("PR.prettyPrint");
+        await JSRuntime.InvokeAsync<string>("PR.prettyPrint");
     }
 
     private void submit()

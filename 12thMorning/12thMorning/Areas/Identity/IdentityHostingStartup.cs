@@ -29,7 +29,8 @@ namespace _12thMorning.Areas.Identity
                 services.AddAuthentication();
                 services.AddAuthorization();
 
-                CreateRoles(services.BuildServiceProvider());
+                //probly need to figure out better way to populate this data, but whatever for now
+                //CreateRoles(services.BuildServiceProvider());
             });
 
 

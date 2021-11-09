@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Components;
 
 
 namespace _12thMorning.Services {
-    [Authorize]
     public class BlogService {
         private _12thMorningContext DB {
             get { return new _12thMorningContext(); }
@@ -27,7 +26,6 @@ namespace _12thMorning.Services {
                 .ToList();
         }
 
-        [Authorize(Roles = "aaa")]
         public MarkupString GetFullPreview(string post) {
             return (MarkupString)BBCode.ParsePost(post);
         }
@@ -75,10 +73,7 @@ namespace _12thMorning.Services {
 
         #endregion
 
-        [Authorize("aa")]
         public void UpdateBlog(Blog blog) {
-
-            if (Startup.IsDev) {
                 var db = DB;
                 if (blog.Id == 0) {
                     blog.DateAdded = DateTime.Now;
@@ -87,7 +82,6 @@ namespace _12thMorning.Services {
                 } else
                     db.Blog.Update(blog);
                 db.SaveChanges();
-            }
         }
 
         private string GetPreviewPost(string post) {
