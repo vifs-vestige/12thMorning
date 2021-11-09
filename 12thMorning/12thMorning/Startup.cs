@@ -12,13 +12,6 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using _12thMorning.Data;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.AspNetCore.Authorization;
 
 namespace _12thMorning
 {
@@ -46,46 +39,8 @@ namespace _12thMorning
             services.AddBlazoredLocalStorage();
             services.AddHttpClient();
             services.AddScoped<TokenProvider>();
-
-            //services.AddDefaultIdentity<ApplicationUser>()
-            //    .AddRoles<IdentityRole>();
-                //.AddEntityFrameworkStores<_12thMorningContext>();
-
-            //services.AddAuthentication(options =>
-            //{
-            //    options.DefaultScheme = "Identity.Application";
-                
-            //})
-            //    //.AddJwtBearer(options =>
-            //    //{
-            //    //    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-            //    //    {
-            //    //        ValidateIssuer = true,
-            //    //        ValidateAudience = true,
-            //    //        ValidateLifetime = true,
-            //    //        ValidateIssuerSigningKey = true,
-            //    //        ValidIssuer = Configuration["JwtIssuer"],
-            //    //        ValidAudience = Configuration["JwtAudience"],
-            //    //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"]))
-            //    //    };
-            //    //})
-            //    .AddCookie();
-
-            //var temp = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().RequireRole("admin").Build();
-            //services.AddAuthorization(options =>
-            //{
-            //    options.AddPolicy("IsAdmin", temp);
-            //});
-
             
             services.AddServerSideBlazor();
-
-            //services.Configure<OpenIdConnectOptions>(options =>
-            //{
-            //    options.ResponseType = OpenIdConnectResponseType.Code;
-            //    options.SaveTokens = true;
-            //    options.ClientId = "";
-            //});
 
             services.Configure<ForwardedHeadersOptions>(options => {
                 options.ForwardedHeaders =
@@ -128,6 +83,7 @@ namespace _12thMorning
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => {
+                //endpoints.MapRazorPages();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/Tools/_Host");
             });

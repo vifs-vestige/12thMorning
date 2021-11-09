@@ -41,28 +41,33 @@
     private Blog Blog;
     private MarkupString Post;
 
-    protected void Next() {
-        if (Id != null) {
+    protected void Next()
+    {
+        if (Id != null)
+        {
             Id++;
             Blog = BlogDataService.GetBlogRaw((int)Id);
         }
 
     }
 
-    protected override void OnInitialized() {
+    protected override void OnInitialized()
+    {
         if (Id != null)
             Blog = BlogDataService.GetBlogRaw((int)Id);
         else
             Blog = new Blog();
     }
 
-    private async void Preview() {
+    private async void Preview()
+    {
         Post = BlogDataService.GetFullPreview(Blog.Post);
         await JSRuntime.InvokeAsync<string>
     ("PR.prettyPrint");
     }
 
-    private void submit() {
+    private void submit()
+    {
         BlogDataService.UpdateBlog(Blog);
     }
 }

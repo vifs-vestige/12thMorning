@@ -3,9 +3,7 @@ using System.Threading.Tasks;
 using _12thMorning.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 [assembly: HostingStartup(typeof(_12thMorning.Areas.Identity.IdentityHostingStartup))]
@@ -28,10 +26,10 @@ namespace _12thMorning.Areas.Identity
                 services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<_12thMorningContext>();
+                services.AddAuthentication();
+                services.AddAuthorization();
 
                 CreateRoles(services.BuildServiceProvider());
-
-
             });
 
 
@@ -42,7 +40,7 @@ namespace _12thMorning.Areas.Identity
         {
             var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            var roleNames = new string[]{ "admin" };
+            var roleNames = new string[] { "admin" };
             IdentityResult roleResult;
 
             foreach (var roleName in roleNames)
@@ -55,15 +53,10 @@ namespace _12thMorning.Areas.Identity
             }
 
             var powerUser = await UserManager.FindByNameAsync("vifs_vestige");
-            var temp = UserManager.GetRolesAsync(powerUser);
             if (powerUser != null)
             {
                 await UserManager.AddToRoleAsync(powerUser, "admin");
             }
-
-            var temp2 = await UserManager.GetRolesAsync(powerUser);
-            //await UserManager.GetRolesAsync(powerUser);
-            var temp3 = "a";
         }
     }
 }

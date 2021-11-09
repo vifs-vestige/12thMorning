@@ -18,7 +18,6 @@
             </BSNavItem>
             <AuthorizeView Roles="admin">
                 <Authorized>
-
                     <BSNavItem>
                         <BSNavLink Class="btn btn-outline-info mx-2" href="/blogupdate">
                             blog update
@@ -26,14 +25,6 @@
                     </BSNavItem>
                 </Authorized>
             </AuthorizeView>
-            @*@if (Startup.IsDev)
-                {
-                <BSNavItem>
-                <BSNavLink Class="btn btn-outline-info mx-2" href="/blogupdate">
-                blog update
-                </BSNavLink>
-                </BSNavItem>
-                }*@
             <BSNavItem>
                 <AuthorizeView Roles="admin">
                     <Authorized>

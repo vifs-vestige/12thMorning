@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using _12thMorning.Data;
 using _12thMorning.Libraries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 
 
 namespace _12thMorning.Services {
+    [Authorize]
     public class BlogService {
         private _12thMorningContext DB {
             get { return new _12thMorningContext(); }
@@ -25,6 +27,7 @@ namespace _12thMorning.Services {
                 .ToList();
         }
 
+        [Authorize(Roles = "aaa")]
         public MarkupString GetFullPreview(string post) {
             return (MarkupString)BBCode.ParsePost(post);
         }
@@ -72,7 +75,9 @@ namespace _12thMorning.Services {
 
         #endregion
 
+        [Authorize("aa")]
         public void UpdateBlog(Blog blog) {
+
             if (Startup.IsDev) {
                 var db = DB;
                 if (blog.Id == 0) {
