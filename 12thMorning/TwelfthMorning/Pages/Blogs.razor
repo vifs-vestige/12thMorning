@@ -1,0 +1,39 @@
+﻿@page "/blogs"
+@using TwelfthMorning.Data
+@inject BlogService BlogDataService
+
+<h3>The Blogs</h3>
+
+<div>
+
+    @foreach (var blog in blogs) {
+        <BSRow Class="mx-auto mt-3">
+            <h1>
+                <a href="blog/@blog.Id">
+                    @blog.Title
+                </a>
+            </h1>
+        </BSRow>
+        <BSRow Class="mx-3 d-inline">
+            @((MarkupString)blog.Post)
+        </BSRow>
+        <small class="d-flex justify-content-end align-bottom">
+            <small>
+                @blog.DateAdded.ToString("dd MMMM yyyy")
+            </small>
+        </small>
+        <hr />
+    }
+</div>
+
+@code {
+
+    private List<Blog> blogs;
+    private int size = 10;
+
+    protected override void OnInitialized()
+    {
+        blogs = BlogDataService.GetBlogPreviewList(0, size);
+        base.OnInitialized();
+    }
+}
