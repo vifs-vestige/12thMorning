@@ -3947,12 +3947,17 @@ textarea.form-control-lg {
   justify-content: space-between;
 }
 .navbar-brand {
-  padding-top: 0.3125rem;
-  padding-bottom: 0.3125rem;
-  margin-right: 1rem;
-  font-size: 1.25rem;
+  padding-top: -0.25rem;
+  padding-bottom: -0.25rem;
+  margin-right: 2rem;
+  font-size: calc(1.325rem + 0.9vw);
   text-decoration: none;
   white-space: nowrap;
+}
+@media (min-width: 1200px) {
+  .navbar-brand {
+    font-size: 2rem;
+  }
 }
 .navbar-nav {
   display: flex;
@@ -4371,10 +4376,10 @@ textarea.form-control-lg {
 }
 
 .navbar-dark .navbar-brand {
-  color: red;
+  color: white;
 }
 .navbar-dark .navbar-brand:hover, .navbar-dark .navbar-brand:focus {
-  color: yellow;
+  color: teal;
 }
 .navbar-dark .navbar-nav .nav-link {
   color: #343a40;
@@ -4387,7 +4392,7 @@ textarea.form-control-lg {
 }
 .navbar-dark .navbar-nav .show > .nav-link,
 .navbar-dark .navbar-nav .nav-link.active {
-  color: yellow;
+  color: teal;
 }
 .navbar-dark .navbar-toggler {
   color: #343a40;
@@ -4402,7 +4407,7 @@ textarea.form-control-lg {
 .navbar-dark .navbar-text a,
 .navbar-dark .navbar-text a:hover,
 .navbar-dark .navbar-text a:focus {
-  color: yellow;
+  color: teal;
 }
 
 .card {
@@ -11118,7 +11123,7 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
-.nav-pills > .btn {
-  margin-right: 2rem;
-  margin-left: 2rem;
-}
+/*.nav-pills > .btn {
+    margin-right: 2rem;
+    margin-left: 2rem;
+}*/
