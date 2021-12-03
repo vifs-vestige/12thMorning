@@ -1,0 +1,26 @@
+﻿$danger: #9f24ff;
+$success: #ff0000;
+$primary: teal;
+$spacer: 2rem;
+$dark: #343a40;
+
+$body-color: black;
+$body-bg: white;
+
+$navbar-dark-color: #343a40;
+$navbar-dark-hover-color: white;
+$navbar-dark-active-color: yellow;
+$navbar-dark-brand-color: red;
+
+$nav-link-color: blue;
+$nav-link-hover-color: white;
+$nav-pills-link-active-color: brown;
+
+$btn-margin-x: 2rem;
+
+@import "../lib/bootstrap/scss/bootstrap";
+
+.nav-pills > .btn {
+    margin-right: 2rem;
+    margin-left: 2rem;
+}

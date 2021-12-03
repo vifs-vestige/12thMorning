@@ -1,20 +1,14 @@
 ﻿@inherits LayoutComponentBase
 
-<PageTitle>TwelfthMorning</PageTitle>
-
+<header>
+    <NavMenu />
+</header>
+<PageTitle>12th morning</PageTitle>
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
     <main>
-        <div class="top-row px-4 auth">
-            <LoginDisplay />
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
+        <div class="container-fluid p-3">
             @Body
-        </article>
+        </div>
+        <button type="button" class="btn btn-primary">test</button>
     </main>
 </div>
