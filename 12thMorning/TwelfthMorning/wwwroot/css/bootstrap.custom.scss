@@ -12,17 +12,27 @@ $navbar-dark-color: #343a40;
 $navbar-dark-hover-color: white;
 //brand text
 $navbar-dark-active-color: $primary;
+
 $navbar-dark-brand-color: white;
+
 $navbar-brand-margin-end: 2rem;
 $navbar-brand-font-size: 2rem;
 
-$nav-link-color: blue;
+$nav-link-color: $primary;
 $nav-link-hover-color: white;
 $nav-pills-link-active-color: brown;
 
-@import "../lib/bootstrap/scss/bootstrap";
+
+@import "node_modules/bootstrap/scss/bootstrap";
 
 /*.nav-pills > .btn {
     margin-right: 2rem;
     margin-left: 2rem;
 }*/
+
+.nav > a.nav-link {
+    background-color: $navbar-dark-color;
+    margin-right: 1rem;
+    border: 1px solid;
+    border-radius: 0.25rem;
+}

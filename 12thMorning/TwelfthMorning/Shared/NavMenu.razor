@@ -5,16 +5,16 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="/">12th morning</a>
         <div class="collapse navbar-collapse">
-            <nav class="nav nav-pills row gx-2">
-                <div class="col">
-                    <a class="btn btn-outline-primary active" href="/blogs">blogs</a>
-                </div>
-                <div class="col">
-                <a class="btn btn-outline-primary" href="/info">info</a>
-                </div>
-                <div class="col">
-                <a class="btn btn-outline-primary" href="/test">test</a>
-                </div>
+            <nav class="nav nav-fill">
+                <a class="nav-link active" href="/blogs">blogs</a>
+                <a class="nav-link" href="/info">info</a>
+                <a class="nav-link" href="/test">test</a>
+                <AuthorizeView Roles="admin">
+                    <Authorized>
+                            <a class="nav-link" href="/blogupdate">blog update</a>
+                            <a class="nav-link" href="/identity/account/logout">logout</a>
+                    </Authorized>
+                </AuthorizeView>
             </nav>
         </div>
     </div>
