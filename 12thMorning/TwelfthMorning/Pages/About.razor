@@ -1,0 +1,26 @@
+﻿@page "/info"
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">card title</h5>
+        <p class="card-text"><DynamicComponent Type="@selectedType"/></p>
+        <div class="card-footer">
+            <button type="button" class="btn btn-outline-info" @onclick="(() => Stuff(nameof(Info)))" >about</button>
+            <button type="button" class="btn btn-outline-info" @onclick="(() => Stuff(nameof(Links)))" >about</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    private Type selectedType = typeof(Info);
+
+    public About()
+    {
+    }
+
+    private void Stuff(string selected)
+    {
+        selectedType = Type.GetType($"TwelfthMorning.Shared.{selected}");
+    }
+
+}

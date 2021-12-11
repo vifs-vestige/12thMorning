@@ -1,0 +1,17 @@
+﻿@foreach(var item in Items)
+{
+    <p>@item</p>
+}
+
+@code {
+
+    protected List<string> Items;
+
+    protected override void OnInitialized()
+    {
+        Items = new List<string>();
+        Items.Add("test1");
+        Items.Add("test2");
+        base.OnInitialized();
+    }
+}
