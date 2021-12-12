@@ -1,26 +1,29 @@
 ﻿@page "/info"
+@using TwelfthMorning.Shared.About
 
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">card title</h5>
         <p class="card-text"><DynamicComponent Type="@selectedType"/></p>
         <div class="card-footer">
-            <button type="button" class="btn btn-outline-info" @onclick="(() => Stuff(nameof(Info)))" >about</button>
-            <button type="button" class="btn btn-outline-info" @onclick="(() => Stuff(nameof(Links)))" >about</button>
+            <button type="button" class="btn btn-outline-info" @onclick="(() => OnClick(nameof(Info)))" >info</button>
+            <button type="button" class="btn btn-outline-info" @onclick="(() => OnClick(nameof(Links)))" >links</button>
+            <button type="button" class="btn btn-outline-info" @onclick="(() => OnClick(nameof(Faq)))" >faq</button>
+            <button type="button" class="btn btn-outline-info" @onclick="(() => OnClick(nameof(Epithets)))" >epithets</button>
         </div>
     </div>
 </div>
 
 @code {
-    private Type selectedType = typeof(Info);
+    private Type? selectedType = typeof(Info);
 
-    public About()
+    private void OnClick(string selected)
     {
-    }
-
-    private void Stuff(string selected)
-    {
-        selectedType = Type.GetType($"TwelfthMorning.Shared.{selected}");
+        selectedType = selected.Length > 0 ? Type.GetType($"TwelfthMorning.Shared.About.{selected}") : null;
+        if(selectedType == null)
+        {
+            selectedType = typeof(Info);
+        }
     }
 
 }

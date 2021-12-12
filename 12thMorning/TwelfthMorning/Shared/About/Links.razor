@@ -1,0 +1,33 @@
+﻿@foreach(var item in Items)
+{
+    <p>
+        <a href="@item.link" target="_blank">
+            <img class="svg_logo" src="/Images/Logos/@(item.img).svg" />
+            @item.text
+        </a>
+    </p>
+}
+
+@code {
+    protected List<Link> Items = new(){
+        { new Link("@vifs_vestige", "Twitter", "http://twitter.com/vifs_vestige") },
+        { new Link("vifs_vestige", "Twitch", "http://twitch.com/vifs_vestige") },
+        { new Link("vifs-vestige", "Github", "https://github.com/vifs-vestige") },
+        { new Link("vifs_vestige", "Instagram", "https://instagram.com/vifs_vestige") },
+        { new Link("vifs_vestige", "Kofi", "https://www.ko-fi.com/vifs_vestige") }
+    };
+
+    public class Link
+    {
+        public string text { get; set; }
+        public string img { get; set; }
+        public string link { get; set; }
+
+        public Link(string text, string img, string link)
+        {
+            this.text = text;
+            this.img = img;
+            this.link = link;
+        }
+    }
+}
