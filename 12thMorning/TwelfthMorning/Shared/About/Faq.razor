@@ -1,5 +1,31 @@
-﻿<h3>Faq</h3>
-
+﻿<h5 class="card-title">faq</h5>
+<p class="card-text">
+@foreach(var item in Items)
+{
+    <p>
+        <b>@(item.question):</b> @((MarkupString)item.answer)
+    </p>
+}
+</p>
 @code {
+    protected List<Item> Items = new(){
+        { new Item("why is this website so ugly and unfinished", "effort is hard") },
+        { new Item("why do you use we/us", "<a href=\"/blog/107\">read</a>")},
+        { new Item("okay, but really, what are you pronouns", "{redacted}")},
+        { new Item("will you stop using all lowercase?", "<small><small>no</small></small>") },
+        { new Item("what is your favorite thing to do?", "stare at our monitors for hours, forgeting we have a body") },
+        { new Item("eat the rich?", "aye") }
+    };
 
+    public class Item
+    {
+        public string question;
+        public string answer;
+
+        public Item(string question, string answer)
+        {
+            this.question = question;
+            this.answer = answer;
+        }
+    }
 }

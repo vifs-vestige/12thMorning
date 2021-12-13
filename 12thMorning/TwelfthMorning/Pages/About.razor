@@ -3,13 +3,12 @@
 
 <div class="card">
     <div class="card-body">
-        <h5 class="card-title">card title</h5>
-        <p class="card-text"><DynamicComponent Type="@selectedType"/></p>
+        <DynamicComponent Type="@selectedType"/>
         <div class="card-footer">
-            <button type="button" class="btn btn-outline-info" @onclick="(() => OnClick(nameof(Info)))" >info</button>
-            <button type="button" class="btn btn-outline-info" @onclick="(() => OnClick(nameof(Links)))" >links</button>
-            <button type="button" class="btn btn-outline-info" @onclick="(() => OnClick(nameof(Faq)))" >faq</button>
-            <button type="button" class="btn btn-outline-info" @onclick="(() => OnClick(nameof(Epithets)))" >epithets</button>
+            <button type="button" class="btn btn-outline-info @(IsActive(nameof(Info)))" @onclick="(() => OnClick(nameof(Info)))" >info</button>
+            <button type="button" class="btn btn-outline-info @(IsActive(nameof(Links)))" @onclick="(() => OnClick(nameof(Links)))" >links</button>
+            <button type="button" class="btn btn-outline-info @(IsActive(nameof(Faq)))" @onclick="(() => OnClick(nameof(Faq)))" >faq</button>
+            <button type="button" class="btn btn-outline-info @(IsActive(nameof(Epithets)))" @onclick="(() => OnClick(nameof(Epithets)))" >epithets</button>
         </div>
     </div>
 </div>
@@ -24,6 +23,12 @@
         {
             selectedType = typeof(Info);
         }
+        StateHasChanged();
+    }
+
+    private string IsActive(string type)
+    {
+        return selectedType.Name == type ? "active" : "";
     }
 
 }

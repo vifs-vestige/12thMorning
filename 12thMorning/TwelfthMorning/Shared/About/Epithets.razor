@@ -1,5 +1,20 @@
-﻿<h3>Epithets</h3>
+﻿<h5 class="card-title">epithets</h5>
+<p class="card-text">
+    here's a list of fun things we have ended up calling ourself:<br/><br/><br/>
+    @foreach(var item in Items)
+    {
+        <p>@item</p>
+    }
+</p>
 
 @code {
-
+    protected List<string> Items = new()
+        {
+            "dark cyberpunk fairy queen",
+            "entity of chaos",
+            "four racoons in a trenchcoat",
+            "that writhing mass of flesh and thoughts",
+            "irony elemental",
+            "the manifestation of the inherent contradiction that is life"
+        };
 }

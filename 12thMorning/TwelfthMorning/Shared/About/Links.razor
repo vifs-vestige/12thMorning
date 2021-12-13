@@ -1,12 +1,14 @@
-﻿@foreach(var item in Items)
+﻿<h5 class="card-title">links</h5>
+<p class="card-text">
+@foreach(var item in Items)
 {
     <p>
         <a href="@item.link" target="_blank">
-            <img class="svg_logo" src="/Images/Logos/@(item.img).svg" />
-            @item.text
+            <img class="svg_logo" src="/Images/Logos/@(item.img).svg" />@item.text
         </a>
     </p>
 }
+</p>
 
 @code {
     protected List<Link> Items = new(){

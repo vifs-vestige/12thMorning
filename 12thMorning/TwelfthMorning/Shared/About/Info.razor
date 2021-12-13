@@ -1,17 +1,19 @@
-﻿@foreach(var item in Items)
-{
-    <p>@item</p>
-}
+﻿<h5 class="card-title">about</h5>
+<p class="card-text">
+    @foreach(var item in Items)
+    {
+        <p>@item</p>
+    }
+</p>
 
 @code {
-
-    protected List<string> Items;
-
-    protected override void OnInitialized()
-    {
-        Items = new List<string>();
-        Items.Add("test1");
-        Items.Add("test2");
-        base.OnInitialized();
-    }
+    protected List<string> Items = new()
+        {
+            "o/ iv here",
+            "pronouns: {redacted}",
+            "poly pan-demi nonbinary faekin system",
+            "gay and neurodivergent af",
+            "horribly addicted to body mods",
+            "we do the beep boops and half finish projects"
+        };
 }
