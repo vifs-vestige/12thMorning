@@ -18,17 +18,15 @@
 
     private void OnClick(string selected)
     {
-        selectedType = selected.Length > 0 ? Type.GetType($"TwelfthMorning.Shared.About.{selected}") : null;
-        if(selectedType == null)
-        {
-            selectedType = typeof(Info);
-        }
+        selectedType = selected.Length > 0 ? 
+            Type.GetType($"TwelfthMorning.Shared.About.{selected}") : typeof(Info);
         StateHasChanged();
     }
 
     private string IsActive(string type)
     {
-        return selectedType.Name == type ? "active" : "";
+        var name = selectedType != null ? selectedType.Name : null;
+        return name == type ? "active" : "";
     }
 
 }
